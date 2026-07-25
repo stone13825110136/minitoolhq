@@ -1,0 +1,24 @@
+---
+description: MiniTool HQ — all site copy must speak to customers, never internal strategy talk
+alwaysApply: true
+---
+
+# MiniTool HQ — Customer-facing copy
+
+All text that ships on the website (homepage, tool pages, FAQs, meta, CTAs, emails in UI) is for **customers** — sellers and creators using the tools.
+
+## Do
+
+- Speak to **their job**: listing photos, inbound cartons, uploads that fail, privacy of product photos
+- Say what the tool **does for them** in plain English (size, pass/fail, download ZIP, no upload)
+- Prefer concrete outcomes over brand philosophy
+
+## Do not
+
+- Paste **internal strategy** language onto the site (e.g. “job-first not toolbox-first”, “swiss army knife”, “vertical tools land over time”, “our wedge”, “marketplace later”, “we’re differentiating from TinyWow”)
+- Write as if explaining the product to the **founder or the AI**
+- Use meeting jargon, roadmap voice, or competitive-analysis tone in customer UI
+
+## Quick test
+
+If a first-time visitor would ask “so what do I get?”, the copy failed. Rewrite for the visitor’s outcome.

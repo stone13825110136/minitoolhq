@@ -37,7 +37,7 @@ const port = 4328;
 const base = `http://127.0.0.1:${port}`;
 const child = spawn(
   process.platform === "win32" ? "npx.cmd" : "npx",
-  ["astro", "dev", "--host", "127.0.0.1", "--port", String(port)],
+  ["astro", "dev", "--host", "127.0.0.1", "--port", String(port), "--force"],
   { cwd: root, shell: true, stdio: "pipe", env: { ...process.env, ASTRO_TELEMETRY_DISABLED: "1" } },
 );
 

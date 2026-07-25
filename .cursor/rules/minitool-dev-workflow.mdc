@@ -27,7 +27,10 @@ Do **not** mark a tool shipped until **feature testing** (step 9) passes.
 - No heavy AI wrappers, no PWA-first, no PDF suite on day one
 - Match competitor **must-have** features
 - After implementation: run the tool in a real browser (or automated E2E), with real sample files when the tool processes files
+- **Customer copy only** on the live site — see `minitool-customer-copy.mdc`. Never ship internal strategy talk.
 
-## First tool
+## Testing tooling
 
-See `docs/specs/01-amazon-image-prep.md`.
+- E2E uses **Playwright** (`super-shell` `devDependency`). After clone: `npx playwright install chromium`
+- Each tool: `npm run test:<slug>` (e.g. `test:amazon-prep`, `test:fba-box`) must pass before **shipped**
+- Record results in the tool spec **Test log**

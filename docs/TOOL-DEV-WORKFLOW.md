@@ -60,7 +60,7 @@ Coding starts only after the spec is merged/accepted.
 - Prefer Astro (or existing `super-shell`) + client JS/TS
 - Free tier: usable but limited (e.g. batch cap)
 - Pro $4.99: unlimited batch / advanced presets — **one subscription for all tools**
-- Ship tool page + SEO/FAQ content
+- Ship tool page + SEO/FAQ content (**customer voice only** — no internal strategy jargon on the live site; see `.cursor/rules/minitool-customer-copy.mdc`)
 
 ### 6. Feature test (mandatory — before “shipped”)
 
