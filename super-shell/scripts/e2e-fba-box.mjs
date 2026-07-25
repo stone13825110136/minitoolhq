@@ -132,11 +132,8 @@ try {
 
   for (let i = 0; i < 5; i++) await page.click("#addCartonBtn");
   await page.waitForFunction(() => document.querySelectorAll(".carton-row").length === 6);
-  assert("Pro banner at >5 cartons", await page.locator("#proBanner").isVisible());
-  assert(
-    "Pro CTA text",
-    /Upgrade to Pro/i.test((await page.locator("#proBanner").textContent()) || ""),
-  );
+  assert("no Pro banner on FBA tool", (await page.locator("#proBanner").count()) === 0);
+  assert("no Pro upgrade section", (await page.locator("#pro-upgrade").count()) === 0);
 
   const rowCount = await page.locator(".carton-row").count();
   for (let i = 0; i < rowCount; i++) {
@@ -148,10 +145,10 @@ try {
   }
   await page.click("#checkBtn");
   await page.waitForSelector(".result-card");
-  assert("free tier checks only 5", (await page.locator(".result-card").count()) === 5);
+  assert("checks all 6 cartons free", (await page.locator(".result-card").count()) === 6);
   assert(
-    "status nudges Pro",
-    /Upgrade to Pro/i.test((await page.locator("#status").textContent()) || ""),
+    "status has no Pro upsell",
+    !/Upgrade to Pro/i.test((await page.locator("#status").textContent()) || ""),
   );
 
   assert("no measurement body uploads", posts.length === 0, JSON.stringify(posts));

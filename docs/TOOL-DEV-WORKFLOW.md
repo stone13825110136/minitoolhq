@@ -80,6 +80,10 @@ Future tools: add `npm run test:<slug>` the same way.
 
 Do not update roadmap status to **shipped** until this step passes.
 
+Site-wide (links, anchors, SEO assets, homepage content — not tool feature depth):  
+`cd super-shell && npm run test:site`  
+Live: `BASE_URL=https://minitoolhq.com npm run test:site` (PowerShell: `$env:BASE_URL='https://minitoolhq.com'; npm run test:site`)
+
 ### 7. After ship
 
 - Add tool to site directory / homepage

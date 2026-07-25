@@ -33,4 +33,5 @@ Do **not** mark a tool shipped until **feature testing** (step 9) passes.
 
 - E2E uses **Playwright** (`super-shell` `devDependency`). After clone: `npx playwright install chromium`
 - Each tool: `npm run test:<slug>` (e.g. `test:amazon-prep`, `test:fba-box`) must pass before **shipped**
-- Record results in the tool spec **Test log**
+- Site shell (all pages/links/assets): `npm run test:site` must pass before calling a release done
+- Record tool results in the tool spec **Test log**

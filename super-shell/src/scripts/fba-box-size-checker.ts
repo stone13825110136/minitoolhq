@@ -1,11 +1,9 @@
 import { checkCarton } from "../lib/fba-box/check";
 import {
-  FREE_CARTON_LIMIT,
   type CartonInput,
   type Program,
   type UnitSystem,
 } from "../lib/fba-box/types";
-import { PRO_CHECKOUT_URL, PRO_PRICE_LABEL } from "../lib/amazon-prep/types";
 
 interface RowEls {
   id: string;
@@ -20,17 +18,12 @@ function uid(): string {
   return `c-${Math.random().toString(36).slice(2, 9)}`;
 }
 
-function proUpgradeHref(): string {
-  return PRO_CHECKOUT_URL.trim() || "#pro-upgrade";
-}
-
 function init(): void {
   const root = document.querySelector<HTMLElement>("[data-fba-box]");
   if (!root) return;
 
   const rowsEl = root.querySelector<HTMLElement>("#cartonRows")!;
   const resultsEl = root.querySelector<HTMLElement>("#results")!;
-  const proBanner = root.querySelector<HTMLElement>("#proBanner")!;
   const statusEl = root.querySelector<HTMLElement>("#status")!;
   const checkBtn = root.querySelector<HTMLButtonElement>("#checkBtn")!;
   const addBtn = root.querySelector<HTMLButtonElement>("#addCartonBtn")!;
@@ -67,26 +60,6 @@ function init(): void {
     weightSuffixes.forEach((el) => {
       el.textContent = w;
     });
-  }
-
-  function updateProBanner(): void {
-    if (rows.length <= FREE_CARTON_LIMIT) {
-      proBanner.hidden = true;
-      proBanner.innerHTML = "";
-      return;
-    }
-    const waiting = rows.length - FREE_CARTON_LIMIT;
-    const href = proUpgradeHref();
-    proBanner.hidden = false;
-    proBanner.innerHTML = `
-      <p class="pro-banner-title">Free plan: first ${FREE_CARTON_LIMIT} cartons only</p>
-      <p class="pro-banner-body">
-        This check will evaluate the first ${FREE_CARTON_LIMIT} cartons.
-        <strong>${waiting}</strong> more will wait.
-        Upgrade to Pro for larger multi-carton checks across MiniTool HQ.
-      </p>
-      <a class="pro-cta" href="${href}">Upgrade to Pro — larger batches · ${PRO_PRICE_LABEL}</a>
-    `;
   }
 
   function addRow(prefill?: Partial<CartonInput>): void {
@@ -129,12 +102,10 @@ function init(): void {
       if (idx >= 0) rows.splice(idx, 1);
       wrap.remove();
       refreshRemoveButtons();
-      updateProBanner();
     });
     rows.push(row);
     syncUnitLabels();
     refreshRemoveButtons();
-    updateProBanner();
   }
 
   function refreshRemoveButtons(): void {
@@ -165,12 +136,12 @@ function init(): void {
     if (!all) return;
     const program = readProgram();
     const units = readUnits();
-    const batch = all.slice(0, FREE_CARTON_LIMIT);
-    const waiting = all.length - batch.length;
 
     resultsEl.innerHTML = "";
-    for (const carton of batch) {
+    let fails = 0;
+    for (const carton of all) {
       const result = checkCarton(carton, program, units);
+      if (!result.pass) fails += 1;
       const card = document.createElement("article");
       card.className = `result-card ${result.pass ? "pass" : "fail"}`;
       const unitDim = units === "imperial" ? "in" : "cm";
@@ -195,20 +166,12 @@ function init(): void {
       resultsEl.append(card);
     }
 
-    if (waiting > 0) {
-      setStatus(
-        `Checked ${batch.length} carton(s) (free limit). ${waiting} still waiting — Upgrade to Pro for larger batches.`,
-        "ok",
-      );
-    } else {
-      const fails = batch.filter((c) => !checkCarton(c, program, units).pass).length;
-      setStatus(
-        fails
-          ? `Done — ${batch.length} checked, ${fails} failed.`
-          : `Done — ${batch.length} carton(s) passed standard limits.`,
-        fails ? "error" : "ok",
-      );
-    }
+    setStatus(
+      fails
+        ? `Done — ${all.length} checked, ${fails} failed.`
+        : `Done — ${all.length} carton(s) passed standard limits.`,
+      fails ? "error" : "ok",
+    );
   }
 
   function round(n: number): string {

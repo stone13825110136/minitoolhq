@@ -1,0 +1,272 @@
+/**
+ * Site-wide link + content smoke test (not tool feature E2E).
+ * Local: builds then previews (so sitemap exists).
+ * Live: BASE_URL=https://minitoolhq.com node scripts/e2e-site-smoke.mjs
+ */
+import { spawn } from "node:child_process";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { chromium } from "playwright";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const root = path.join(__dirname, "..");
+const externalBase = process.env.BASE_URL?.replace(/\/$/, "") || "";
+const useLive = Boolean(externalBase);
+
+const results = [];
+function log(name, pass, notes = "") {
+  results.push({ name, pass: !!pass, notes });
+  console.log(`${pass ? "PASS" : "FAIL"}  ${name}${notes ? ` — ${notes}` : ""}`);
+}
+function assert(name, cond, notes = "") {
+  log(name, cond, notes);
+  if (!cond) throw new Error(`Assertion failed: ${name}`);
+}
+
+async function waitForServer(url, ms = 120000) {
+  const start = Date.now();
+  while (Date.now() - start < ms) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) return;
+    } catch {
+      /* retry */
+    }
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  throw new Error("Server did not start: " + url);
+}
+
+function killServer(child) {
+  try {
+    if (process.platform === "win32" && child?.pid) {
+      spawn("taskkill", ["/pid", String(child.pid), "/T", "/F"], { shell: true });
+    } else {
+      child?.kill("SIGTERM");
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
+function run(cmd, args) {
+  return new Promise((resolve, reject) => {
+    const p = spawn(cmd, args, {
+      cwd: root,
+      shell: true,
+      stdio: "inherit",
+      env: { ...process.env, ASTRO_TELEMETRY_DISABLED: "1" },
+    });
+    p.on("exit", (code) => (code === 0 ? resolve() : reject(new Error(`${cmd} exit ${code}`))));
+  });
+}
+
+let child = null;
+let base = externalBase;
+
+if (!useLive) {
+  const port = 4330;
+  base = `http://127.0.0.1:${port}`;
+  await run(process.platform === "win32" ? "npm.cmd" : "npm", ["run", "build"]);
+  child = spawn(
+    process.platform === "win32" ? "npx.cmd" : "npx",
+    ["astro", "preview", "--host", "127.0.0.1", "--port", String(port)],
+    { cwd: root, shell: true, stdio: "pipe", env: { ...process.env, ASTRO_TELEMETRY_DISABLED: "1" } },
+  );
+}
+
+try {
+  if (!useLive) await waitForServer(`${base}/`);
+
+  const browser = await chromium.launch();
+  const context = await browser.newContext({
+    userAgent:
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+  });
+  const page = await context.newPage();
+
+  async function open(pathOrUrl) {
+    const url = pathOrUrl.startsWith("http") ? pathOrUrl : `${base}${pathOrUrl}`;
+    // Prefer request+setContent when live CF resets browser navigations
+    if (useLive) {
+      const res = await page.request.get(url, { maxRedirects: 5 });
+      assert(`fetch ${pathOrUrl}`, res.status() === 200, `status=${res.status()}`);
+      const html = await res.text();
+      await page.setContent(html, { waitUntil: "domcontentloaded" });
+      // Make relative links resolve for clicks — base tag
+      await page.evaluate((b) => {
+        let el = document.querySelector("base");
+        if (!el) {
+          el = document.createElement("base");
+          document.head.prepend(el);
+        }
+        el.href = b + "/";
+      }, base);
+      return html;
+    }
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+    return page.content();
+  }
+
+  const pagesToVisit = [
+    { path: "/", name: "homepage" },
+    { path: "/tools/amazon-image-prep", name: "amazon prep page" },
+    { path: "/tools/fba-box-size-checker", name: "fba box page" },
+  ];
+
+  const staticAssets = [
+    "/favicon.svg",
+    "/favicon.ico",
+    "/robots.txt",
+    "/sitemap-index.xml",
+    "/sitemap-0.xml",
+    "/BingSiteAuth.xml",
+  ];
+
+  for (const p of pagesToVisit) {
+    const res = await page.request.get(`${base}${p.path}`);
+    assert(`${p.name} HTTP 200`, res.status() === 200, `status=${res.status()}`);
+  }
+  for (const asset of staticAssets) {
+    const res = await page.request.get(`${base}${asset}`);
+    assert(`asset ${asset} HTTP 200`, res.status() === 200, `status=${res.status()}`);
+  }
+
+  const robots = await (await page.request.get(`${base}/robots.txt`)).text();
+  assert("robots allows crawl", /Allow:\s*\//i.test(robots));
+  assert("robots lists sitemap", /sitemap-index\.xml/i.test(robots));
+
+  const smIndex = await (await page.request.get(`${base}/sitemap-index.xml`)).text();
+  assert("sitemap-index has sitemap-0", /sitemap-0\.xml/i.test(smIndex));
+  const sm0 = await (await page.request.get(`${base}/sitemap-0.xml`)).text();
+  assert("sitemap lists home", /<loc>/i.test(sm0));
+  assert("sitemap lists amazon tool", /amazon-image-prep/i.test(sm0));
+  assert("sitemap lists fba tool", /fba-box-size-checker/i.test(sm0));
+
+  const bing = await (await page.request.get(`${base}/BingSiteAuth.xml`)).text();
+  assert("BingSiteAuth is XML users", /<users>/i.test(bing) && /<user>/i.test(bing));
+
+  const homeHtml = await open("/");
+  assert("home has Tools heading", /<h2[^>]*>\s*Tools\s*<\/h2>/i.test(homeHtml));
+  assert("home has What you get", /What you get/i.test(homeHtml));
+  assert(
+    "home rejects internal jargon",
+    !/Job-first, not toolbox-first|swiss army knife/i.test(homeHtml),
+  );
+  assert(
+    "home brand MiniTool HQ",
+    /MiniTool HQ/i.test((await page.locator(".brand-mark").textContent()) || ""),
+  );
+
+  const broken = [];
+  for (const p of pagesToVisit) {
+    const html = await open(p.path);
+    const hrefs = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href") || ""));
+    for (const href of hrefs) {
+      if (!href) continue;
+      if (href.startsWith("mailto:")) {
+        assert(`mailto on ${p.name}`, /contact@minitoolhq\.com/i.test(href), href.slice(0, 80));
+        continue;
+      }
+      // Cloudflare email obfuscation on live — not a real site page
+      if (href.includes("/cdn-cgi/")) continue;
+      if (/^https?:\/\//i.test(href) && !/minitoolhq\.com|127\.0\.0\.1|localhost/i.test(href)) {
+        continue;
+      }
+
+      let pathPart = p.path;
+      let hash = "";
+      if (href.startsWith("#")) {
+        hash = href.slice(1);
+      } else if (href.startsWith("/#")) {
+        pathPart = "/";
+        hash = href.slice(2);
+      } else if (href.startsWith("/")) {
+        const [pathOnly, h] = href.split("#");
+        pathPart = pathOnly || "/";
+        hash = h || "";
+      } else {
+        continue;
+      }
+
+      const url = `${base}${pathPart}`;
+      const res = await page.request.get(url);
+      if (res.status() !== 200) {
+        broken.push(`${p.name}: ${href} → ${url} status ${res.status()}`);
+        continue;
+      }
+      if (hash) {
+        const body = await res.text();
+        if (!new RegExp(`id=["']${hash}["']`).test(body)) {
+          // Same-page hash: also accept current HTML (SPA-less static)
+          if (pathPart === p.path || (pathPart === "/" && p.path === "/")) {
+            if (!new RegExp(`id=["']${hash}["']`).test(html)) {
+              broken.push(`${p.name}: ${href} → missing #${hash}`);
+            }
+          } else if (!new RegExp(`id=["']${hash}["']`).test(body)) {
+            broken.push(`${p.name}: ${href} → missing #${hash}`);
+          }
+        }
+      }
+    }
+  }
+  assert("no broken internal links/anchors", broken.length === 0, broken.join(" | ") || "all ok");
+  // Nav journeys (local uses real clicks; live uses request verification of destinations)
+  if (!useLive) {
+    await page.goto(`${base}/`, { waitUntil: "domcontentloaded" });
+    await page.click('a.tool-card[href="/tools/amazon-image-prep"]');
+    await page.waitForURL(/amazon-image-prep/);
+    assert("card to Amazon Prep", /Amazon/i.test(await page.title()));
+
+    await page.click('header a[href="/tools/fba-box-size-checker"]');
+    await page.waitForURL(/fba-box-size-checker/);
+    assert("nav to FBA Box", /FBA Box Size/i.test(await page.title()));
+
+    await page.click("header a.brand");
+    await page.waitForURL((u) => u.pathname === "/" || u.pathname === "");
+    assert("brand back home", (await page.locator(".brand-mark").count()) === 1);
+
+    await page.click('a[href="/#tools"]');
+    assert("#tools exists", (await page.locator("#tools").count()) === 1);
+    await page.click('a[href="/#report-issue"]');
+    assert("#report-issue exists", (await page.locator("#report-issue").count()) === 1);
+    await page.click('footer a[href="/#value"]');
+    assert("#value exists", (await page.locator("#value").count()) === 1);
+  } else {
+    assert(
+      "live nav targets ok",
+      (await page.request.get(`${base}/tools/amazon-image-prep`)).status() === 200 &&
+        (await page.request.get(`${base}/tools/fba-box-size-checker`)).status() === 200,
+    );
+  }
+
+  await open("/tools/amazon-image-prep");
+  assert("amazon has drop zone", (await page.locator("#dropZone").count()) === 1);
+  assert("amazon has process btn", (await page.locator("#processBtn").count()) === 1);
+  assert("amazon has FAQ", (await page.locator(".faq details").count()) >= 5);
+  assert("amazon has #pro-upgrade", (await page.locator("#pro-upgrade").count()) === 1);
+  assert("amazon has #report-issue", (await page.locator("#report-issue").count()) === 1);
+
+  await open("/tools/fba-box-size-checker");
+  assert("fba has check btn", (await page.locator("#checkBtn").count()) === 1);
+  assert("fba has program radios", (await page.locator('input[name="program"]').count()) === 2);
+  assert("fba has FAQ", (await page.locator(".faq details").count()) >= 5);
+  assert("fba has rules table", (await page.locator("table.data").count()) >= 1);
+  assert("fba has no #pro-upgrade", (await page.locator("#pro-upgrade").count()) === 0);
+
+  await open("/");
+  assert("home canonical present", (await page.locator('link[rel="canonical"]').count()) >= 1);
+  assert("home og:title present", (await page.locator('meta[property="og:title"]').count()) >= 1);
+
+  await browser.close();
+  console.log("\nAll site smoke checks passed.\n\n--- SUMMARY ---");
+  for (const r of results) console.log(`| ${r.name} | ${r.pass ? "pass" : "fail"} | ${r.notes} |`);
+} catch (err) {
+  console.error(err);
+  console.log("\n--- SUMMARY (partial) ---");
+  for (const r of results) console.log(`| ${r.name} | ${r.pass ? "pass" : "fail"} | ${r.notes} |`);
+  killServer(child);
+  process.exit(1);
+} finally {
+  killServer(child);
+}

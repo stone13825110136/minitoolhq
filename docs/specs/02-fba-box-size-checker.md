@@ -42,7 +42,7 @@ Interactive **inbound carton** Pass/Fail for **FBA vs AWD** (36×25×25 vs 25×2
 | Weight >50 → Team Lift / single-item note | ✅ text | ❌ | ❌ | **must** |
 | Weight >100 → Mechanical Lift note | ✅ text | ❌ | ❌ | **should** |
 | in/lb and cm/kg units | — | ✅ | ✅ | **must** |
-| Batch multiple cartons | — | paid packing | ✅ multi pkg | **should** (free soft cap) |
+| Batch multiple cartons | — | paid packing | ✅ multi pkg | **must** (unlimited free) |
 | SEO rules table + FAQ + disclaimer | ✅ | partial | ✅ | **must** |
 | Product FBA fee size-tier estimate | — | ✅ | ❌ | **won't** (v1) |
 | 3D bin packing / placement fees | — | paid | ❌ | **won't** |
@@ -90,16 +90,10 @@ Sources reviewed: Seller Central forum (length change Jun 20, 2025), GoAura / Pa
 | Dimension / weight math | None — plain TypeScript | — | No codec needed |
 | Do not | reinvent fee tier tables | — | Out of scope v1 |
 
-## Free vs Pro ($4.99/mo)
+## Monetization
 
-| | Free | Pro |
-|--|------|-----|
-| Single-carton check | ✅ unlimited | ✅ |
-| Multi-carton rows / run | Up to **5** cartons | **Unlimited** (UI practical cap ~50) |
-| FBA + AWD presets | ✅ | ✅ |
-| Soft Upgrade CTA | When >5 cartons queued | — |
-
-Same site-wide Pro as Amazon Image Prep (`PRO_CHECKOUT_URL` / `#pro-upgrade`).
+**Fully free — no batch cap, no Pro CTA on this page.**  
+Inbound carton Pass/Fail is a SEO / traffic tool; charging for “more cartons” has no real willingness-to-pay. Site-wide Pro stays on tools with real batch cost (e.g. Amazon Image Prep).
 
 ## Out of scope (v1)
 
@@ -115,12 +109,11 @@ Same site-wide Pro as Amazon Image Prep (`PRO_CHECKOUT_URL` / `#pro-upgrade`).
 1. H1 + privacy/no-upload (numbers stay in browser)  
 2. Program toggle: **FBA** | **AWD**  
 3. Units: in/lb | cm/kg  
-4. Carton row(s): L, W, H, weight (+ Add carton, free max 5)  
+4. Carton row(s): L, W, H, weight (+ Add carton, unlimited)  
 5. **Check** → Pass/Fail cards per carton  
 6. Rules reference table (FBA vs AWD) + last-reviewed date  
 7. FAQ (SEO)  
-8. Soft Pro CTA when free multi-carton cap hit  
-9. Disclaimer + link stub for Seller Central docs  
+8. Disclaimer + link stub for Seller Central docs  
 
 ## SEO
 
@@ -138,7 +131,7 @@ Same site-wide Pro as Amazon Image Prep (`PRO_CHECKOUT_URL` / `#pro-upgrade`).
 - [x] AWD: fail when any side >25 OR weight >50  
 - [x] Sides sorted so longest is treated as length  
 - [x] in/lb and cm/kg both work  
-- [x] Multi-carton free cap 5 with Pro CTA (same pattern as Amazon Prep)  
+- [x] Multi-carton unlimited; no Pro upsell on this tool  
 - [x] SEO: title, H1, rules table, FAQ, disclaimer  
 - [x] Homepage Tools card links to this tool  
 - [x] `npm run test:fba-box` E2E covers must cases; Test log filled  
@@ -154,6 +147,7 @@ Same site-wide Pro as Amazon Image Prep (`PRO_CHECKOUT_URL` / `#pro-upgrade`).
 | 2026-07-25 | sorted 10×30×20 Pass FBA | pass | |
 | 2026-07-25 | AWD fails 30in length | pass | |
 | 2026-07-25 | metric 50×40×30cm Pass FBA | pass | |
-| 2026-07-25 | free cap 5 + Pro CTA | pass | |
+| 2026-07-25 | free cap 5 + Pro CTA | superseded | removed — tool fully free |
+| 2026-07-25 | unlimited cartons, no Pro CTA | pass | |
 | 2026-07-25 | no measurement body uploads | pass | |
 | 2026-07-25 | `npm run test:fba-box` | pass | 16/16 |

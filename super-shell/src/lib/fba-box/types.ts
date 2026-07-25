@@ -40,9 +40,6 @@ export interface CheckResult {
   notes: string[];
 }
 
-/** Free: up to this many cartons per check run. */
-export const FREE_CARTON_LIMIT = 5;
-
 /** US inbound limits in inches / pounds (as documented in spec). */
 export const FBA_LIMITS_IN_LB: RuleLimits = {
   maxLength: 36,

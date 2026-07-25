@@ -1,8 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ReportIssue from "../../components/ReportIssue.astro";
-import { FREE_CARTON_LIMIT } from "../../lib/fba-box/types";
-import { PRO_PRICE_LABEL } from "../../lib/amazon-prep/types";
 
 const pageTitle = "Amazon FBA Box Size Checker — 36×25×25 Pass/Fail (Free)";
 const pageDescription =
@@ -58,7 +56,7 @@ const appLd = {
   </Fragment>
 
   <section data-fba-box>
-    <p class="badge">No upload · In-browser · Free up to {FREE_CARTON_LIMIT} cartons / run</p>
+    <p class="badge">No upload · In-browser · Free · Unlimited cartons</p>
     <h1>Amazon FBA Box Size Checker</h1>
     <p class="lede">
       Enter inbound carton length, width, height, and weight — get an instant Pass/Fail against
@@ -82,7 +80,6 @@ const appLd = {
 
       <div id="cartonRows" class="carton-rows"></div>
 
-      <div class="pro-banner" id="proBanner" hidden></div>
       <p class="status" id="status"></p>
 
       <div class="actions">
@@ -92,16 +89,6 @@ const appLd = {
 
       <div id="results" class="results" aria-live="polite"></div>
     </div>
-
-    <section id="pro-upgrade" class="section pro-upgrade-stub">
-      <h2>MiniTool HQ Pro</h2>
-      <p class="lede">
-        One site-wide subscription ({PRO_PRICE_LABEL}) unlocks larger multi-carton checks and higher
-        limits on every tool. Checkout plugs in here when billing is live —
-        <a href="mailto:contact@minitoolhq.com">contact@minitoolhq.com</a>
-        if you need higher limits now.
-      </p>
-    </section>
 
     <section class="section">
       <h2>Amazon inbound box limits (US reference)</h2>
@@ -193,10 +180,9 @@ const appLd = {
         </p>
       </details>
       <details>
-        <summary>Is there a free carton limit?</summary>
+        <summary>Is there a carton limit?</summary>
         <p>
-          Free use checks up to {FREE_CARTON_LIMIT} cartons per run. Hit the ceiling and you&apos;ll
-          see an Upgrade to Pro prompt ({PRO_PRICE_LABEL}) for larger batches across MiniTool HQ.
+          No. Check as many cartons as you need in one run — this tool is free with no batch cap.
         </p>
       </details>
     </section>
