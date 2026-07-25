@@ -193,6 +193,13 @@ try {
     "tweaks hidden when multi-select",
     await page.locator("#tweakFields").evaluate((el) => el.hidden === true),
   );
+  assert(
+    "multi size summary visible",
+    await page.locator("#multiSizeSummary").evaluate((el) => el.hidden === false),
+  );
+  const summaryText = (await page.locator("#multiSizeList").textContent()) || "";
+  assert("summary lists Amazon 2000", /Amazon/.test(summaryText) && /2000/.test(summaryText));
+  assert("summary lists TikTok 1200", /TikTok/.test(summaryText) && /1200/.test(summaryText));
 
   await setPlatforms(page, ["amazon"]);
   await page.waitForFunction(() => document.querySelector("#targetPx")?.value === "2000");

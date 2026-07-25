@@ -51,6 +51,8 @@ function init(): void {
 
   const platformList = root.querySelector<HTMLElement>("#platformList")!;
   const tweakFields = root.querySelector<HTMLElement>("#tweakFields")!;
+  const multiSizeSummary = root.querySelector<HTMLElement>("#multiSizeSummary")!;
+  const multiSizeList = root.querySelector<HTMLElement>("#multiSizeList")!;
   const targetPx = root.querySelector<HTMLInputElement>("#targetPx")!;
   const maxMb = root.querySelector<HTMLInputElement>("#maxMb")!;
   const whiteBg = root.querySelector<HTMLInputElement>("#whiteBg")!;
@@ -92,7 +94,9 @@ function init(): void {
   function syncExportMode(): void {
     const ids = selectedPlatformIds();
     const single = ids.length === 1;
+    const multi = ids.length > 1;
     tweakFields.hidden = !single;
+    multiSizeSummary.hidden = !multi;
     if (single) {
       const preset = presetById(ids[0]);
       targetPx.value = String(preset.options.targetPx);
@@ -101,13 +105,21 @@ function init(): void {
       upscale.checked = preset.options.upscaleBelowZoom;
       platformBlurb.textContent = `Single export: ${preset.label} — ${preset.blurb}. Tweak size below if needed.`;
       processBtn.textContent = `Process & download ${preset.label} ZIP`;
-    } else if (ids.length > 1) {
-      const labels = ids.map((id) => presetById(id).label).join(" · ");
-      platformBlurb.textContent = `Multi export (${ids.length}): ${labels}. One ZIP with a folder per marketplace (recommended sizes).`;
+      multiSizeList.innerHTML = "";
+    } else if (multi) {
+      platformBlurb.textContent = `Multi export (${ids.length}): each selected marketplace uses its own size — not one shared 2000px.`;
       processBtn.textContent = `Process & download ${ids.length}-platform ZIP`;
+      multiSizeList.innerHTML = ids
+        .map((id) => {
+          const p = presetById(id);
+          const bg = p.options.whiteBackground ? " · white BG" : "";
+          return `<li><strong>${escapeHtml(p.label)}</strong> → ${p.options.targetPx}×${p.options.targetPx}${bg}</li>`;
+        })
+        .join("");
     } else {
       platformBlurb.textContent = "Select at least one marketplace (single or multi).";
       processBtn.textContent = "Process & download ZIP";
+      multiSizeList.innerHTML = "";
     }
     processBtn.disabled = queue.length === 0 || busy || ids.length === 0;
     syncUrl();
