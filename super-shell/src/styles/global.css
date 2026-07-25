@@ -436,6 +436,12 @@ table.data th {
   }
 }
 
+@media (min-width: 980px) {
+  .tool-cards {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
 .tool-card {
   display: block;
   padding: 1.35rem;
@@ -553,4 +559,121 @@ table.data th {
 .footer-sep {
   margin: 0 0.35rem;
   opacity: 0.5;
+}
+
+.field-set {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.85rem 1rem 1rem;
+  margin: 0;
+}
+
+.field-set legend {
+  padding: 0 0.35rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.45rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.carton-rows {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.carton-row {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.9rem 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.carton-row-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
+}
+
+.grid-4 {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 800px) {
+  .grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.btn-tiny {
+  padding: 0.25rem 0.55rem;
+  font-size: 0.8rem;
+}
+
+.results {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.result-card {
+  border-radius: 12px;
+  padding: 0.95rem 1.05rem;
+  border: 1px solid var(--line);
+}
+
+.result-card.pass {
+  border-color: rgba(120, 200, 120, 0.35);
+  background: rgba(120, 200, 120, 0.08);
+}
+
+.result-card.fail {
+  border-color: rgba(230, 100, 100, 0.4);
+  background: rgba(230, 100, 100, 0.08);
+}
+
+.result-card header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: baseline;
+  margin-bottom: 0.55rem;
+}
+
+.badge-result {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.result-card.pass .badge-result {
+  color: var(--ok);
+}
+
+.result-card.fail .badge-result {
+  color: var(--danger);
+}
+
+.result-card .muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.result-card ul {
+  margin: 0.35rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+}
+
+.result-card .ok-line {
+  margin: 0;
+  color: var(--muted);
 }

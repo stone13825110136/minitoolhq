@@ -1,0 +1,210 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import { FREE_CARTON_LIMIT } from "../../lib/fba-box/types";
+import { PRO_PRICE_LABEL } from "../../lib/amazon-prep/types";
+
+const pageTitle = "Amazon FBA Box Size Checker — 36×25×25 Pass/Fail (Free)";
+const pageDescription =
+  "Check inbound carton dimensions and weight against Amazon FBA and AWD box limits. Instant Pass/Fail in your browser — no signup.";
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What is the Amazon FBA box size limit?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "For US FBA small-parcel inbound cartons, common published limits are 36 inches on the longest side, 25 inches on the other sides, and 50 pounds — confirm in Seller Central. AWD often remains 25×25×25 inches.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Do FBA and AWD use the same box size limits?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. FBA length increased to 36 inches (Jun 20, 2025) while AWD commonly still uses 25×25×25 inches. Always match the destination program.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Are my measurements uploaded?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. Checks run in your browser. Dimensions and weights are not uploaded to MiniTool HQ servers.",
+      },
+    },
+  ],
+};
+
+const appLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Amazon FBA Box Size Checker",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Any",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  description: pageDescription,
+  url: "https://minitoolhq.com/tools/fba-box-size-checker",
+};
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} path="/tools/fba-box-size-checker">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(appLd)} />
+  </Fragment>
+
+  <section data-fba-box>
+    <p class="badge">No upload · In-browser · Free up to {FREE_CARTON_LIMIT} cartons / run</p>
+    <h1>Amazon FBA Box Size Checker</h1>
+    <p class="lede">
+      Enter inbound carton length, width, height, and weight — get an instant Pass/Fail against
+      common US <strong>FBA</strong> (36×25×25, 50 lb) and <strong>AWD</strong> (25×25×25, 50 lb)
+      limits. Sides are sorted so the longest edge is treated as length.
+    </p>
+
+    <div class="panel">
+      <div class="grid-2">
+        <fieldset class="field-set">
+          <legend>Program</legend>
+          <label class="radio"><input type="radio" name="program" value="fba" checked /> FBA inbound</label>
+          <label class="radio"><input type="radio" name="program" value="awd" /> AWD inbound</label>
+        </fieldset>
+        <fieldset class="field-set">
+          <legend>Units</legend>
+          <label class="radio"><input type="radio" name="units" value="imperial" checked /> in / lb</label>
+          <label class="radio"><input type="radio" name="units" value="metric" /> cm / kg</label>
+        </fieldset>
+      </div>
+
+      <div id="cartonRows" class="carton-rows"></div>
+
+      <div class="pro-banner" id="proBanner" hidden></div>
+      <p class="status" id="status"></p>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="checkBtn" type="button">Check cartons</button>
+        <button class="btn btn-ghost" id="addCartonBtn" type="button">Add carton</button>
+      </div>
+
+      <div id="results" class="results" aria-live="polite"></div>
+    </div>
+
+    <section id="pro-upgrade" class="section pro-upgrade-stub">
+      <h2>MiniTool HQ Pro</h2>
+      <p class="lede">
+        One site-wide subscription ({PRO_PRICE_LABEL}) unlocks larger multi-carton checks and higher
+        limits on every tool. Checkout plugs in here when billing is live —
+        <a href="mailto:contact@minitoolhq.com">contact@minitoolhq.com</a>
+        if you need higher limits now.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Amazon inbound box limits (US reference)</h2>
+      <p class="lede">
+        Figures below summarize widely published guidance (including the Jun 20, 2025 FBA length
+        change). Always confirm the shipment destination in Seller Central before you seal cartons.
+      </p>
+      <div class="table-wrap panel">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Rule</th>
+              <th>FBA</th>
+              <th>AWD</th>
+              <th>This tool</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Max length (longest side)</td>
+              <td>36 in</td>
+              <td>25 in</td>
+              <td>Sorted longest side vs program max</td>
+            </tr>
+            <tr>
+              <td>Max width / height</td>
+              <td>25 in / 25 in</td>
+              <td>25 in / 25 in</td>
+              <td>Median / shortest vs max</td>
+            </tr>
+            <tr>
+              <td>Max weight (standard)</td>
+              <td>50 lb</td>
+              <td>50 lb</td>
+              <td>Fail over 50 lb + lift-label notes</td>
+            </tr>
+            <tr>
+              <td>Minimum size (guide)</td>
+              <td>6 × 4 × 1 in</td>
+              <td>6 × 4 × 1 in</td>
+              <td>Warning if below</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lede" style="margin-top: 1rem;">
+        Not affiliated with Amazon. Passing this check does not guarantee acceptance at a
+        fulfillment center.
+      </p>
+    </section>
+
+    <section class="section faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>What is the Amazon FBA box size limit?</summary>
+        <p>
+          For US FBA small-parcel inbound cartons, commonly cited limits are 36 inches on the longest
+          side, 25 inches on the other sides, and 50 pounds (updated Jun 20, 2025 for length). Confirm
+          in Seller Central for your shipment.
+        </p>
+      </details>
+      <details>
+        <summary>Do FBA and AWD use the same box size?</summary>
+        <p>
+          No. AWD often still uses 25×25×25 inches while FBA allows up to 36 inches in length. Pick
+          the correct program in this tool to match the destination.
+        </p>
+      </details>
+      <details>
+        <summary>What if my carton is over 50 pounds?</summary>
+        <p>
+          Standard path fails over 50 lb. Heavier cartons may only be allowed for a single
+          oversized/heavy unit with Team Lift (or Mechanical Lift over 100 lb) labeling — check
+          Seller Central.
+        </p>
+      </details>
+      <details>
+        <summary>Can a box exceed 36 inches?</summary>
+        <p>
+          Only in limited single-oversize-item cases. This tool flags oversize and tells you to
+          confirm exceptions in Seller Central rather than auto-approving.
+        </p>
+      </details>
+      <details>
+        <summary>Are my measurements uploaded?</summary>
+        <p>
+          No. All math runs in your browser. Open DevTools → Network while checking if you want to
+          verify.
+        </p>
+      </details>
+      <details>
+        <summary>Is there a free carton limit?</summary>
+        <p>
+          Free use checks up to {FREE_CARTON_LIMIT} cartons per run. Hit the ceiling and you&apos;ll
+          see an Upgrade to Pro prompt ({PRO_PRICE_LABEL}) for larger batches across MiniTool HQ.
+        </p>
+      </details>
+    </section>
+
+    <ReportIssue />
+  </section>
+</BaseLayout>
+
+<script>
+  import "../../scripts/fba-box-size-checker";
+</script>

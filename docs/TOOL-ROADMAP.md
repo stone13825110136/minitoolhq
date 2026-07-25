@@ -16,8 +16,8 @@ Rules: `.cursor/rules/minitool-dev-workflow.mdc`
 | # | Tool | Spec | Status |
 |---|------|------|--------|
 | 1 | Amazon Image Prep | [specs/01-amazon-image-prep.md](./specs/01-amazon-image-prep.md) | **shipped (v1)** + SEO pass |
-| 2 | TikTok Shop image preset | — | next (seller SEO) |
-| 3 | FBA / marketplace box size checker | — | queued (seller SEO) |
+| 2 | FBA / marketplace box size checker | [specs/02-fba-box-size-checker.md](./specs/02-fba-box-size-checker.md) | **shipped (v1)** |
+| 3 | TikTok Shop image preset | — | next (seller SEO) |
 | 4 | Image compressor (batch) | — | queued |
 | 5 | HEIC → JPG | — | queued |
 | 6 | Strip EXIF (standalone) | — | queued |

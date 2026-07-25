@@ -33,7 +33,7 @@ Updated 2026-07-25 from product discussion + first-tool spec.
 2. ~~Deploy Cloudflare Pages + DNS~~ — live at https://minitoolhq.com (fix www 522 if still broken)  
 3. **Traffic:** verify sitemap + submit https://minitoolhq.com in Google Search Console  
 4. Wire Pro checkout later (Gumroad / Lemon Squeezy) — CTA stubbed  
-5. Next SEO tools after traffic baseline: TikTok Shop image preset / FBA box checker (seller line)
+5. Next SEO tools: TikTok Shop image preset (seller line)
 
 ## Related repos
 
