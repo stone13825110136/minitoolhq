@@ -108,11 +108,11 @@ try {
   }
 
   // UI / SEO
-  assert("page title SEO", (await page.title()).includes("Amazon Product Image Prep"));
+  assert("page title SEO", (await page.title()).includes("Amazon Product Image Resizer"));
   assert(
     "H1 present",
     (await page.locator("[data-amazon-prep] h1").first().textContent())?.includes(
-      "Amazon Product Photo Prep",
+      "Amazon Product Image Resizer",
     ),
   );
   assert("requirements table", (await page.locator("[data-amazon-prep] table.data").count()) >= 2);

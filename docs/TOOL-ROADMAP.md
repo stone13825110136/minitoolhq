@@ -15,14 +15,15 @@ Rules: `.cursor/rules/minitool-dev-workflow.mdc`
 
 | # | Tool | Spec | Status |
 |---|------|------|--------|
-| 1 | Amazon Image Prep | [specs/01-amazon-image-prep.md](./specs/01-amazon-image-prep.md) | **shipped (v1)** |
-| 2 | Image compressor (batch) | — | queued |
-| 3 | HEIC → JPG | — | queued |
-| 4 | Strip EXIF (standalone) | — | queued |
-| 5 | Etsy / Shopify image presets | — | queued |
-| 6 | UTM / campaign link builder | — | queued |
-| 7 | Word counter / QR (directory fillers) | — | later |
-| 8 | Listing title checker | — | later |
+| 1 | Amazon Image Prep | [specs/01-amazon-image-prep.md](./specs/01-amazon-image-prep.md) | **shipped (v1)** + SEO pass |
+| 2 | TikTok Shop image preset | — | next (seller SEO) |
+| 3 | FBA / marketplace box size checker | — | queued (seller SEO) |
+| 4 | Image compressor (batch) | — | queued |
+| 5 | HEIC → JPG | — | queued |
+| 6 | Strip EXIF (standalone) | — | queued |
+| 7 | Etsy / Shopify image presets | — | queued |
+| 8 | UTM / campaign link builder | — | later |
+| 9 | Word counter / QR (directory fillers) | — | later |
 
 ## Narrative
 

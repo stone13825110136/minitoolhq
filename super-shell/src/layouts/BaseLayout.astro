@@ -4,12 +4,18 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description?: string;
+  /** Path only, e.g. /tools/amazon-image-prep — used for canonical + OG */
+  path?: string;
 }
 
 const {
   title,
   description = "Private browser tools for creators & sellers. Files stay on your device.",
+  path = Astro.url.pathname,
 } = Astro.props;
+
+const site = Astro.site?.href.replace(/\/$/, "") ?? "https://minitoolhq.com";
+const canonical = new URL(path.startsWith("/") ? path : `/${path}`, `${site}/`).href;
 ---
 
 <!doctype html>
@@ -21,7 +27,18 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MiniTool HQ" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <title>{title}</title>
+    <slot name="head" />
   </head>
   <body>
     <header class="site-header">

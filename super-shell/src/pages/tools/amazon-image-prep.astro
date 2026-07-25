@@ -2,19 +2,72 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ReportIssue from "../../components/ReportIssue.astro";
 import { FREE_BATCH_LIMIT } from "../../lib/amazon-prep/types";
+
+const pageTitle =
+  "Amazon Product Image Resizer — 2000px, White Background & Strip EXIF (Free)";
+const pageDescription =
+  "Free Amazon product image resizer in your browser. Batch resize listing photos to 2000px, add a pure white background, strip EXIF/GPS, and download a ZIP — no upload.";
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What size do Amazon product photos need?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Amazon requires at least 1,000 px on the longest side. Zoom activates around 1,600 px. This tool defaults to 2,000 px (or a 2000×2000 square main-image pad).",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Does Amazon require a white background?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes for the main image slot shown in search — pure white RGB(255,255,255). Secondary images can use lifestyle backgrounds.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Are my photos uploaded to a server?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. Processing runs entirely in your browser. You should not see image uploads in DevTools → Network.",
+      },
+    },
+  ],
+};
+
+const appLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Amazon Product Image Prep",
+  applicationCategory: "MultimediaApplication",
+  operatingSystem: "Any",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  description: pageDescription,
+  url: "https://minitoolhq.com/tools/amazon-image-prep",
+};
 ---
 
 <BaseLayout
-  title="Amazon Product Image Prep — Resize, Strip EXIF & ZIP (No Upload)"
-  description="Batch-resize product photos to Amazon’s ~2000px spec, strip GPS/EXIF, optional white background. Runs in your browser — nothing uploaded."
+  title={pageTitle}
+  description={pageDescription}
+  path="/tools/amazon-image-prep"
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(appLd)} />
+  </Fragment>
+
   <section data-amazon-prep>
     <p class="badge">No upload · Local processing · Free batch up to {FREE_BATCH_LIMIT}</p>
-    <h1>Amazon Product Photo Prep</h1>
+    <h1>Amazon Product Image Resizer &amp; Prep</h1>
     <p class="lede">
-      Drop phone or studio photos, get Amazon-ready JPEGs in a ZIP — resize to the ~2000px zoom
-      spec, optional pure white background, size cap, and EXIF/GPS stripped. Files never leave
-      your device.
+      Free browser tool to resize Amazon listing photos to the ~2000px zoom spec, optional pure
+      white background, file size cap, and EXIF/GPS stripped — then download a ZIP. Files never
+      leave your device.
     </p>
 
     <div class="panel">
@@ -75,6 +128,21 @@ import { FREE_BATCH_LIMIT } from "../../lib/amazon-prep/types";
         <span class="status"><span id="queueCount">0</span> images queued</span>
       </div>
     </div>
+
+    <section class="section">
+      <h2>How to resize Amazon product images (no upload)</h2>
+      <ol class="steps">
+        <li>Drop JPEG, PNG, WebP, or HEIC product photos (phone or studio).</li>
+        <li>
+          Choose square <strong>2000×2000</strong> for main images, or longest-side resize for
+          secondary shots.
+        </li>
+        <li>
+          Keep pure white background on for Amazon search main images; leave EXIF/GPS strip on.
+        </li>
+        <li>Process and download a ZIP of Amazon-ready JPEGs — nothing is uploaded.</li>
+      </ol>
+    </section>
 
     <section class="section">
       <h2>Metadata removal report</h2>
@@ -161,6 +229,20 @@ import { FREE_BATCH_LIMIT } from "../../lib/amazon-prep/types";
         <p>
           Amazon requires at least 1,000 px on the longest side. Zoom activates around 1,600 px.
           This tool defaults to 2,000 px (or a 2000×2000 square main-image pad).
+        </p>
+      </details>
+      <details>
+        <summary>How do I resize images to 2000px for Amazon listings?</summary>
+        <p>
+          Set target size to 2000 (default). Use square 2000×2000 for main images with white pad,
+          or longest-side mode for other gallery photos. Process and download the ZIP.
+        </p>
+      </details>
+      <details>
+        <summary>Is there a free Amazon product photo editor that does not upload files?</summary>
+        <p>
+          This page is built for that job: resize, white background, size cap, and EXIF strip run
+          locally in your browser. No account is required for the free batch limit.
         </p>
       </details>
       <details>

@@ -23,12 +23,17 @@ Updated 2026-07-25 from product discussion + first-tool spec.
 - Do not open “submit a tool” marketplace before traffic
 - Do not code a tool without competitor parity + reuse scan + spec
 
+## Growth focus (current)
+
+**Core acquisition = SEO on tool pages** (not ads). Ship keyword-aligned tool URLs → Search Console → more vertical tools.
+
 ## Immediate next steps
 
 1. ~~Implement + feature-test `01-amazon-image-prep`~~ — E2E 21/21 pass (`npm run test:amazon-prep`)  
-2. Deploy (Cloudflare Pages recommended); point Aliyun DNS when ready  
-3. Wire Pro checkout later (Gumroad / Lemon Squeezy) — CTA stubbed  
-4. Next tool: restart workflow for Image Compressor (`02` spec) — includes mandatory E2E before shipped
+2. ~~Deploy Cloudflare Pages + DNS~~ — live at https://minitoolhq.com (fix www 522 if still broken)  
+3. **Traffic:** verify sitemap + submit https://minitoolhq.com in Google Search Console  
+4. Wire Pro checkout later (Gumroad / Lemon Squeezy) — CTA stubbed  
+5. Next SEO tools after traffic baseline: TikTok Shop image preset / FBA box checker (seller line)
 
 ## Related repos
 
