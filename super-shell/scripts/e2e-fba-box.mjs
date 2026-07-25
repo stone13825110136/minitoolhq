@@ -77,13 +77,40 @@ try {
 
   await page.goto(`${base}/tools/fba-box-size-checker`, { waitUntil: "networkidle" });
 
+  // SEO (primary: amazon fba box size)
   assert("page title SEO", (await page.title()).includes("FBA Box Size Checker"));
+  const fbaDesc = (await page.locator('meta[name="description"]').getAttribute("content")) || "";
+  assert("meta description has primary keyword", /amazon fba box size/i.test(fbaDesc));
+  assert(
+    "meta has secondary long-tail",
+    /carton size|box dimensions|AWD/i.test(fbaDesc),
+  );
   assert(
     "H1 present",
     (await page.locator("[data-fba-box] h1").textContent())?.includes("FBA Box Size Checker"),
   );
   assert("rules table", (await page.locator("[data-fba-box] table.data").count()) >= 1);
-  assert("FAQ >= 5", (await page.locator("[data-fba-box] .faq details").count()) >= 5);
+  const fbaFaqCount = await page.locator("[data-fba-box] .faq details").count();
+  assert("FAQ >= 5", fbaFaqCount >= 5);
+  const fbaFaqLd = await page.evaluate(() => {
+    const blocks = [...document.querySelectorAll('script[type="application/ld+json"]')];
+    for (const el of blocks) {
+      try {
+        const data = JSON.parse(el.textContent || "");
+        if (data["@type"] === "FAQPage" && Array.isArray(data.mainEntity)) {
+          return data.mainEntity.length;
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+    return 0;
+  });
+  assert(
+    "FAQPage JSON-LD matches FAQ count",
+    fbaFaqLd >= fbaFaqCount,
+    `ld=${fbaFaqLd} faq=${fbaFaqCount}`,
+  );
 
   const home = await context.newPage();
   await home.goto(base, { waitUntil: "domcontentloaded" });

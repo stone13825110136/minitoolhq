@@ -107,8 +107,16 @@ try {
     await page.locator(selector).click({ force: true, timeout: 15000 });
   }
 
-  // UI / SEO
-  assert("page title SEO", (await page.title()).includes("Amazon Product Image Resizer"));
+  // UI / SEO (primary: amazon product image resize)
+  const amazonTitle = await page.title();
+  assert("page title SEO", amazonTitle.includes("Amazon Product Image Resizer"));
+  const amazonDesc =
+    (await page.locator('meta[name="description"]').getAttribute("content")) || "";
+  assert("meta description has primary keyword", /amazon product image resizer/i.test(amazonDesc));
+  assert(
+    "meta has secondary long-tail",
+    /main image|image requirements|listing photo compressor|strip EXIF/i.test(amazonDesc),
+  );
   assert(
     "H1 present",
     (await page.locator("[data-amazon-prep] h1").first().textContent())?.includes(
@@ -116,7 +124,27 @@ try {
     ),
   );
   assert("requirements table", (await page.locator("[data-amazon-prep] table.data").count()) >= 2);
-  assert("FAQ count >= 5", (await page.locator("[data-amazon-prep] .faq details").count()) >= 5);
+  const amazonFaqCount = await page.locator("[data-amazon-prep] .faq details").count();
+  assert("FAQ count >= 5", amazonFaqCount >= 5);
+  const amazonFaqLd = await page.evaluate(() => {
+    const blocks = [...document.querySelectorAll('script[type="application/ld+json"]')];
+    for (const el of blocks) {
+      try {
+        const data = JSON.parse(el.textContent || "");
+        if (data["@type"] === "FAQPage" && Array.isArray(data.mainEntity)) {
+          return data.mainEntity.length;
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+    return 0;
+  });
+  assert(
+    "FAQPage JSON-LD matches FAQ count",
+    amazonFaqLd >= amazonFaqCount,
+    `ld=${amazonFaqLd} faq=${amazonFaqCount}`,
+  );
 
   const home = await context.newPage();
   await home.goto(base, { waitUntil: "domcontentloaded" });

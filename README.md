@@ -9,8 +9,8 @@
 
 - Domain: **minitoolhq.com** (Aliyun DNS) — separate from hotpicklab
 - Scaffold: Astro in `super-shell/`
-- Process frozen: research → reuse OSS → spec → build → $4.99 Pro
-- First tool shipped: `/tools/amazon-image-prep` (Amazon Image Prep)
+- Process frozen: research → SEO keywords → reuse OSS → spec → build feature+SEO together → test
+- Shipped: Amazon Product Image Resizer, FBA Box Size Checker
 
 ## Quick start
 
@@ -31,6 +31,8 @@ npm run dev
 ## Agent rules
 
 - `.cursor/rules/minitool-dev-workflow.mdc` — always apply; no coding without a spec
+- `.cursor/rules/minitool-seo-keywords.mdc` — SEO/long-tail gate; ship with every tool
+- `.cursor/rules/minitool-customer-copy.mdc` — customer-facing copy only
 
 ## Deploy
 

@@ -2,39 +2,54 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ReportIssue from "../../components/ReportIssue.astro";
 
-const pageTitle = "Amazon FBA Box Size Checker — 36×25×25 Pass/Fail (Free)";
+/** Primary: amazon fba box size. Secondaries woven into title/description/FAQ. */
+const pageTitle = "Amazon FBA Box Size Checker — Carton Dimensions & Limits (Free)";
 const pageDescription =
-  "Check inbound carton dimensions and weight against Amazon FBA and AWD box limits. Instant Pass/Fail in your browser — no signup.";
+  "Free Amazon FBA box size and carton size checker. Verify FBA box dimensions (36×25×25) vs AWD (25×25×25), weight limits, and Pass/Fail — in your browser, no signup.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "What is the Amazon FBA box size limit?",
+    a: "For US FBA small-parcel inbound cartons, commonly cited Amazon FBA box size limits are 36 inches on the longest side, 25 inches on the other sides, and 50 pounds (length updated Jun 20, 2025). Confirm in Seller Central for your shipment.",
+  },
+  {
+    q: "What are standard FBA box dimensions?",
+    a: "Typical FBA box dimensions for small-parcel inbound are up to 36 × 25 × 25 inches after sorting sides so the longest edge is length. This FBA carton size checker sorts L×W×H for you before Pass/Fail.",
+  },
+  {
+    q: "Do FBA and AWD use the same box size?",
+    a: "No — AWD vs FBA box size differs. AWD often still uses 25×25×25 inches while FBA allows up to 36 inches in length. Pick the correct program in this tool to match the destination.",
+  },
+  {
+    q: "How do I check FBA carton size before shipping?",
+    a: "Enter each carton’s length, width, height, and weight in this free FBA carton size checker, choose FBA or AWD, then Check. You get Pass/Fail plus which rule failed — nothing is uploaded.",
+  },
+  {
+    q: "What if my carton is over 50 pounds?",
+    a: "The standard path fails over 50 lb. Heavier cartons may only be allowed for a single oversized/heavy unit with Team Lift (or Mechanical Lift over 100 lb) labeling — check Seller Central.",
+  },
+  {
+    q: "Can a box exceed 36 inches?",
+    a: "Only in limited single-oversize-item cases. This tool flags oversize and tells you to confirm exceptions in Seller Central rather than auto-approving.",
+  },
+  {
+    q: "Are my measurements uploaded?",
+    a: "No. All math runs in your browser. Open DevTools → Network while checking if you want to verify.",
+  },
+  {
+    q: "Is there a carton limit?",
+    a: "No. Check as many cartons as you need in one run — this Amazon FBA box size checker is free with no batch cap.",
+  },
+];
 
 const faqLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What is the Amazon FBA box size limit?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "For US FBA small-parcel inbound cartons, common published limits are 36 inches on the longest side, 25 inches on the other sides, and 50 pounds — confirm in Seller Central. AWD often remains 25×25×25 inches.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Do FBA and AWD use the same box size limits?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No. FBA length increased to 36 inches (Jun 20, 2025) while AWD commonly still uses 25×25×25 inches. Always match the destination program.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Are my measurements uploaded?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No. Checks run in your browser. Dimensions and weights are not uploaded to MiniTool HQ servers.",
-      },
-    },
-  ],
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
 };
 
 const appLd = {
@@ -59,9 +74,10 @@ const appLd = {
     <p class="badge">No upload · In-browser · Free · Unlimited cartons</p>
     <h1>Amazon FBA Box Size Checker</h1>
     <p class="lede">
-      Enter inbound carton length, width, height, and weight — get an instant Pass/Fail against
-      common US <strong>FBA</strong> (36×25×25, 50 lb) and <strong>AWD</strong> (25×25×25, 50 lb)
-      limits. Sides are sorted so the longest edge is treated as length.
+      Free <strong>Amazon FBA box size</strong> and <strong>carton size checker</strong>. Enter
+      inbound <strong>FBA box dimensions</strong> and weight — instant Pass/Fail against common US
+      <strong>FBA</strong> (36×25×25, 50 lb) and <strong>AWD</strong> (25×25×25, 50 lb) limits.
+      Sides are sorted so the longest edge is treated as length.
     </p>
 
     <div class="panel">
@@ -91,10 +107,11 @@ const appLd = {
     </div>
 
     <section class="section">
-      <h2>Amazon inbound box limits (US reference)</h2>
+      <h2>Amazon FBA box dimensions &amp; inbound limits (US reference)</h2>
       <p class="lede">
-        Figures below summarize widely published guidance (including the Jun 20, 2025 FBA length
-        change). Always confirm the shipment destination in Seller Central before you seal cartons.
+        Figures below summarize widely published FBA box size and AWD carton guidance (including the
+        Jun 20, 2025 FBA length change). Always confirm the shipment destination in Seller Central
+        before you seal cartons.
       </p>
       <div class="table-wrap panel">
         <table class="data">
@@ -111,22 +128,22 @@ const appLd = {
               <td>Max length (longest side)</td>
               <td>36 in</td>
               <td>25 in</td>
-              <td>Sorted longest side vs program max</td>
+              <td>Fail if over</td>
             </tr>
             <tr>
               <td>Max width / height</td>
-              <td>25 in / 25 in</td>
-              <td>25 in / 25 in</td>
-              <td>Median / shortest vs max</td>
+              <td>25 × 25 in</td>
+              <td>25 × 25 in</td>
+              <td>Fail if over</td>
             </tr>
             <tr>
               <td>Max weight (standard)</td>
               <td>50 lb</td>
               <td>50 lb</td>
-              <td>Fail over 50 lb + lift-label notes</td>
+              <td>Fail + lift notes</td>
             </tr>
             <tr>
-              <td>Minimum size (guide)</td>
+              <td>Min size (guide)</td>
               <td>6 × 4 × 1 in</td>
               <td>6 × 4 × 1 in</td>
               <td>Warning if below</td>
@@ -141,50 +158,15 @@ const appLd = {
     </section>
 
     <section class="section faq">
-      <h2>FAQ</h2>
-      <details>
-        <summary>What is the Amazon FBA box size limit?</summary>
-        <p>
-          For US FBA small-parcel inbound cartons, commonly cited limits are 36 inches on the longest
-          side, 25 inches on the other sides, and 50 pounds (updated Jun 20, 2025 for length). Confirm
-          in Seller Central for your shipment.
-        </p>
-      </details>
-      <details>
-        <summary>Do FBA and AWD use the same box size?</summary>
-        <p>
-          No. AWD often still uses 25×25×25 inches while FBA allows up to 36 inches in length. Pick
-          the correct program in this tool to match the destination.
-        </p>
-      </details>
-      <details>
-        <summary>What if my carton is over 50 pounds?</summary>
-        <p>
-          Standard path fails over 50 lb. Heavier cartons may only be allowed for a single
-          oversized/heavy unit with Team Lift (or Mechanical Lift over 100 lb) labeling — check
-          Seller Central.
-        </p>
-      </details>
-      <details>
-        <summary>Can a box exceed 36 inches?</summary>
-        <p>
-          Only in limited single-oversize-item cases. This tool flags oversize and tells you to
-          confirm exceptions in Seller Central rather than auto-approving.
-        </p>
-      </details>
-      <details>
-        <summary>Are my measurements uploaded?</summary>
-        <p>
-          No. All math runs in your browser. Open DevTools → Network while checking if you want to
-          verify.
-        </p>
-      </details>
-      <details>
-        <summary>Is there a carton limit?</summary>
-        <p>
-          No. Check as many cartons as you need in one run — this tool is free with no batch cap.
-        </p>
-      </details>
+      <h2>FAQ — FBA box size, dimensions &amp; AWD</h2>
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
     </section>
 
     <ReportIssue />

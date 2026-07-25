@@ -1,0 +1,57 @@
+---
+description: MiniTool HQ — every tool must ship with full long-tail SEO or it is not shipped
+alwaysApply: true
+---
+
+# MiniTool HQ — SEO / long-tail keywords (mandatory)
+
+If customers cannot find the tool in search, the tool has no business value.  
+**Do not mark a tool shipped** until the SEO checklist below is complete on the live tool page + spec.
+
+## Spec (before coding)
+
+In `docs/specs/NN-*.md` under **Meta** + **SEO**:
+
+| Field | Required |
+|-------|----------|
+| Primary keyword | 1 phrase users actually type |
+| Secondary keywords | **≥3** related long-tails |
+| Title | Includes primary; under ~60 chars when possible |
+| H1 | Includes primary (or closest natural variant) |
+| Meta description | Includes primary + ≥1 secondary; job outcome; under ~160 chars |
+| FAQ topics | ≥5 questions that mirror search queries (not only product FAQ) |
+
+## Tool page (must ship together with the feature)
+
+1. **`<title>` + meta description + canonical + OG/Twitter** via `BaseLayout`
+2. **H1** carries the primary keyword
+3. **Opening lede** naturally uses primary + secondary phrases (no keyword stuffing)
+4. **FAQ** ≥5 items; questions worded like real searches
+5. **FAQPage JSON-LD** must include **every** on-page FAQ (same source array — do not maintain two copies)
+6. **WebApplication JSON-LD** with name, description, url, `offers.price: "0"` when free
+7. **Rules / requirements table** when the job is policy-driven (Amazon sizes, FBA limits, etc.)
+8. **Homepage** Tools card links to the tool with a keyword-relevant title
+9. **Sitemap** picks up the URL via `@astrojs/sitemap` (no orphan pages)
+
+## E2E gate (before “shipped”)
+
+Tool E2E **must** assert at least:
+
+- `document.title` contains the primary keyword (or agreed Title fragment from the spec)
+- `meta[name="description"]` is non-empty and contains the primary keyword
+- On-page FAQ count ≥ 5
+- FAQPage JSON-LD script exists and question count ≥ on-page FAQ count
+- H1 is present and matches the keyword intent from the spec
+
+## Do / Don’t
+
+- Do: one strong tool URL that ranks for primary + nearby long-tails via FAQ/table copy
+- Do: sync SEO when renaming the tool or changing the job
+- Don’t: ship UI-only and “add SEO later”
+- Don’t: use a bare `meta keywords` tag as the strategy
+- Don’t: put internal strategy jargon in titles/FAQs (see `minitool-customer-copy.mdc`)
+
+## Monetization note
+
+Traffic tools (e.g. FBA box checker) may be fully free — still require full SEO.  
+Paid batch tools still require the same keyword gate.

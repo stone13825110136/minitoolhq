@@ -9,8 +9,9 @@ Cursor rule: `.cursor/rules/minitool-dev-workflow.mdc`.
 2. Open top 3–5 results
 3. Fill **quick scan** table + **feature parity** table
 4. Search GitHub/npm for reusable libs (MIT/Apache preferred)
-5. Write one-line wedge + free vs Pro boundary
-6. Create `docs/specs/NN-tool-slug.md` — then code
+5. Write one-line wedge + monetization (fully free vs free+Pro)
+6. Lock **primary + ≥3 secondary keywords**, Title, H1, description, ≥5 FAQ questions (see `.cursor/rules/minitool-seo-keywords.mdc`)
+7. Create `docs/specs/NN-tool-slug.md` — then code feature **and** SEO together
 
 Optional: competitor-research agent/skill  
 https://github.com/750928465/competitor-research-skill-kit
@@ -39,9 +40,11 @@ https://github.com/750928465/competitor-research-skill-kit
 ## Our wedge (fill before build)
 
 - One-line difference:
-- Free vs Pro ($4.99/mo) boundary:
-- Primary SEO title:
+- Monetization (fully free traffic tool vs free+Pro):
 - Primary keyword:
+- Secondary keywords (≥3):
+- Primary SEO title:
+- Meta description draft:
 
 ## Market pain signals
 

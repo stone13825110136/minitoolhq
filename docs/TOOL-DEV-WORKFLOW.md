@@ -16,11 +16,14 @@ Every MiniTool HQ tool follows this process. No coding before a build spec exist
 
 ## Steps (mandatory)
 
-### 1. Keyword
+### 1. Keyword (mandatory — see `.cursor/rules/minitool-seo-keywords.mdc`)
 
 - Primary keyword (what users type)
-- Secondary keywords (2–3)
+- Secondary keywords (**≥3** long-tails)
 - Job-to-be-done in one sentence
+- Draft Title / H1 / meta description / ≥5 FAQ questions that mirror searches
+
+**Gate:** a tool with no discoverable keywords is worthless — do not skip this step or defer SEO.
 
 ### 2. Competitor research (30–60 min)
 
@@ -55,12 +58,14 @@ Record chosen libs + license in the build spec.
 Create `docs/specs/NN-tool-slug.md` using the template below.  
 Coding starts only after the spec is merged/accepted.
 
-### 5. Implement
+### 5. Implement (feature + SEO in the same ship)
 
 - Prefer Astro (or existing `super-shell`) + client JS/TS
-- Free tier: usable but limited (e.g. batch cap)
-- Pro $4.99: unlimited batch / advanced presets — **one subscription for all tools**
-- Ship tool page + SEO/FAQ content (**customer voice only** — no internal strategy jargon on the live site; see `.cursor/rules/minitool-customer-copy.mdc`)
+- Free tier: usable but limited when willingness-to-pay exists; **traffic tools may be fully free** (no fake caps)
+- Pro $4.99: site-wide unlock for tools with real batch cost — **not** bolted onto every page
+- Ship tool page **with** full SEO in the same change: Title, H1, description, FAQ (≥5), FAQPage JSON-LD = all FAQs, WebApplication JSON-LD, homepage card, sitemap URL
+- Customer voice only — see `.cursor/rules/minitool-customer-copy.mdc` and `.cursor/rules/minitool-seo-keywords.mdc`
+- Prefer one `faqs` array in the `.astro` page that renders both HTML FAQ and JSON-LD (no drift)
 
 ### 6. Feature test (mandatory — before “shipped”)
 
@@ -71,14 +76,15 @@ Coding starts only after the spec is merged/accepted.
 3. Walk every acceptance-criterion checkbox in the spec
 4. For file tools: use real sample files (batch ≥2); confirm download / output
 5. For privacy tools: confirm no upload of file bytes (Network tab or equivalent)
-6. Hit free-tier limits and confirm Pro CTA copy
-7. Fix failures, re-test
-8. Append a **Test log** section to the tool spec (`date`, cases, pass/fail)
+6. Hit free-tier limits and confirm Pro CTA copy **only if the tool monetizes that way**
+7. **SEO gate:** title + meta description contain primary keyword; FAQ ≥5; FAQPage JSON-LD question count ≥ on-page FAQ count; H1 present
+8. Fix failures, re-test
+9. Append a **Test log** section to the tool spec (`date`, cases, pass/fail)
 
-Amazon Image Prep E2E: `cd super-shell && npm run test:amazon-prep`  
-Future tools: add `npm run test:<slug>` the same way.
+Tool E2E examples: `cd super-shell && npm run test:amazon-prep` / `test:fba-box`  
+Future tools: add `npm run test:<slug>` with the same SEO assertions.
 
-Do not update roadmap status to **shipped** until this step passes.
+Do not update roadmap status to **shipped** until feature **and** SEO gates pass.
 
 Site-wide (links, anchors, SEO assets, homepage content — not tool feature depth):  
 `cd super-shell && npm run test:site`  
@@ -98,6 +104,7 @@ Live: `BASE_URL=https://minitoolhq.com npm run test:site` (PowerShell: `$env:BAS
 ## Meta
 - Slug / URL:
 - Primary keyword:
+- Secondary keywords: (list ≥3)
 - Status: draft | ready | shipped
 
 ## Job
@@ -115,20 +122,25 @@ One sentence.
 | Need | Library | License |
 |------|---------|---------|
 
-## Free vs Pro ($4.99)
-- Free:
-- Pro:
+## Monetization
+- Fully free traffic tool | OR free core + Pro boundary:
 
 ## Out of scope (v1)
 - …
 
-## SEO
+## SEO (mandatory — ship with v1)
 - Title:
 - H1:
-- FAQ topics:
+- Meta description:
+- Secondary phrases used in lede / table / FAQ:
+- FAQ topics (≥5 search-shaped questions):
 
 ## Acceptance criteria
-- [ ] …
+- [ ] Feature musts…
+- [ ] Title + meta description include primary keyword
+- [ ] FAQ ≥5; FAQPage JSON-LD matches all FAQs
+- [ ] Homepage Tools card + sitemap URL
+- [ ] E2E includes SEO assertions
 
 ## Test log
 | Date | Case | Result | Notes |

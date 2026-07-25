@@ -7,6 +7,7 @@
 | Slug / URL | `/tools/fba-box-size-checker` |
 | Primary keyword | amazon fba box size |
 | Secondary keywords | fba box dimensions, amazon fba box size limit, fba carton size checker, awd vs fba box size |
+| SEO gate | **mandatory with ship** — see `.cursor/rules/minitool-seo-keywords.mdc` |
 | Status | **shipped** (v1 in `super-shell`) |
 | Stack | Astro (`super-shell`) + client-side TS; no server, no upload |
 
@@ -119,10 +120,11 @@ Inbound carton Pass/Fail is a SEO / traffic tool; charging for “more cartons�
 
 | Field | Copy (draft) |
 |-------|----------------|
-| Title | Amazon FBA Box Size Checker — 36×25×25 Pass/Fail (Free) |
+| Title | Amazon FBA Box Size Checker — Carton Dimensions & Limits (Free) |
 | H1 | Amazon FBA Box Size Checker |
-| Description | Check inbound carton dimensions and weight against Amazon FBA and AWD box limits. Instant Pass/Fail in your browser — no signup. |
-| FAQ topics | What is FBA box size limit 2026?; FBA vs AWD box size; what if over 50 lb?; can box exceed 36 inches?; min box size |
+| Description | Free Amazon FBA box size and carton size checker… FBA box dimensions vs AWD |
+| FAQ topics | FBA box size limit; FBA box dimensions; AWD vs FBA; how to check carton size; over 50 lb; over 36 in; privacy; unlimited free |
+| FAQ JSON-LD | Same `faqs` array as on-page (no drift) |
 
 ## Acceptance criteria
 
@@ -133,14 +135,17 @@ Inbound carton Pass/Fail is a SEO / traffic tool; charging for “more cartons�
 - [x] in/lb and cm/kg both work  
 - [x] Multi-carton unlimited; no Pro upsell on this tool  
 - [x] SEO: title, H1, rules table, FAQ, disclaimer  
+- [x] Title + meta include primary keyword; secondaries in description/lede/FAQ  
+- [x] FAQPage JSON-LD matches all on-page FAQs  
 - [x] Homepage Tools card links to this tool  
-- [x] `npm run test:fba-box` E2E covers must cases; Test log filled  
+- [x] `npm run test:fba-box` E2E covers must cases + SEO assertions; Test log filled  
 
 ## Test log
 
 | Date | Case | Result | Notes |
 |------|------|--------|-------|
 | 2026-07-25 | page title / H1 / FAQ / rules table | pass | |
+| 2026-07-25 | meta primary + secondary + FAQ JSON-LD sync | pass | |
 | 2026-07-25 | homepage links to tool | pass | |
 | 2026-07-25 | default 20×16×12@28lb Pass FBA | pass | |
 | 2026-07-25 | 40in length Fail + names rule | pass | |

@@ -7,6 +7,7 @@
 | Slug / URL | `/tools/amazon-image-prep` |
 | Primary keyword | amazon product image resize |
 | Secondary keywords | amazon main image size, amazon image requirements, strip exif amazon photos, amazon listing photo compressor |
+| SEO gate | **mandatory with ship** — see `.cursor/rules/minitool-seo-keywords.mdc` |
 | Status | **shipped** (v1 in `super-shell`) |
 | Stack | Astro (`super-shell`) + client-side TS; no upload API |
 
@@ -119,10 +120,11 @@ Site-wide: Pro unlocks future tools’ batch limits too — one price.
 
 | Field | Copy (draft) |
 |-------|----------------|
-| Title | Amazon Product Image Prep — Resize, Strip EXIF & ZIP (No Upload) |
-| H1 | Amazon Product Photo Prep |
-| Meta | Batch-resize product photos to Amazon’s ~2000px spec, strip GPS/EXIF, optional white background. Runs in your browser — nothing uploaded. |
-| FAQ topics | Required size / white background / GPS strip / max file size / PNG-WebP input / batch / privacy |
+| Title | Amazon Product Image Resizer — 2000px Main Image, White BG & Strip EXIF |
+| H1 | Amazon Product Image Resizer & Prep |
+| Meta | Free Amazon product image resizer and listing photo compressor… main image size, image requirements, strip EXIF |
+| FAQ topics | Size / 2000px resize / image requirements / listing photo compressor / white BG / strip EXIF / GPS / max size / formats / privacy / batch / credit |
+| FAQ JSON-LD | Same `faqs` array as on-page (no drift) |
 
 ## Acceptance criteria
 
@@ -133,8 +135,11 @@ Site-wide: Pro unlocks future tools’ batch limits too — one price.
 - [x] White BG toggle pads or flattens to RGB 255,255,255
 - [x] Free cap 10 images with clear upgrade path copy (checkout can be stubbed)
 - [x] Requirements table + ≥5 FAQs on page
+- [x] Title + meta include primary keyword; secondaries in description/lede/FAQ
+- [x] FAQPage JSON-LD matches all on-page FAQs
 - [x] Linked from homepage / tools index
 - [x] Spec libs only — no custom codec from scratch
+- [x] E2E asserts SEO meta + FAQ JSON-LD
 
 ## Test log
 
@@ -143,9 +148,11 @@ Command: `cd super-shell && npm run test:amazon-prep` (Playwright E2E)
 | Date | Case | Result | Notes |
 |------|------|--------|-------|
 | 2026-07-25 | page title SEO | pass | |
+| 2026-07-25 | meta primary + secondary keywords | pass | synced faqs → FAQPage JSON-LD |
 | 2026-07-25 | H1 present | pass | |
 | 2026-07-25 | requirements table | pass | |
 | 2026-07-25 | FAQ count ≥ 5 | pass | |
+| 2026-07-25 | FAQPage JSON-LD matches FAQ count | pass | |
 | 2026-07-25 | homepage links to tool | pass | |
 | 2026-07-25 | queue shows 2 | pass | |
 | 2026-07-25 | ZIP downloaded | pass | |

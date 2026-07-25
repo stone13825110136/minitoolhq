@@ -3,46 +3,77 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import ReportIssue from "../../components/ReportIssue.astro";
 import { FREE_BATCH_LIMIT, PRO_PRICE_LABEL } from "../../lib/amazon-prep/types";
 
+/** Primary: amazon product image resize. Secondaries in copy below. */
 const pageTitle =
-  "Amazon Product Image Resizer — 2000px, White Background & Strip EXIF (Free)";
+  "Amazon Product Image Resizer — 2000px Main Image, White BG & Strip EXIF";
 const pageDescription =
-  "Free Amazon product image resizer in your browser. Batch resize listing photos to 2000px, add a pure white background, strip EXIF/GPS, and download a ZIP — no upload.";
+  "Free Amazon product image resizer and listing photo compressor. Match Amazon image requirements: 2000px main image size, pure white background, strip EXIF/GPS — batch ZIP, no upload.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "What size do Amazon product photos need?",
+    a: "Amazon requires at least 1,000 px on the longest side. Zoom activates around 1,600 px. For Amazon main image size, this tool defaults to 2,000 px (or a 2000×2000 square pad).",
+  },
+  {
+    q: "How do I resize images to 2000px for Amazon listings?",
+    a: "Use this Amazon product image resizer: set target size to 2000 (default). Choose square 2000×2000 for main images with white pad, or longest-side mode for gallery photos, then download the ZIP.",
+  },
+  {
+    q: "What are the Amazon image requirements for listing photos?",
+    a: "Common Amazon image requirements: ≥1000 px (prefer 2000 px for zoom), JPEG, pure white RGB(255,255,255) on the main image, no badges or text overlays, and no personal data in EXIF/GPS.",
+  },
+  {
+    q: "Is there a free Amazon listing photo compressor that does not upload files?",
+    a: `Yes — this page is a free Amazon listing photo compressor and prep kit: resize, white background, size cap, and EXIF strip run locally in your browser. Free batch up to ${FREE_BATCH_LIMIT} images; no account required.`,
+  },
+  {
+    q: "Does Amazon require a white background?",
+    a: "Yes for the main image slot shown in search — pure white RGB(255,255,255). Secondary images can use lifestyle backgrounds. Toggle white background on for main images.",
+  },
+  {
+    q: "How do I strip EXIF from Amazon photos?",
+    a: "Leave Strip EXIF / GPS on (always enabled here). Drawing through a canvas produces a clean JPEG with no EXIF/GPS — useful before you upload Amazon listing photos from a phone.",
+  },
+  {
+    q: "Will this strip GPS from my phone photos?",
+    a: "Yes. Drawing through a canvas produces a clean JPEG with no EXIF/GPS. The report table shows what was embedded before stripping.",
+  },
+  {
+    q: "What is the maximum file size?",
+    a: "Amazon does not publish a hard cap; under ~10 MB uploads reliably. The default cap here is 5 MB via quality binary search — a practical listing photo compressor for Seller Central.",
+  },
+  {
+    q: "Can I use PNG, WebP, or HEIC?",
+    a: "Yes as inputs. All outputs are JPEG, which Amazon prefers for product photos.",
+  },
+  {
+    q: "Are my photos uploaded to a server?",
+    a: "No. Processing runs entirely in your browser. Open DevTools → Network while processing to verify — you should not see image uploads.",
+  },
+  {
+    q: "Is there a batch limit?",
+    a: `Yes — free use processes up to ${FREE_BATCH_LIMIT} images per run. When you hit that ceiling, you'll see an Upgrade to Pro prompt (${PRO_PRICE_LABEL}) for larger batches across the whole site.`,
+  },
+  {
+    q: "Can I get free usage credit?",
+    a: "Yes. If you report a real tool problem that helps us fix it, we grant a free usage credit (for example, higher batch limits). Use Report a tool issue or email contact@minitoolhq.com.",
+  },
+];
 
 const faqLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What size do Amazon product photos need?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Amazon requires at least 1,000 px on the longest side. Zoom activates around 1,600 px. This tool defaults to 2,000 px (or a 2000×2000 square main-image pad).",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Does Amazon require a white background?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Yes for the main image slot shown in search — pure white RGB(255,255,255). Secondary images can use lifestyle backgrounds.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Are my photos uploaded to a server?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No. Processing runs entirely in your browser. You should not see image uploads in DevTools → Network.",
-      },
-    },
-  ],
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
 };
 
 const appLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  name: "Amazon Product Image Prep",
+  name: "Amazon Product Image Resizer & Prep",
   applicationCategory: "MultimediaApplication",
   operatingSystem: "Any",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -65,9 +96,10 @@ const appLd = {
     <p class="badge">No upload · Local processing · Free batch up to {FREE_BATCH_LIMIT}</p>
     <h1>Amazon Product Image Resizer &amp; Prep</h1>
     <p class="lede">
-      Free browser tool to resize Amazon listing photos to the ~2000px zoom spec, optional pure
-      white background, file size cap, and EXIF/GPS stripped — then download a ZIP. Files never
-      leave your device.
+      Free <strong>Amazon product image resizer</strong> and listing photo compressor for Seller
+      Central. Match common <strong>Amazon image requirements</strong>: ~2000px
+      <strong>main image size</strong>, optional pure white background, file-size cap, and
+      <strong>strip EXIF/GPS</strong> — then download a ZIP. Files never leave your device.
     </p>
 
     <div class="panel">
@@ -234,79 +266,15 @@ const appLd = {
     </section>
 
     <section class="section faq">
-      <h2>FAQ</h2>
-      <details>
-        <summary>What size do Amazon product photos need?</summary>
-        <p>
-          Amazon requires at least 1,000 px on the longest side. Zoom activates around 1,600 px.
-          This tool defaults to 2,000 px (or a 2000×2000 square main-image pad).
-        </p>
-      </details>
-      <details>
-        <summary>How do I resize images to 2000px for Amazon listings?</summary>
-        <p>
-          Set target size to 2000 (default). Use square 2000×2000 for main images with white pad,
-          or longest-side mode for other gallery photos. Process and download the ZIP.
-        </p>
-      </details>
-      <details>
-        <summary>Is there a free Amazon product photo editor that does not upload files?</summary>
-        <p>
-          This page is built for that job: resize, white background, size cap, and EXIF strip run
-          locally in your browser. No account is required for the free batch limit.
-        </p>
-      </details>
-      <details>
-        <summary>Does Amazon require a white background?</summary>
-        <p>
-          Yes for the main image slot shown in search — pure white RGB(255,255,255). Secondary
-          images can use lifestyle backgrounds. Toggle white background on for main images.
-        </p>
-      </details>
-      <details>
-        <summary>Will this strip GPS from my phone photos?</summary>
-        <p>
-          Yes. Drawing through a canvas produces a clean JPEG with no EXIF/GPS. The report table
-          shows what was embedded before stripping.
-        </p>
-      </details>
-      <details>
-        <summary>What is the maximum file size?</summary>
-        <p>
-          Amazon does not publish a hard cap; under ~10 MB uploads reliably. The default cap here
-          is 5 MB via quality binary search.
-        </p>
-      </details>
-      <details>
-        <summary>Can I use PNG, WebP, or HEIC?</summary>
-        <p>
-          Yes as inputs. All outputs are JPEG, which Amazon prefers for product photos.
-        </p>
-      </details>
-      <details>
-        <summary>Are my photos uploaded to a server?</summary>
-        <p>
-          No. Processing runs entirely in your browser. Open DevTools → Network while processing
-          to verify — you should not see image uploads.
-        </p>
-      </details>
-      <details>
-        <summary>Is there a batch limit?</summary>
-        <p>
-          Yes — free use processes up to {FREE_BATCH_LIMIT} images per run. When you hit that
-          ceiling, you&apos;ll see an Upgrade to Pro prompt ({PRO_PRICE_LABEL}) for larger batches
-          across the whole site. Checkout will appear in
-          <a href="#pro-upgrade">MiniTool HQ Pro</a> once billing is connected.
-        </p>
-      </details>
-      <details>
-        <summary>Can I get free usage credit?</summary>
-        <p>
-          Yes. If you report a real tool problem that helps us fix it, we grant a free usage
-          credit (for example, higher batch limits). Use
-          <a href="#report-issue">Report a tool issue</a> or email contact@minitoolhq.com.
-        </p>
-      </details>
+      <h2>FAQ — Amazon product images &amp; listing prep</h2>
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
     </section>
 
     <ReportIssue />
