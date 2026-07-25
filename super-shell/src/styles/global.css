@@ -328,9 +328,11 @@ table.data th {
   font-size: 0.95rem;
 }
 
-.pro-banner[hidden] {
-  display: none;
+.pro-banner a {
+  color: inherit;
+  font-weight: 600;
 }
+
 
 .section {
   margin-top: 3rem;
@@ -411,4 +413,87 @@ table.data th {
   color: var(--accent);
   margin: 0;
   letter-spacing: -0.03em;
+}
+
+.report-block {
+  padding: 1.35rem 1.35rem 1.5rem;
+  border: 1px solid rgba(200, 240, 108, 0.22);
+  border-radius: var(--radius);
+  background: rgba(200, 240, 108, 0.05);
+}
+
+.report-block h2 {
+  margin-top: 0;
+}
+
+.report-list {
+  margin: 1rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+}
+
+.report-list li {
+  margin: 0.35rem 0;
+}
+
+.report-block .actions {
+  margin-top: 1.25rem;
+}
+
+.report-block .btn {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.value-block .lede {
+  max-width: 40rem;
+}
+
+.value-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 700px) {
+  .value-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.value-item {
+  padding: 1.1rem 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(24, 32, 28, 0.55);
+}
+
+.value-item h3 {
+  margin: 0 0 0.45rem;
+  font-family: var(--display);
+  font-size: 1.15rem;
+  font-weight: 650;
+}
+
+.value-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.footer-quiet {
+  margin-top: 0.65rem;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.footer-sep {
+  margin: 0 0.35rem;
+  opacity: 0.5;
+}
+
+.pro-banner a {
+  color: inherit;
+  font-weight: 600;
 }

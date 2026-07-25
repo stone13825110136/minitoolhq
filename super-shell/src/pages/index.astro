@@ -1,19 +1,59 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ReportIssue from "../components/ReportIssue.astro";
 ---
 
 <BaseLayout
   title="MiniTool HQ — Private Browser Tools for Creators & Sellers"
-  description="Free, private, browser-based micro tools. Files stay on your device. No signup for core tools."
+  description="Private browser tools for creators and sellers. Files stay on your device. Built for real jobs like Amazon listing photos — not another generic editor."
 >
   <section class="hero-home">
-    <p class="badge">Free core · Local processing · $4.99/mo Pro</p>
+    <p class="badge">Private · In-browser · No upload</p>
     <p class="brand-mark">MiniTool HQ</p>
     <h1>Private tools for creators &amp; sellers.</h1>
     <p class="lede">
-      Browser micro-tools that keep files on your device. Start with Amazon listing photo prep —
-      more tools shipping continuously.
+      Small, focused browser tools that keep files on your device — built around real workflows,
+      starting with Amazon listing photo prep.
     </p>
+  </section>
+
+  <section id="value" class="section value-block">
+    <h2>Why this exists</h2>
+    <p class="lede">
+      Generic free editors already cover “edit any image privately.” MiniTool HQ is for when you
+      have a <strong>specific job</strong> — marketplace listings, creator assets, seller ops —
+      and want the defaults done right without uploading product photos to a random server.
+    </p>
+    <div class="value-grid">
+      <div class="value-item">
+        <h3>Job-first, not toolbox-first</h3>
+        <p>
+          Start with Amazon Image Prep: size, white background, EXIF strip, ZIP — aimed at listing
+          photos, not a 100-tool swiss army knife.
+        </p>
+      </div>
+      <div class="value-item">
+        <h3>Private by design</h3>
+        <p>
+          Processing runs in your browser. Your files are not uploaded to our servers for editing.
+          Trust the Network tab, not a slogan alone.
+        </p>
+      </div>
+      <div class="value-item">
+        <h3>Seller &amp; creator workflows</h3>
+        <p>
+          Built for people shipping listings and assets: clear specs, batch-friendly steps, and
+          more vertical tools coming on the same site.
+        </p>
+      </div>
+      <div class="value-item">
+        <h3>Free to use for core work</h3>
+        <p>
+          Open a tool and go — no account required for core use. Optional higher limits stay out of
+          the way until you need them.
+        </p>
+      </div>
+    </div>
   </section>
 
   <section id="tools" class="section">
@@ -28,8 +68,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </a>
       <div class="tool-card" style="opacity: 0.55; cursor: default;">
         <h2>Image Compressor</h2>
-        <p>Next up — private batch compression. Same Pro unlock.</p>
+        <p>Next up — private batch compression for the same workflows.</p>
       </div>
     </div>
   </section>
+
+  <ReportIssue />
 </BaseLayout>

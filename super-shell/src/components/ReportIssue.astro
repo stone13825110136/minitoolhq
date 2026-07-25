@@ -1,0 +1,37 @@
+---
+/** Shared copy for bug-report → free usage credit */
+const FEEDBACK_EMAIL = "contact@minitoolhq.com";
+
+const feedbackMailto = `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent(
+  "MiniTool HQ — tool issue report",
+)}&body=${encodeURIComponent(
+  [
+    "Tool name:",
+    "Page URL:",
+    "What went wrong:",
+    "Steps to reproduce:",
+    "Browser / device:",
+    "Screenshot or sample file notes (optional):",
+    "",
+    "I understand confirmed useful bug reports can receive a free usage credit.",
+  ].join("\n"),
+)}`;
+---
+
+<section id="report-issue" class="section report-block">
+  <h2>Found a problem? Get free usage credit</h2>
+  <p class="lede">
+    If a tool breaks, looks wrong, or fails your workflow, tell us. <strong>Confirmed useful bug
+    reports</strong> earn a <strong>free usage credit</strong> (for example, higher batch limits
+    while we fix it). No account required to report.
+  </p>
+  <ul class="report-list">
+    <li>Include the tool name, what you expected, and what happened</li>
+    <li>Add steps to reproduce (and browser if you know it)</li>
+    <li>We reply with a credit when the report helps us ship a fix</li>
+  </ul>
+  <div class="actions">
+    <a class="btn btn-primary" href={feedbackMailto}>Report a tool issue</a>
+    <a class="btn btn-ghost" href={`mailto:${FEEDBACK_EMAIL}`}>{FEEDBACK_EMAIL}</a>
+  </div>
+</section>

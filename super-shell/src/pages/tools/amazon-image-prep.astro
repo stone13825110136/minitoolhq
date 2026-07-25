@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
 import { FREE_BATCH_LIMIT } from "../../lib/amazon-prep/types";
 ---
 
@@ -197,13 +198,24 @@ import { FREE_BATCH_LIMIT } from "../../lib/amazon-prep/types";
         </p>
       </details>
       <details>
-        <summary>What is the free vs Pro limit?</summary>
+        <summary>Is there a batch limit?</summary>
         <p>
-          Free: up to {FREE_BATCH_LIMIT} images per run with the full pipeline. Pro ($4.99/mo,
-          checkout coming soon) unlocks unlimited batch across MiniTool HQ tools.
+          Yes — free use processes up to {FREE_BATCH_LIMIT} images per run. Need more for a real
+          catalog day? <a href="#report-issue">Report a useful bug</a> for free usage credit, or
+          ask us about higher limits.
+        </p>
+      </details>
+      <details>
+        <summary>Can I get free usage credit?</summary>
+        <p>
+          Yes. If you report a real tool problem that helps us fix it, we grant a free usage
+          credit (for example, higher batch limits). Use
+          <a href="#report-issue">Report a tool issue</a> or email contact@minitoolhq.com.
         </p>
       </details>
     </section>
+
+    <ReportIssue />
   </section>
 </BaseLayout>
 

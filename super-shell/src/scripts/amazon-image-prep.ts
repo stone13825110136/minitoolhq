@@ -102,7 +102,7 @@ function init(): void {
 
     if (queue.length > FREE_BATCH_LIMIT) {
       proBanner.hidden = false;
-      proBanner.textContent = `Free tier processes the first ${FREE_BATCH_LIMIT} images per run. ${queue.length - FREE_BATCH_LIMIT} extra file(s) need Pro ($4.99/mo) — checkout coming soon. We'll process ${FREE_BATCH_LIMIT} for now.`;
+      proBanner.innerHTML = `This run will process the first ${FREE_BATCH_LIMIT} images (free batch limit). ${queue.length - FREE_BATCH_LIMIT} file(s) will wait. Need more? <a href="/#report-issue">Report a useful bug for free usage credit</a>.`;
     } else {
       proBanner.hidden = true;
     }
