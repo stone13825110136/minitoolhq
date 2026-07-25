@@ -170,6 +170,26 @@ try {
   await page.waitForFunction(() => Number(document.querySelector("#queueCount")?.textContent) === 11);
   const bannerVisible = await page.locator("#proBanner").isVisible();
   assert("Pro banner when >10 queued", bannerVisible);
+  const bannerText = (await page.locator("#proBanner").textContent()) || "";
+  assert("Pro banner sells upgrade", /Upgrade to Pro/i.test(bannerText), bannerText);
+  assert("Pro CTA present", (await page.locator("#proBanner .pro-cta").count()) >= 1);
+
+  // Exactly 10 also shows timely Pro tip
+  await dismissOverlay();
+  await safeClick("#clearBtn");
+  const tenFiles = manyUnique.slice(0, 10);
+  await page.locator("#fileInput").setInputFiles(tenFiles);
+  await page.waitForFunction(() => Number(document.querySelector("#queueCount")?.textContent) === 10);
+  assert("Pro banner at exactly 10", await page.locator("#proBanner").isVisible());
+  assert(
+    "Pro banner at 10 mentions free batch",
+    /Free batch full/i.test((await page.locator("#proBanner").textContent()) || ""),
+  );
+
+  await dismissOverlay();
+  await safeClick("#clearBtn");
+  await page.locator("#fileInput").setInputFiles(manyUnique);
+  await page.waitForFunction(() => Number(document.querySelector("#queueCount")?.textContent) === 11);
 
   const [download2] = await Promise.all([
     page.waitForEvent("download", { timeout: 180000 }),
@@ -179,6 +199,8 @@ try {
   await page.waitForSelector("#reportBody tr");
   const cappedRows = await page.locator("#reportBody tr").count();
   assert("free tier processes only 10", cappedRows === 10, `got ${cappedRows}`);
+  const afterStatus = (await page.locator("#status").textContent()) || "";
+  assert("status nudges Pro after capped run", /Upgrade to Pro/i.test(afterStatus), afterStatus);
 
   // Square default + white BG: inspect via in-page process module
   await dismissOverlay();

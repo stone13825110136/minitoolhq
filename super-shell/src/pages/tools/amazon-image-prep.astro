@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ReportIssue from "../../components/ReportIssue.astro";
-import { FREE_BATCH_LIMIT } from "../../lib/amazon-prep/types";
+import { FREE_BATCH_LIMIT, PRO_PRICE_LABEL } from "../../lib/amazon-prep/types";
 
 const pageTitle =
   "Amazon Product Image Resizer — 2000px, White Background & Strip EXIF (Free)";
@@ -128,6 +128,17 @@ const appLd = {
         <span class="status"><span id="queueCount">0</span> images queued</span>
       </div>
     </div>
+
+    <section id="pro-upgrade" class="section pro-upgrade-stub">
+      <h2>MiniTool HQ Pro</h2>
+      <p class="lede">
+        One site-wide subscription ({PRO_PRICE_LABEL}) unlocks larger batches on every MiniTool HQ
+        tool — still private, still in your browser. Payment checkout plugs in here when billing is
+        live; until then email
+        <a href="mailto:contact@minitoolhq.com">contact@minitoolhq.com</a>
+        if you need higher limits now.
+      </p>
+    </section>
 
     <section class="section">
       <h2>How to resize Amazon product images (no upload)</h2>
@@ -282,9 +293,10 @@ const appLd = {
       <details>
         <summary>Is there a batch limit?</summary>
         <p>
-          Yes — free use processes up to {FREE_BATCH_LIMIT} images per run. Need more for a real
-          catalog day? <a href="#report-issue">Report a useful bug</a> for free usage credit, or
-          ask us about higher limits.
+          Yes — free use processes up to {FREE_BATCH_LIMIT} images per run. When you hit that
+          ceiling, you&apos;ll see an Upgrade to Pro prompt ({PRO_PRICE_LABEL}) for larger batches
+          across the whole site. Checkout will appear in
+          <a href="#pro-upgrade">MiniTool HQ Pro</a> once billing is connected.
         </p>
       </details>
       <details>

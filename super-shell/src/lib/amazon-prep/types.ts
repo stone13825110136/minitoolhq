@@ -43,6 +43,11 @@ export interface ProcessFileResult {
 }
 
 export const FREE_BATCH_LIMIT = 10;
+
+/** Site-wide Pro — paste Lemon Squeezy / Gumroad URL when checkout is live. */
+export const PRO_CHECKOUT_URL = "";
+export const PRO_PRICE_LABEL = "$4.99/mo";
+
 export const DEFAULT_OPTIONS: ProcessOptions = {
   resizeMode: "square",
   targetPx: 2000,
