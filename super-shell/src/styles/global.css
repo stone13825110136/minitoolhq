@@ -566,25 +566,11 @@ table.data th {
   opacity: 0.5;
 }
 
-.multi-size-summary {
-  margin-top: 0.75rem;
-  padding: 0.85rem 1rem;
-}
-
-.multi-size-list {
+.field-set {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.85rem 1rem 1rem;
   margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem 1rem;
-  color: var(--ink);
-  font-size: 0.92rem;
-}
-
-.multi-size-list li strong {
-  color: var(--accent, var(--ink));
-  font-weight: 600;
 }
 
 .field-set legend {

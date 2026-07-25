@@ -51,8 +51,6 @@ function init(): void {
 
   const platformList = root.querySelector<HTMLElement>("#platformList")!;
   const tweakFields = root.querySelector<HTMLElement>("#tweakFields")!;
-  const multiSizeSummary = root.querySelector<HTMLElement>("#multiSizeSummary")!;
-  const multiSizeList = root.querySelector<HTMLElement>("#multiSizeList")!;
   const targetPx = root.querySelector<HTMLInputElement>("#targetPx")!;
   const maxMb = root.querySelector<HTMLInputElement>("#maxMb")!;
   const whiteBg = root.querySelector<HTMLInputElement>("#whiteBg")!;
@@ -94,32 +92,22 @@ function init(): void {
   function syncExportMode(): void {
     const ids = selectedPlatformIds();
     const single = ids.length === 1;
-    const multi = ids.length > 1;
     tweakFields.hidden = !single;
-    multiSizeSummary.hidden = !multi;
     if (single) {
       const preset = presetById(ids[0]);
       targetPx.value = String(preset.options.targetPx);
       maxMb.value = String(preset.options.maxBytes / (1024 * 1024));
       whiteBg.checked = preset.options.whiteBackground;
       upscale.checked = preset.options.upscaleBelowZoom;
-      platformBlurb.textContent = `Single export: ${preset.label} — ${preset.blurb}. Tweak size below if needed.`;
+      platformBlurb.textContent = `${preset.label}: ${preset.blurb}`;
       processBtn.textContent = `Process & download ${preset.label} ZIP`;
-      multiSizeList.innerHTML = "";
-    } else if (multi) {
-      platformBlurb.textContent = `Multi export (${ids.length}): each selected marketplace uses its own size — not one shared 2000px.`;
-      processBtn.textContent = `Process & download ${ids.length}-platform ZIP`;
-      multiSizeList.innerHTML = ids
-        .map((id) => {
-          const p = presetById(id);
-          const bg = p.options.whiteBackground ? " · white BG" : "";
-          return `<li><strong>${escapeHtml(p.label)}</strong> → ${p.options.targetPx}×${p.options.targetPx}${bg}</li>`;
-        })
-        .join("");
+    } else if (ids.length > 1) {
+      const labels = ids.map((id) => presetById(id).label).join(", ");
+      platformBlurb.textContent = `${labels} — one ZIP with a folder for each marketplace.`;
+      processBtn.textContent = `Process & download ZIP (${ids.length} marketplaces)`;
     } else {
-      platformBlurb.textContent = "Select at least one marketplace (single or multi).";
+      platformBlurb.textContent = "Select at least one marketplace.";
       processBtn.textContent = "Process & download ZIP";
-      multiSizeList.innerHTML = "";
     }
     processBtn.disabled = queue.length === 0 || busy || ids.length === 0;
     syncUrl();
@@ -384,7 +372,7 @@ function init(): void {
   processBtn.addEventListener("click", () => void processAll());
   clearBtn.addEventListener("click", clearQueue);
 
-  setStatus("Check one marketplace (single ZIP) or several (multi-folder ZIP), add photos, then Process.");
+  setStatus("Select marketplace(s), add photos, then Process.");
   renderQueue();
 }
 

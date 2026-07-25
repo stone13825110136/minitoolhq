@@ -88,16 +88,15 @@ const appLd = {
     <p class="lede">
       One tool for listing photos across <strong>Amazon</strong>, <strong>TikTok Shop</strong>,
       <strong>Etsy</strong>, <strong>eBay</strong>, <strong>Shopify</strong>, and
-      <strong>Walmart</strong>. Check <strong>one</strong> marketplace for a single export, or check
-      <strong>several</strong> for one multi-platform ZIP (folder per marketplace). Strip EXIF/GPS —
-      files never leave your device.
+      <strong>Walmart</strong>. Check the marketplace(s) you need, resize and strip EXIF/GPS, then
+      download one ZIP. Files never leave your device.
     </p>
 
     <div class="panel">
       <fieldset class="field-set">
-        <legend>Marketplaces — choose single or multi</legend>
+        <legend>Marketplaces</legend>
         <p class="muted" style="margin: 0 0 0.65rem; font-size: 0.9rem;">
-          One checked = single-platform ZIP. Two or more = one ZIP with a folder for each.
+          Check one marketplace, or several for one ZIP with a folder for each.
         </p>
         <div class="checks" id="platformList"></div>
         <div class="actions" style="margin-top: 0.75rem;">
@@ -110,13 +109,6 @@ const appLd = {
         </div>
       </fieldset>
       <p class="status" id="platformBlurb" style="margin-top: 0.5rem;"></p>
-
-      <div class="panel multi-size-summary" id="multiSizeSummary" hidden>
-        <p class="muted" style="margin: 0 0 0.5rem; font-size: 0.9rem;">
-          Each marketplace keeps its own recommended size (not a shared 2000px):
-        </p>
-        <ul class="multi-size-list" id="multiSizeList"></ul>
-      </div>
 
       <div class="grid-2" id="tweakFields">
         <label class="field">
