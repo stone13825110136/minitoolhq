@@ -6,6 +6,10 @@ export interface ProcessOptions {
   maxBytes: number;
   whiteBackground: boolean;
   upscaleBelowZoom: boolean;
+  /** Floor used when upscaling small sources (Amazon zoom ~1600; TikTok often target itself). */
+  upscaleMinPx?: number;
+  /** Output filename prefix before basename, e.g. amazon- / tiktok-shop- */
+  filenamePrefix?: string;
 }
 
 export interface ExifSummary {
@@ -54,4 +58,6 @@ export const DEFAULT_OPTIONS: ProcessOptions = {
   maxBytes: 5 * 1024 * 1024,
   whiteBackground: true,
   upscaleBelowZoom: true,
+  upscaleMinPx: 1600,
+  filenamePrefix: "amazon",
 };

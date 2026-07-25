@@ -1,14 +1,16 @@
 import { processImageFile } from "../lib/amazon-prep/process";
+import { blobToUint8Array, zipJpegFiles } from "../lib/amazon-prep/zip";
 import {
-  DEFAULT_OPTIONS,
   FREE_BATCH_LIMIT,
+  PLATFORM_PRESETS,
   PRO_CHECKOUT_URL,
   PRO_PRICE_LABEL,
+  presetById,
+  type PlatformId,
   type ProcessOptions,
   type ProcessResultRow,
   type QueueItem,
-} from "../lib/amazon-prep/types";
-import { blobToUint8Array, zipJpegFiles } from "../lib/amazon-prep/zip";
+} from "../lib/marketplace-prep/presets";
 
 const ACCEPT = new Set([
   "image/jpeg",
@@ -43,31 +45,16 @@ function downloadBlob(blob: Blob, filename: string): void {
   URL.revokeObjectURL(url);
 }
 
-function readOptions(root: HTMLElement): ProcessOptions {
-  const mode = (root.querySelector("#resizeMode") as HTMLSelectElement).value;
-  const targetPx = Number((root.querySelector("#targetPx") as HTMLInputElement).value);
-  const maxMb = Number((root.querySelector("#maxMb") as HTMLInputElement).value);
-  const whiteBackground = (root.querySelector("#whiteBg") as HTMLInputElement).checked;
-  const upscaleBelowZoom = (root.querySelector("#upscale") as HTMLInputElement).checked;
-
-  return {
-    resizeMode: mode === "longest" ? "longest" : "square",
-    targetPx: Number.isFinite(targetPx) && targetPx >= 1000 ? Math.round(targetPx) : 2000,
-    maxBytes:
-      Number.isFinite(maxMb) && maxMb > 0
-        ? Math.round(maxMb * 1024 * 1024)
-        : DEFAULT_OPTIONS.maxBytes,
-    whiteBackground,
-    upscaleBelowZoom,
-    upscaleMinPx: DEFAULT_OPTIONS.upscaleMinPx,
-    filenamePrefix: DEFAULT_OPTIONS.filenamePrefix,
-  };
-}
-
 function init(): void {
-  const root = document.querySelector<HTMLElement>("[data-amazon-prep]");
+  const root = document.querySelector<HTMLElement>("[data-marketplace-prep]");
   if (!root) return;
 
+  const platformSelect = root.querySelector<HTMLSelectElement>("#platform")!;
+  const targetPx = root.querySelector<HTMLInputElement>("#targetPx")!;
+  const maxMb = root.querySelector<HTMLInputElement>("#maxMb")!;
+  const whiteBg = root.querySelector<HTMLInputElement>("#whiteBg")!;
+  const upscale = root.querySelector<HTMLInputElement>("#upscale")!;
+  const platformBlurb = root.querySelector<HTMLElement>("#platformBlurb")!;
   const drop = root.querySelector<HTMLElement>("#dropZone")!;
   const fileInput = root.querySelector<HTMLInputElement>("#fileInput")!;
   const thumbs = root.querySelector<HTMLElement>("#thumbs")!;
@@ -80,11 +67,44 @@ function init(): void {
 
   let queue: QueueItem[] = [];
   let busy = false;
+  let currentPlatform: PlatformId = "amazon";
 
   function setStatus(msg: string, kind: "" | "error" | "ok" = ""): void {
     statusEl.textContent = msg;
     statusEl.classList.remove("error", "ok");
     if (kind) statusEl.classList.add(kind);
+  }
+
+  function applyPreset(id: string): void {
+    const preset = presetById(id);
+    currentPlatform = preset.id;
+    platformSelect.value = preset.id;
+    targetPx.value = String(preset.options.targetPx);
+    maxMb.value = String(preset.options.maxBytes / (1024 * 1024));
+    whiteBg.checked = preset.options.whiteBackground;
+    upscale.checked = preset.options.upscaleBelowZoom;
+    platformBlurb.textContent = preset.blurb;
+    const url = new URL(window.location.href);
+    url.searchParams.set("platform", preset.id);
+    window.history.replaceState({}, "", url.toString());
+  }
+
+  function readOptions(): ProcessOptions {
+    const preset = presetById(currentPlatform);
+    const px = Number(targetPx.value);
+    const mb = Number(maxMb.value);
+    return {
+      resizeMode: "square",
+      targetPx: Number.isFinite(px) && px >= 600 ? Math.round(px) : preset.options.targetPx,
+      maxBytes:
+        Number.isFinite(mb) && mb > 0
+          ? Math.round(mb * 1024 * 1024)
+          : preset.options.maxBytes,
+      whiteBackground: whiteBg.checked,
+      upscaleBelowZoom: upscale.checked,
+      upscaleMinPx: Number.isFinite(px) && px >= 600 ? Math.round(px) : preset.options.upscaleMinPx,
+      filenamePrefix: preset.options.filenamePrefix,
+    };
   }
 
   function renderQueue(): void {
@@ -103,7 +123,6 @@ function init(): void {
     }
     processBtn.disabled = queue.length === 0 || busy;
     clearBtn.disabled = queue.length === 0 || busy;
-
     updateProBanner(queue.length);
   }
 
@@ -117,10 +136,8 @@ function init(): void {
       proBanner.innerHTML = "";
       return;
     }
-
     const href = proUpgradeHref();
     const cta = `<a class="pro-cta" href="${href}">Upgrade to Pro — larger batches · ${PRO_PRICE_LABEL}</a>`;
-
     if (count === FREE_BATCH_LIMIT) {
       proBanner.hidden = false;
       proBanner.innerHTML = `
@@ -133,7 +150,6 @@ function init(): void {
       `;
       return;
     }
-
     const waiting = count - FREE_BATCH_LIMIT;
     proBanner.hidden = false;
     proBanner.innerHTML = `
@@ -154,11 +170,7 @@ function init(): void {
       return;
     }
     for (const file of files) {
-      queue.push({
-        id: uid(file),
-        file,
-        previewUrl: URL.createObjectURL(file),
-      });
+      queue.push({ id: uid(file), file, previewUrl: URL.createObjectURL(file) });
     }
     setStatus(`${queue.length} image(s) queued — nothing uploaded.`);
     renderQueue();
@@ -194,7 +206,7 @@ function init(): void {
     processBtn.disabled = true;
     clearBtn.disabled = true;
 
-    const options = readOptions(root);
+    const options = readOptions();
     const batch = queue.slice(0, FREE_BATCH_LIMIT);
     const zipEntries: { name: string; data: Uint8Array }[] = [];
     const rows: ProcessResultRow[] = [];
@@ -212,7 +224,7 @@ function init(): void {
       }
 
       const zipBlob = zipJpegFiles(zipEntries);
-      downloadBlob(zipBlob, `amazon-images-${Date.now()}.zip`);
+      downloadBlob(zipBlob, `marketplace-images-${Date.now()}.zip`);
       renderReport(rows);
       const waiting = queue.length - batch.length;
       if (waiting > 0) {
@@ -234,6 +246,18 @@ function init(): void {
       renderQueue();
     }
   }
+
+  for (const p of PLATFORM_PRESETS) {
+    const opt = document.createElement("option");
+    opt.value = p.id;
+    opt.textContent = p.label;
+    platformSelect.append(opt);
+  }
+
+  const initial = new URLSearchParams(window.location.search).get("platform");
+  applyPreset(initial ?? "amazon");
+
+  platformSelect.addEventListener("change", () => applyPreset(platformSelect.value));
 
   drop.addEventListener("click", () => fileInput.click());
   fileInput.addEventListener("change", () => {
@@ -261,7 +285,7 @@ function init(): void {
   processBtn.addEventListener("click", () => void processAll());
   clearBtn.addEventListener("click", clearQueue);
 
-  setStatus("Add product photos to begin. Processing never leaves this browser.");
+  setStatus("Choose a marketplace, add photos, then Process. Nothing is uploaded.");
   renderQueue();
 }
 

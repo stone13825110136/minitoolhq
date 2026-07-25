@@ -12,6 +12,7 @@
     "astro": "astro",
     "test:fixtures": "node scripts/make-fixtures.mjs",
     "test:amazon-prep": "node scripts/e2e-amazon-prep.mjs",
+    "test:marketplace-prep": "node scripts/e2e-marketplace-prep.mjs",
     "test:fba-box": "node scripts/e2e-fba-box.mjs",
     "test:site": "node scripts/e2e-site-smoke.mjs"
   },

@@ -26,9 +26,10 @@ Do **not** mark a tool shipped until **feature testing** and **SEO gate** both p
 - Self-operated tools first; marketplace later
 - No heavy AI wrappers, no PWA-first, no PDF suite on day one
 - Match competitor **must-have** features
+- **Same customer job = one tool** (e.g. one Marketplace Image Prep, not Amazon+TikTok+Etsy clones)
 - After implementation: run the tool in a real browser (or automated E2E), with real sample files when the tool processes files
 - **Customer copy only** on the live site — see `minitool-customer-copy.mdc`
-- **Search discoverability is mandatory** — see `minitool-seo-keywords.mdc`. A tool customers cannot find is not shipped
+- **Search discoverability is mandatory** — see `minitool-seo-keywords.mdc`. Cover vertical keywords on the one job page via FAQ/presets
 
 ## Testing tooling
 

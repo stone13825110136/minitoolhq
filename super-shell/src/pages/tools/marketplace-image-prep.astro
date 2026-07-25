@@ -1,0 +1,237 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import { FREE_BATCH_LIMIT, PRO_PRICE_LABEL, PLATFORM_PRESETS } from "../../lib/marketplace-prep/presets";
+
+const pageTitle = "Marketplace Image Resizer — Amazon, TikTok Shop, Etsy & More";
+const pageDescription =
+  "Free marketplace image resizer for Amazon, TikTok Shop, Etsy, eBay, Shopify, and Walmart. Square listing sizes, optional white background, strip EXIF — batch ZIP, no upload.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "Can I resize photos for Amazon and TikTok Shop in one tool?",
+    a: "Yes. This marketplace image resizer covers Amazon, TikTok Shop, Etsy, eBay, Shopify, and Walmart in one page — pick a platform preset, then Process. You do not need a separate tool per marketplace.",
+  },
+  {
+    q: "What size do Amazon product photos need?",
+    a: "Amazon product image resize commonly targets ~2000px (or 2000×2000 square main images) for zoom. Use the Amazon preset here: square pad, white background on, JPEG under 5 MB, EXIF stripped.",
+  },
+  {
+    q: "What is the TikTok Shop product image size?",
+    a: "TikTok Shop images should be square. Official minimum is often 600×600; many sellers use 1000×1000 or 1200×1200. The TikTok Shop preset defaults to 1200×1200 with optional white background for the main image.",
+  },
+  {
+    q: "What size should Etsy listing photos be?",
+    a: "Etsy listing photo size is commonly prepared at 2000×2000 square for sharp zoom. Select the Etsy preset, or change the pixel field after selecting.",
+  },
+  {
+    q: "Does this work for eBay and Shopify too?",
+    a: "Yes. eBay product image size defaults to 1600×1600; Shopify product image size defaults to 2048×2048. Walmart uses a 2000×2000 white-background style preset.",
+  },
+  {
+    q: "Are my photos uploaded to a server?",
+    a: "No. All resizing runs in your browser. Open DevTools → Network while processing to verify — you should not see image uploads.",
+  },
+  {
+    q: "Will this strip EXIF and GPS?",
+    a: "Yes. Every run redraws through canvas so EXIF/GPS are removed. The report table shows what was present before stripping.",
+  },
+  {
+    q: "Is there a batch limit?",
+    a: `Free use processes up to ${FREE_BATCH_LIMIT} images per run. Hit the ceiling and you will see an Upgrade to Pro prompt (${PRO_PRICE_LABEL}) for larger batches across MiniTool HQ.`,
+  },
+  {
+    q: "Can I get free usage credit?",
+    a: "Yes. Confirmed useful bug reports earn a free usage credit. Use Report a tool issue or email contact@minitoolhq.com.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const appLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Marketplace Image Resizer",
+  applicationCategory: "MultimediaApplication",
+  operatingSystem: "Any",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  description: pageDescription,
+  url: "https://minitoolhq.com/tools/marketplace-image-prep",
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/tools/marketplace-image-prep"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(appLd)} />
+  </Fragment>
+
+  <section data-marketplace-prep>
+    <p class="badge">No upload · Local processing · Free batch up to {FREE_BATCH_LIMIT}</p>
+    <h1>Marketplace Image Resizer</h1>
+    <p class="lede">
+      One tool for listing photos across <strong>Amazon</strong>, <strong>TikTok Shop</strong>,
+      <strong>Etsy</strong>, <strong>eBay</strong>, <strong>Shopify</strong>, and
+      <strong>Walmart</strong>. Pick a marketplace, batch-resize to that platform’s common square
+      size, optional white background, strip EXIF/GPS, download a ZIP — files never leave your
+      device.
+    </p>
+
+    <div class="panel">
+      <div class="grid-2">
+        <label class="field">
+          Marketplace
+          <select id="platform"></select>
+        </label>
+        <label class="field">
+          Square size (px)
+          <input id="targetPx" type="number" min="600" max="10000" step="100" value="2000" />
+        </label>
+        <label class="field">
+          Max file size (MB)
+          <input id="maxMb" type="number" min="0.5" max="20" step="0.5" value="5" />
+        </label>
+        <div class="checks" style="align-content: end;">
+          <label>
+            <input id="whiteBg" type="checkbox" checked />
+            Pure white background (RGB 255)
+          </label>
+          <label>
+            <input id="upscale" type="checkbox" checked />
+            Upscale if below selected size
+          </label>
+          <label>
+            <input type="checkbox" checked disabled />
+            Strip EXIF / GPS (always on)
+          </label>
+        </div>
+      </div>
+      <p class="status" id="platformBlurb" style="margin-top: 0.5rem;"></p>
+
+      <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="Add product photos">
+        <strong>Drop product photos here</strong>
+        <p>JPEG · PNG · WebP · HEIC — up to {FREE_BATCH_LIMIT} free per run — nothing is uploaded</p>
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif"
+          multiple
+          hidden
+        />
+      </div>
+
+      <p class="status" id="status"></p>
+      <div class="pro-banner" id="proBanner" hidden></div>
+      <div class="thumbs" id="thumbs"></div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="processBtn" type="button" disabled>
+          Process &amp; Download ZIP
+        </button>
+        <button class="btn btn-ghost" id="clearBtn" type="button" disabled>Clear all</button>
+        <span class="status"><span id="queueCount">0</span> images queued</span>
+      </div>
+    </div>
+
+    <section id="pro-upgrade" class="section pro-upgrade-stub">
+      <h2>MiniTool HQ Pro</h2>
+      <p class="lede">
+        One site-wide subscription ({PRO_PRICE_LABEL}) unlocks larger batches on every MiniTool HQ
+        tool. Checkout plugs in here when billing is live —
+        <a href="mailto:contact@minitoolhq.com">contact@minitoolhq.com</a>
+        if you need higher limits now.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li>Choose the marketplace you are listing on (or switch presets for each channel).</li>
+        <li>Drop JPEG, PNG, WebP, or HEIC photos. Adjust size or white background if needed.</li>
+        <li>Process and download one ZIP — nothing is uploaded.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2>Marketplace size reference</h2>
+      <p class="lede">
+        Defaults below match widely published guidance. Always confirm in each platform’s Seller
+        Center — rules change.
+      </p>
+      <div class="table-wrap panel">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Marketplace</th>
+              <th>Default in this tool</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              PLATFORM_PRESETS.map((p) => (
+                <tr>
+                  <td>{p.label}</td>
+                  <td>
+                    {p.options.targetPx}×{p.options.targetPx}
+                    {p.options.whiteBackground ? " · white BG" : ""}
+                  </td>
+                  <td>{p.blurb}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>EXIF / GPS removal report</h2>
+      <div class="table-wrap panel">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Camera</th>
+              <th>GPS</th>
+              <th>Date</th>
+              <th>Other</th>
+              <th>Size</th>
+            </tr>
+          </thead>
+          <tbody id="reportBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section faq">
+      <h2>FAQ — Amazon, TikTok Shop, Etsy &amp; more</h2>
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <ReportIssue />
+  </section>
+</BaseLayout>
+
+<script>
+  import "../../scripts/marketplace-image-prep";
+</script>

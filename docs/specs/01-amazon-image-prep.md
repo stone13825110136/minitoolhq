@@ -8,7 +8,7 @@
 | Primary keyword | amazon product image resize |
 | Secondary keywords | amazon main image size, amazon image requirements, strip exif amazon photos, amazon listing photo compressor |
 | SEO gate | **mandatory with ship** — see `.cursor/rules/minitool-seo-keywords.mdc` |
-| Status | **shipped** (v1 in `super-shell`) |
+| Status | **merged** into [03-marketplace-image-prep.md](./03-marketplace-image-prep.md) — same job, one tool |
 | Stack | Astro (`super-shell`) + client-side TS; no upload API |
 
 ## Job

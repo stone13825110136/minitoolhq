@@ -2,7 +2,7 @@ import { readExifSummary } from "./exif";
 import { heicToJpegBlob, isHeicFile } from "./heic";
 import type { ProcessFileResult, ProcessOptions } from "./types";
 
-const ZOOM_MIN = 1600;
+const DEFAULT_UPSCALE_MIN = 1600;
 
 export async function processImageFile(
   file: File,
@@ -17,7 +17,8 @@ export async function processImageFile(
     const blob = await encodeUnderMaxBytes(canvas, options.maxBytes);
     const base = file.name.replace(/\.[^.]+$/, "") || "image";
     const safe = base.replace(/[^\w.-]+/g, "_").slice(0, 80);
-    const outputName = `amazon-${safe}.jpg`;
+    const prefix = (options.filenamePrefix ?? "amazon").replace(/-+$/g, "");
+    const outputName = `${prefix}-${safe}.jpg`;
 
     return {
       blob,
@@ -45,7 +46,7 @@ function drawToCanvas(
   bitmap: ImageBitmap,
   options: ProcessOptions,
 ): { canvas: HTMLCanvasElement; width: number; height: number } {
-  const { targetPx, resizeMode, whiteBackground, upscaleBelowZoom } = options;
+  const { targetPx, resizeMode, whiteBackground, upscaleBelowZoom, upscaleMinPx } = options;
   const srcW = bitmap.width;
   const srcH = bitmap.height;
   const longest = Math.max(srcW, srcH);
@@ -54,6 +55,7 @@ function drawToCanvas(
     targetPx,
     resizeMode,
     upscaleBelowZoom,
+    upscaleMinPx: upscaleMinPx ?? DEFAULT_UPSCALE_MIN,
     forceContainInSquare: resizeMode === "square" || whiteBackground,
   });
 
@@ -101,16 +103,17 @@ function scaleDimensions(
     targetPx: number;
     resizeMode: ProcessOptions["resizeMode"];
     upscaleBelowZoom: boolean;
+    upscaleMinPx: number;
     forceContainInSquare: boolean;
   },
 ): { w: number; h: number } {
-  const { targetPx, upscaleBelowZoom } = opts;
+  const { targetPx, upscaleBelowZoom, upscaleMinPx } = opts;
   let scale = 1;
 
   if (longest > targetPx) {
     scale = targetPx / longest;
-  } else if (upscaleBelowZoom && longest < ZOOM_MIN) {
-    scale = Math.min(targetPx, ZOOM_MIN) / longest;
+  } else if (upscaleBelowZoom && longest < upscaleMinPx) {
+    scale = Math.min(targetPx, upscaleMinPx) / longest;
   } else if (!opts.forceContainInSquare && longest !== targetPx) {
     // longest mode without white pad: leave in sweet spot untouched
     scale = 1;

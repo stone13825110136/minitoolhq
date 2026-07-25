@@ -1,0 +1,5 @@
+# Cloudflare Pages — keep old image-prep URLs alive as deep links into the unified tool
+/tools/amazon-image-prep /tools/marketplace-image-prep?platform=amazon 301
+/tools/amazon-image-prep/ /tools/marketplace-image-prep?platform=amazon 301
+/tools/tiktok-shop-image-prep /tools/marketplace-image-prep?platform=tiktok-shop 301
+/tools/tiktok-shop-image-prep/ /tools/marketplace-image-prep?platform=tiktok-shop 301

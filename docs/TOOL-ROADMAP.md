@@ -15,10 +15,11 @@ Rules: `.cursor/rules/minitool-dev-workflow.mdc`
 
 | # | Tool | Spec | Status |
 |---|------|------|--------|
-| 1 | Amazon Image Prep | [specs/01-amazon-image-prep.md](./specs/01-amazon-image-prep.md) | **shipped (v1)** + SEO pass |
-| 2 | FBA / marketplace box size checker | [specs/02-fba-box-size-checker.md](./specs/02-fba-box-size-checker.md) | **shipped (v1)** |
-| 3 | TikTok Shop image preset | — | next (seller SEO) |
-| 4 | Image compressor (batch) | — | queued |
+| 1 | Marketplace Image Prep (Amazon / TikTok / Etsy / …) | [specs/03-marketplace-image-prep.md](./specs/03-marketplace-image-prep.md) | **shipped (v1)** — one tool, multi-preset |
+| 2 | FBA / marketplace box size checker | [specs/02-fba-box-size-checker.md](./specs/02-fba-box-size-checker.md) | **shipped (v1)** + fully free |
+| 3 | ~~TikTok Shop only~~ | — | **cancelled** — merged into #1 |
+| 4 | ~~Amazon Image Prep only~~ | [specs/01-amazon-image-prep.md](./specs/01-amazon-image-prep.md) | **merged into #1** (URL redirects) |
+| 5 | Image compressor (batch) | — | next |
 | 5 | HEIC → JPG | — | queued |
 | 6 | Strip EXIF (standalone) | — | queued |
 | 7 | Etsy / Shopify image presets | — | queued |

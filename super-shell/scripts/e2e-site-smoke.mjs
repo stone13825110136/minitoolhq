@@ -110,7 +110,7 @@ try {
 
   const pagesToVisit = [
     { path: "/", name: "homepage" },
-    { path: "/tools/amazon-image-prep", name: "amazon prep page" },
+    { path: "/tools/marketplace-image-prep", name: "marketplace prep page" },
     { path: "/tools/fba-box-size-checker", name: "fba box page" },
   ];
 
@@ -140,7 +140,7 @@ try {
   assert("sitemap-index has sitemap-0", /sitemap-0\.xml/i.test(smIndex));
   const sm0 = await (await page.request.get(`${base}/sitemap-0.xml`)).text();
   assert("sitemap lists home", /<loc>/i.test(sm0));
-  assert("sitemap lists amazon tool", /amazon-image-prep/i.test(sm0));
+  assert("sitemap lists marketplace tool", /marketplace-image-prep/i.test(sm0));
   assert("sitemap lists fba tool", /fba-box-size-checker/i.test(sm0));
 
   const bing = await (await page.request.get(`${base}/BingSiteAuth.xml`)).text();
@@ -214,9 +214,9 @@ try {
   // Nav journeys (local uses real clicks; live uses request verification of destinations)
   if (!useLive) {
     await page.goto(`${base}/`, { waitUntil: "domcontentloaded" });
-    await page.click('a.tool-card[href="/tools/amazon-image-prep"]');
-    await page.waitForURL(/amazon-image-prep/);
-    assert("card to Amazon Prep", /Amazon/i.test(await page.title()));
+    await page.click('a.tool-card[href="/tools/marketplace-image-prep"]');
+    await page.waitForURL(/marketplace-image-prep/);
+    assert("card to Marketplace Prep", /Marketplace Image Resizer/i.test(await page.title()));
 
     await page.click('header a[href="/tools/fba-box-size-checker"]');
     await page.waitForURL(/fba-box-size-checker/);
@@ -235,17 +235,18 @@ try {
   } else {
     assert(
       "live nav targets ok",
-      (await page.request.get(`${base}/tools/amazon-image-prep`)).status() === 200 &&
+      (await page.request.get(`${base}/tools/marketplace-image-prep`)).status() === 200 &&
         (await page.request.get(`${base}/tools/fba-box-size-checker`)).status() === 200,
     );
   }
 
-  await open("/tools/amazon-image-prep");
-  assert("amazon has drop zone", (await page.locator("#dropZone").count()) === 1);
-  assert("amazon has process btn", (await page.locator("#processBtn").count()) === 1);
-  assert("amazon has FAQ", (await page.locator(".faq details").count()) >= 5);
-  assert("amazon has #pro-upgrade", (await page.locator("#pro-upgrade").count()) === 1);
-  assert("amazon has #report-issue", (await page.locator("#report-issue").count()) === 1);
+  await open("/tools/marketplace-image-prep");
+  assert("marketplace has drop zone", (await page.locator("#dropZone").count()) === 1);
+  assert("marketplace has process btn", (await page.locator("#processBtn").count()) === 1);
+  assert("marketplace has platform select", (await page.locator("#platform").count()) === 1);
+  assert("marketplace has FAQ", (await page.locator(".faq details").count()) >= 5);
+  assert("marketplace has #pro-upgrade", (await page.locator("#pro-upgrade").count()) === 1);
+  assert("marketplace has #report-issue", (await page.locator("#report-issue").count()) === 1);
 
   await open("/tools/fba-box-size-checker");
   assert("fba has check btn", (await page.locator("#checkBtn").count()) === 1);

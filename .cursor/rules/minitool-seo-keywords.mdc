@@ -8,6 +8,14 @@ alwaysApply: true
 If customers cannot find the tool in search, the tool has no business value.  
 **Do not mark a tool shipped** until the SEO checklist below is complete on the live tool page + spec.
 
+## Customer-first product rule (hard)
+
+**Same customer job = one tool.** Do **not** ship separate tools that only change a marketplace preset (e.g. Amazon image prep vs TikTok image prep vs Etsy image prep).
+
+- Cover vertical search phrases (**amazon product image resize**, **tiktok shop image size**, etc.) on **that one page** via Title/H1/lede, platform picker labels, requirements table rows, and FAQ questions.
+- Optional: old vanity URLs may **redirect** into the one tool with `?platform=…` — never maintain duplicate UIs.
+- Split tools only when the **job is different** (e.g. FBA box Pass/Fail ≠ image resize).
+
 ## Spec (before coding)
 
 In `docs/specs/NN-*.md` under **Meta** + **SEO**:
@@ -15,7 +23,7 @@ In `docs/specs/NN-*.md` under **Meta** + **SEO**:
 | Field | Required |
 |-------|----------|
 | Primary keyword | 1 phrase users actually type |
-| Secondary keywords | **≥3** related long-tails |
+| Secondary keywords | **≥3** related long-tails (may include other platforms’ phrases if one tool covers them) |
 | Title | Includes primary; under ~60 chars when possible |
 | H1 | Includes primary (or closest natural variant) |
 | Meta description | Includes primary + ≥1 secondary; job outcome; under ~160 chars |
@@ -29,7 +37,7 @@ In `docs/specs/NN-*.md` under **Meta** + **SEO**:
 4. **FAQ** ≥5 items; questions worded like real searches
 5. **FAQPage JSON-LD** must include **every** on-page FAQ (same source array — do not maintain two copies)
 6. **WebApplication JSON-LD** with name, description, url, `offers.price: "0"` when free
-7. **Rules / requirements table** when the job is policy-driven (Amazon sizes, FBA limits, etc.)
+7. **Rules / requirements table** when the job is policy-driven
 8. **Homepage** Tools card links to the tool with a keyword-relevant title
 9. **Sitemap** picks up the URL via `@astrojs/sitemap` (no orphan pages)
 
@@ -45,8 +53,9 @@ Tool E2E **must** assert at least:
 
 ## Do / Don’t
 
-- Do: one strong tool URL that ranks for primary + nearby long-tails via FAQ/table copy
+- Do: one strong tool URL; rank nearby long-tails via FAQ/table/platform copy
 - Do: sync SEO when renaming the tool or changing the job
+- Don’t: split one job into many tools “for SEO”
 - Don’t: ship UI-only and “add SEO later”
 - Don’t: use a bare `meta keywords` tag as the strategy
 - Don’t: put internal strategy jargon in titles/FAQs (see `minitool-customer-copy.mdc`)
