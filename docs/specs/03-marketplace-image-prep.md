@@ -22,7 +22,14 @@ Vanity redirects (keep old links alive):
 
 ## Job
 
-> Pick a marketplace preset → batch resize listing photos to that platform’s square (or longest) spec, optional white background, ≤5 MB, strip EXIF/GPS → ZIP. All in-browser.
+> Check one or more marketplace presets → batch resize listing photos to each platform’s square spec, optional white background (single-platform tweak), ≤5 MB, strip EXIF/GPS → **one ZIP** with a folder per selected marketplace. All in-browser.
+
+## Single or multi export (required — user chooses)
+
+- UI: checkbox select (not a single `<select>`). Select all / clear helpers optional.
+- **One checked:** single-platform ZIP (flat files, e.g. `amazon-….jpg`); show size / max MB / white BG / upscale tweaks.
+- **Two or more checked:** one ZIP with folders per marketplace, e.g. `amazon/…`, `tiktok-shop/…`; each folder uses that preset’s defaults (tweaks hidden).
+- Deep link: `?platform=amazon` or `?platform=amazon,tiktok-shop`.
 
 ## Platform presets (v1)
 
@@ -35,7 +42,7 @@ Vanity redirects (keep old links alive):
 | Shopify | 2048×2048 | square | off | Storefront common |
 | Walmart | 2000×2000 | square | on | Main image style |
 
-User can change size after picking a preset. Always confirm in each Seller Center.
+User can change size when exactly one marketplace is selected. Always confirm in each Seller Center.
 
 ## Competitors
 
@@ -53,11 +60,13 @@ Free batch **10** / run → Pro CTA (same as prior Amazon Prep).
 
 ## Acceptance criteria
 
-- [x] One UI; platform `<select>` switches defaults
-- [x] `?platform=` deep link works for amazon / tiktok-shop / …
+- [x] One UI; marketplace checkboxes (multi-select)
+- [x] Multi-select → one ZIP with folder per marketplace
+- [x] Single-select → size / white BG tweaks visible
+- [x] `?platform=` deep link works for one or comma-separated ids
 - [x] Old Amazon & TikTok paths redirect / deep-link to this tool
 - [x] Batch ZIP, EXIF report, no upload
-- [x] FAQ ≥5 covering multi-platform + privacy; JSON-LD synced
+- [x] FAQ ≥5 covering multi-export + privacy; JSON-LD synced
 - [x] Homepage shows **one** image-prep card (not Amazon + TikTok separate)
 - [x] `npm run test:marketplace-prep` E2E green
 
@@ -70,5 +79,6 @@ Command: `cd super-shell && npm run test:marketplace-prep`
 | 2026-07-25 | SEO title/meta/H1/FAQ JSON-LD | pass | |
 | 2026-07-25 | one homepage card | pass | |
 | 2026-07-25 | Amazon + TikTok presets | pass | 2000 / 1200 |
+| 2026-07-25 | multi-export ZIP folders | pass | amazon/ + tiktok-shop/ |
 | 2026-07-25 | batch ZIP + free cap 10 | pass | |
 | 2026-07-25 | no upload | pass | |

@@ -49,7 +49,8 @@ function init(): void {
   const root = document.querySelector<HTMLElement>("[data-marketplace-prep]");
   if (!root) return;
 
-  const platformSelect = root.querySelector<HTMLSelectElement>("#platform")!;
+  const platformList = root.querySelector<HTMLElement>("#platformList")!;
+  const tweakFields = root.querySelector<HTMLElement>("#tweakFields")!;
   const targetPx = root.querySelector<HTMLInputElement>("#targetPx")!;
   const maxMb = root.querySelector<HTMLInputElement>("#maxMb")!;
   const whiteBg = root.querySelector<HTMLInputElement>("#whiteBg")!;
@@ -67,7 +68,6 @@ function init(): void {
 
   let queue: QueueItem[] = [];
   let busy = false;
-  let currentPlatform: PlatformId = "amazon";
 
   function setStatus(msg: string, kind: "" | "error" | "ok" = ""): void {
     statusEl.textContent = msg;
@@ -75,36 +75,64 @@ function init(): void {
     if (kind) statusEl.classList.add(kind);
   }
 
-  function applyPreset(id: string): void {
-    const preset = presetById(id);
-    currentPlatform = preset.id;
-    platformSelect.value = preset.id;
-    targetPx.value = String(preset.options.targetPx);
-    maxMb.value = String(preset.options.maxBytes / (1024 * 1024));
-    whiteBg.checked = preset.options.whiteBackground;
-    upscale.checked = preset.options.upscaleBelowZoom;
-    platformBlurb.textContent = preset.blurb;
+  function selectedPlatformIds(): PlatformId[] {
+    return [...platformList.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked')].map(
+      (el) => el.value as PlatformId,
+    );
+  }
+
+  function syncUrl(): void {
+    const ids = selectedPlatformIds();
     const url = new URL(window.location.href);
-    url.searchParams.set("platform", preset.id);
+    if (ids.length) url.searchParams.set("platform", ids.join(","));
+    else url.searchParams.delete("platform");
     window.history.replaceState({}, "", url.toString());
   }
 
-  function readOptions(): ProcessOptions {
-    const preset = presetById(currentPlatform);
-    const px = Number(targetPx.value);
-    const mb = Number(maxMb.value);
-    return {
-      resizeMode: "square",
-      targetPx: Number.isFinite(px) && px >= 600 ? Math.round(px) : preset.options.targetPx,
-      maxBytes:
-        Number.isFinite(mb) && mb > 0
-          ? Math.round(mb * 1024 * 1024)
-          : preset.options.maxBytes,
-      whiteBackground: whiteBg.checked,
-      upscaleBelowZoom: upscale.checked,
-      upscaleMinPx: Number.isFinite(px) && px >= 600 ? Math.round(px) : preset.options.upscaleMinPx,
-      filenamePrefix: preset.options.filenamePrefix,
-    };
+  function syncExportMode(): void {
+    const ids = selectedPlatformIds();
+    const single = ids.length === 1;
+    tweakFields.hidden = !single;
+    if (single) {
+      const preset = presetById(ids[0]);
+      targetPx.value = String(preset.options.targetPx);
+      maxMb.value = String(preset.options.maxBytes / (1024 * 1024));
+      whiteBg.checked = preset.options.whiteBackground;
+      upscale.checked = preset.options.upscaleBelowZoom;
+      platformBlurb.textContent = `Single export: ${preset.label} — ${preset.blurb}. Tweak size below if needed.`;
+      processBtn.textContent = `Process & download ${preset.label} ZIP`;
+    } else if (ids.length > 1) {
+      const labels = ids.map((id) => presetById(id).label).join(" · ");
+      platformBlurb.textContent = `Multi export (${ids.length}): ${labels}. One ZIP with a folder per marketplace (recommended sizes).`;
+      processBtn.textContent = `Process & download ${ids.length}-platform ZIP`;
+    } else {
+      platformBlurb.textContent = "Select at least one marketplace (single or multi).";
+      processBtn.textContent = "Process & download ZIP";
+    }
+    processBtn.disabled = queue.length === 0 || busy || ids.length === 0;
+    syncUrl();
+  }
+
+  function optionsForPlatform(id: PlatformId): ProcessOptions {
+    const preset = presetById(id);
+    const ids = selectedPlatformIds();
+    if (ids.length === 1 && ids[0] === id) {
+      const px = Number(targetPx.value);
+      const mb = Number(maxMb.value);
+      return {
+        resizeMode: "square",
+        targetPx: Number.isFinite(px) && px >= 600 ? Math.round(px) : preset.options.targetPx,
+        maxBytes:
+          Number.isFinite(mb) && mb > 0
+            ? Math.round(mb * 1024 * 1024)
+            : preset.options.maxBytes,
+        whiteBackground: whiteBg.checked,
+        upscaleBelowZoom: upscale.checked,
+        upscaleMinPx: Number.isFinite(px) && px >= 600 ? Math.round(px) : preset.options.upscaleMinPx,
+        filenamePrefix: preset.options.filenamePrefix,
+      };
+    }
+    return { ...preset.options };
   }
 
   function renderQueue(): void {
@@ -121,8 +149,8 @@ function init(): void {
       fig.append(img, cap);
       thumbs.append(fig);
     }
-    processBtn.disabled = queue.length === 0 || busy;
     clearBtn.disabled = queue.length === 0 || busy;
+    processBtn.disabled = queue.length === 0 || busy || selectedPlatformIds().length === 0;
     updateProBanner(queue.length);
   }
 
@@ -184,7 +212,7 @@ function init(): void {
     renderQueue();
   }
 
-  function renderReport(rows: ProcessResultRow[]): void {
+  function renderReport(rows: ProcessResultRow[], platforms: string[]): void {
     reportBody.innerHTML = "";
     for (const row of rows) {
       const tr = document.createElement("tr");
@@ -198,43 +226,76 @@ function init(): void {
       `;
       reportBody.append(tr);
     }
+    if (platforms.length > 1) {
+      const note = document.createElement("tr");
+      note.innerHTML = `<td colspan="6" class="muted">Exported folders: ${platforms.map(escapeHtml).join(", ")}</td>`;
+      reportBody.append(note);
+    }
   }
 
   async function processAll(): Promise<void> {
     if (busy || !queue.length) return;
+    const platforms = selectedPlatformIds();
+    if (!platforms.length) {
+      setStatus("Select at least one marketplace.", "error");
+      return;
+    }
+
     busy = true;
     processBtn.disabled = true;
     clearBtn.disabled = true;
 
-    const options = readOptions();
     const batch = queue.slice(0, FREE_BATCH_LIMIT);
     const zipEntries: { name: string; data: Uint8Array }[] = [];
     const rows: ProcessResultRow[] = [];
+    const folderNames = platforms.map((id) => presetById(id).id);
 
     try {
-      for (let i = 0; i < batch.length; i++) {
-        const item = batch[i];
-        setStatus(`Processing ${i + 1}/${batch.length}: ${item.file.name}`);
-        const result = await processImageFile(item.file, options);
-        zipEntries.push({
-          name: result.outputName,
-          data: await blobToUint8Array(result.blob),
-        });
-        rows.push(result.row);
+      let step = 0;
+      const total = batch.length * platforms.length;
+      for (const platformId of platforms) {
+        const options = optionsForPlatform(platformId);
+        const folder = presetById(platformId).id;
+        for (let i = 0; i < batch.length; i++) {
+          const item = batch[i];
+          step += 1;
+          setStatus(
+            `Processing ${step}/${total}: ${item.file.name} → ${presetById(platformId).label}`,
+          );
+          const result = await processImageFile(item.file, options);
+          // Single platform: flat ZIP. Multi: folder per marketplace.
+          const entryName =
+            platforms.length === 1
+              ? result.outputName
+              : `${folder}/${result.outputName}`;
+          zipEntries.push({
+            name: entryName,
+            data: await blobToUint8Array(result.blob),
+          });
+          if (platformId === platforms[0]) rows.push(result.row);
+        }
       }
 
       const zipBlob = zipJpegFiles(zipEntries);
-      downloadBlob(zipBlob, `marketplace-images-${Date.now()}.zip`);
-      renderReport(rows);
+      const zipName =
+        platforms.length === 1
+          ? `${platforms[0]}-images-${Date.now()}.zip`
+          : `marketplace-images-${Date.now()}.zip`;
+      downloadBlob(zipBlob, zipName);
+      renderReport(rows, folderNames);
       const waiting = queue.length - batch.length;
+      const platLabel =
+        platforms.length === 1
+          ? presetById(platforms[0]).label
+          : `${platforms.length} marketplaces (folders)`;
       if (waiting > 0) {
         setStatus(
-          `Done — ${rows.length} JPEG(s) downloaded (free limit). ${waiting} still queued — Upgrade to Pro for larger batches.`,
+          `Done — ${batch.length} image(s) × ${platLabel} (free limit). ${waiting} still queued — Upgrade to Pro for larger batches.`,
           "ok",
         );
       } else {
         setStatus(
-          `Done — ${rows.length} JPEG(s) zipped and downloaded. EXIF stripped via canvas redraw.`,
+          `Done — ${batch.length} image(s) exported for ${platLabel}. EXIF stripped.`,
           "ok",
         );
       }
@@ -248,16 +309,42 @@ function init(): void {
   }
 
   for (const p of PLATFORM_PRESETS) {
-    const opt = document.createElement("option");
-    opt.value = p.id;
-    opt.textContent = p.label;
-    platformSelect.append(opt);
+    const label = document.createElement("label");
+    label.innerHTML = `<input type="checkbox" name="platform" value="${p.id}" /> ${p.label}`;
+    platformList.append(label);
   }
 
-  const initial = new URLSearchParams(window.location.search).get("platform");
-  applyPreset(initial ?? "amazon");
+  const selectAllBtn = root.querySelector<HTMLButtonElement>("#selectAllPlatforms");
+  const clearPlatformsBtn = root.querySelector<HTMLButtonElement>("#clearPlatforms");
+  selectAllBtn?.addEventListener("click", () => {
+    for (const box of platformList.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')) {
+      box.checked = true;
+    }
+    syncExportMode();
+  });
+  clearPlatformsBtn?.addEventListener("click", () => {
+    for (const box of platformList.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')) {
+      box.checked = false;
+    }
+    syncExportMode();
+  });
 
-  platformSelect.addEventListener("change", () => applyPreset(platformSelect.value));
+  const initialParam = new URLSearchParams(window.location.search).get("platform") || "amazon";
+  const initialIds = initialParam
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  for (const id of initialIds) {
+    const box = platformList.querySelector<HTMLInputElement>(`input[value="${id}"]`);
+    if (box) box.checked = true;
+  }
+  if (!selectedPlatformIds().length) {
+    const amazon = platformList.querySelector<HTMLInputElement>('input[value="amazon"]');
+    if (amazon) amazon.checked = true;
+  }
+  syncExportMode();
+
+  platformList.addEventListener("change", () => syncExportMode());
 
   drop.addEventListener("click", () => fileInput.click());
   fileInput.addEventListener("change", () => {
@@ -285,7 +372,7 @@ function init(): void {
   processBtn.addEventListener("click", () => void processAll());
   clearBtn.addEventListener("click", clearQueue);
 
-  setStatus("Choose a marketplace, add photos, then Process. Nothing is uploaded.");
+  setStatus("Check one marketplace (single ZIP) or several (multi-folder ZIP), add photos, then Process.");
   renderQueue();
 }
 

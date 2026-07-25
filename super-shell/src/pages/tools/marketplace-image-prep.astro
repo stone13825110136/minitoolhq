@@ -5,12 +5,16 @@ import { FREE_BATCH_LIMIT, PRO_PRICE_LABEL, PLATFORM_PRESETS } from "../../lib/m
 
 const pageTitle = "Marketplace Image Resizer — Amazon, TikTok Shop, Etsy & More";
 const pageDescription =
-  "Free marketplace image resizer for Amazon, TikTok Shop, Etsy, eBay, Shopify, and Walmart. Square listing sizes, optional white background, strip EXIF — batch ZIP, no upload.";
+  "Free marketplace image resizer for Amazon, TikTok Shop, Etsy, eBay, Shopify, and Walmart. Multi-select platforms → one ZIP with folders. Square sizes, white background, strip EXIF — no upload.";
 
 const faqs: { q: string; a: string }[] = [
   {
     q: "Can I resize photos for Amazon and TikTok Shop in one tool?",
-    a: "Yes. This marketplace image resizer covers Amazon, TikTok Shop, Etsy, eBay, Shopify, and Walmart in one page — pick a platform preset, then Process. You do not need a separate tool per marketplace.",
+    a: "Yes. This marketplace image resizer covers Amazon, TikTok Shop, Etsy, eBay, Shopify, and Walmart on one page. Check one or more marketplaces, then Process — no separate tool per channel.",
+  },
+  {
+    q: "Can I export Amazon and TikTok Shop sizes in one ZIP?",
+    a: "Yes. Check multiple marketplaces (for example Amazon + TikTok Shop), drop your photos once, and Process. You get one ZIP with a folder per marketplace — each folder uses that platform’s recommended square size.",
   },
   {
     q: "What size do Amazon product photos need?",
@@ -22,7 +26,7 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "What size should Etsy listing photos be?",
-    a: "Etsy listing photo size is commonly prepared at 2000×2000 square for sharp zoom. Select the Etsy preset, or change the pixel field after selecting.",
+    a: "Etsy listing photo size is commonly prepared at 2000×2000 square for sharp zoom. Check only Etsy to tweak the pixel field, or include Etsy with other marketplaces for a multi-folder ZIP.",
   },
   {
     q: "Does this work for eBay and Shopify too?",
@@ -38,7 +42,7 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Is there a batch limit?",
-    a: `Free use processes up to ${FREE_BATCH_LIMIT} images per run. Hit the ceiling and you will see an Upgrade to Pro prompt (${PRO_PRICE_LABEL}) for larger batches across MiniTool HQ.`,
+    a: `Free use processes up to ${FREE_BATCH_LIMIT} images per run (each selected marketplace uses that same batch). Hit the ceiling and you will see an Upgrade to Pro prompt (${PRO_PRICE_LABEL}) for larger batches across MiniTool HQ.`,
   },
   {
     q: "Can I get free usage credit?",
@@ -84,17 +88,30 @@ const appLd = {
     <p class="lede">
       One tool for listing photos across <strong>Amazon</strong>, <strong>TikTok Shop</strong>,
       <strong>Etsy</strong>, <strong>eBay</strong>, <strong>Shopify</strong>, and
-      <strong>Walmart</strong>. Pick a marketplace, batch-resize to that platform’s common square
-      size, optional white background, strip EXIF/GPS, download a ZIP — files never leave your
-      device.
+      <strong>Walmart</strong>. Check <strong>one</strong> marketplace for a single export, or check
+      <strong>several</strong> for one multi-platform ZIP (folder per marketplace). Strip EXIF/GPS —
+      files never leave your device.
     </p>
 
     <div class="panel">
-      <div class="grid-2">
-        <label class="field">
-          Marketplace
-          <select id="platform"></select>
-        </label>
+      <fieldset class="field-set">
+        <legend>Marketplaces — choose single or multi</legend>
+        <p class="muted" style="margin: 0 0 0.65rem; font-size: 0.9rem;">
+          One checked = single-platform ZIP. Two or more = one ZIP with a folder for each.
+        </p>
+        <div class="checks" id="platformList"></div>
+        <div class="actions" style="margin-top: 0.75rem;">
+          <button class="btn btn-ghost btn-tiny" id="selectAllPlatforms" type="button">
+            Select all
+          </button>
+          <button class="btn btn-ghost btn-tiny" id="clearPlatforms" type="button">
+            Clear selection
+          </button>
+        </div>
+      </fieldset>
+      <p class="status" id="platformBlurb" style="margin-top: 0.5rem;"></p>
+
+      <div class="grid-2" id="tweakFields">
         <label class="field">
           Square size (px)
           <input id="targetPx" type="number" min="600" max="10000" step="100" value="2000" />
@@ -118,7 +135,6 @@ const appLd = {
           </label>
         </div>
       </div>
-      <p class="status" id="platformBlurb" style="margin-top: 0.5rem;"></p>
 
       <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="Add product photos">
         <strong>Drop product photos here</strong>
@@ -138,7 +154,7 @@ const appLd = {
 
       <div class="actions">
         <button class="btn btn-primary" id="processBtn" type="button" disabled>
-          Process &amp; Download ZIP
+          Process &amp; download ZIP
         </button>
         <button class="btn btn-ghost" id="clearBtn" type="button" disabled>Clear all</button>
         <span class="status"><span id="queueCount">0</span> images queued</span>
@@ -158,9 +174,9 @@ const appLd = {
     <section class="section">
       <h2>How it works</h2>
       <ol class="steps">
-        <li>Choose the marketplace you are listing on (or switch presets for each channel).</li>
-        <li>Drop JPEG, PNG, WebP, or HEIC photos. Adjust size or white background if needed.</li>
-        <li>Process and download one ZIP — nothing is uploaded.</li>
+        <li>Check one marketplace for a single export, or several for a multi-platform ZIP.</li>
+        <li>Drop JPEG, PNG, WebP, or HEIC photos. Single-select: tweak size or white background if needed.</li>
+        <li>Process once — download one ZIP (flat for single, folders when multi). Nothing is uploaded.</li>
       </ol>
     </section>
 

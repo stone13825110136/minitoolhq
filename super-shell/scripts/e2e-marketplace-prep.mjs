@@ -77,6 +77,25 @@ child.stderr.on("data", (d) => {
   serverLog += d.toString();
 });
 
+async function setPlatforms(page, ids) {
+  await page.evaluate((wanted) => {
+    const boxes = [...document.querySelectorAll('#platformList input[type="checkbox"]')];
+    for (const box of boxes) {
+      box.checked = wanted.includes(box.value);
+    }
+    document.querySelector("#platformList")?.dispatchEvent(new Event("change", { bubbles: true }));
+  }, ids);
+  await page.waitForFunction(
+    (wanted) => {
+      const checked = [...document.querySelectorAll('#platformList input[type="checkbox"]:checked')].map(
+        (el) => el.value,
+      );
+      return wanted.length === checked.length && wanted.every((id) => checked.includes(id));
+    },
+    ids,
+  );
+}
+
 try {
   await waitForServer(`${base}/tools/marketplace-image-prep`);
 
@@ -125,7 +144,7 @@ try {
       "Marketplace Image Resizer",
     ),
   );
-  assert("platform select", (await page.locator("#platform").count()) === 1);
+  assert("platform checklist", (await page.locator("#platformList input[type='checkbox']").count()) >= 6);
   assert("requirements table", (await page.locator("[data-marketplace-prep] table.data").count()) >= 1);
   const faqCount = await page.locator("[data-marketplace-prep] .faq details").count();
   assert("FAQ count >= 5", faqCount >= 5);
@@ -158,14 +177,26 @@ try {
   );
   await home.close();
 
-  assert("amazon preset selected", (await page.locator("#platform").inputValue()) === "amazon");
+  assert(
+    "amazon preset selected",
+    await page.locator('#platformList input[value="amazon"]').isChecked(),
+  );
   assert("amazon default 2000", (await page.locator("#targetPx").inputValue()) === "2000");
+  assert("tweaks visible for single platform", await page.locator("#tweakFields").isVisible());
 
-  await page.selectOption("#platform", "tiktok-shop");
+  await setPlatforms(page, ["tiktok-shop"]);
   await page.waitForFunction(() => document.querySelector("#targetPx")?.value === "1200");
   assert("tiktok preset 1200", (await page.locator("#targetPx").inputValue()) === "1200");
-  await page.selectOption("#platform", "amazon");
+
+  await setPlatforms(page, ["amazon", "tiktok-shop"]);
+  assert(
+    "tweaks hidden when multi-select",
+    await page.locator("#tweakFields").evaluate((el) => el.hidden === true),
+  );
+
+  await setPlatforms(page, ["amazon"]);
   await page.waitForFunction(() => document.querySelector("#targetPx")?.value === "2000");
+  assert("tweaks back for single", await page.locator("#tweakFields").isVisible());
 
   const files2 = [
     path.join(fixtures, "product-red-1800.png"),
@@ -182,7 +213,7 @@ try {
   const zipPath = path.join(downloadDir, await download.suggestedFilename());
   await download.saveAs(zipPath);
   assert("ZIP downloaded", fs.existsSync(zipPath) && fs.statSync(zipPath).size > 1000, zipPath);
-  assert("ZIP name pattern", /marketplace-images-\d+\.zip$/i.test(path.basename(zipPath)));
+  assert("single ZIP name pattern", /amazon-images-\d+\.zip$/i.test(path.basename(zipPath)));
 
   await page.waitForSelector("#reportBody tr", { timeout: 10000 });
   assert("report has 2 rows", (await page.locator("#reportBody tr").count()) === 2);
@@ -194,8 +225,33 @@ try {
   const bigPosts = uploadedRequests.filter((r) => r.size > 50_000);
   assert("no large file upload via fetch/xhr", bigPosts.length === 0, JSON.stringify(bigPosts));
 
+  // Multi-platform one ZIP
   await dismissOverlay();
   await safeClick("#clearBtn");
+  await setPlatforms(page, ["amazon", "tiktok-shop"]);
+  await page.locator("#fileInput").setInputFiles([path.join(fixtures, "product-red-1800.png")]);
+  await page.waitForFunction(() => document.querySelector("#queueCount")?.textContent === "1");
+  const [multiDownload] = await Promise.all([
+    page.waitForEvent("download", { timeout: 120000 }),
+    safeClick("#processBtn"),
+  ]);
+  const multiZipPath = path.join(downloadDir, "multi-" + (await multiDownload.suggestedFilename()));
+  await multiDownload.saveAs(multiZipPath);
+  assert("multi ZIP downloaded", fs.existsSync(multiZipPath) && fs.statSync(multiZipPath).size > 500);
+
+  const { unzipSync } = await import("fflate");
+  const multiNames = Object.keys(unzipSync(fs.readFileSync(multiZipPath)));
+  assert(
+    "multi ZIP has amazon + tiktok-shop folders",
+    multiNames.some((n) => n.startsWith("amazon/")) &&
+      multiNames.some((n) => n.startsWith("tiktok-shop/")),
+    multiNames.join(", "),
+  );
+  assert("multi ZIP has 2 entries for 1 image", multiNames.length === 2, multiNames.join(", "));
+
+  await dismissOverlay();
+  await safeClick("#clearBtn");
+  await setPlatforms(page, ["amazon"]);
   const manyUnique = [];
   for (let i = 0; i < 11; i++) {
     const p = path.join(downloadDir, `cap-${i}.png`);
@@ -222,7 +278,7 @@ try {
   await safeClick("#clearBtn");
   await page.locator("#fileInput").setInputFiles([path.join(fixtures, "product-tall-2400.png")]);
   await page.waitForSelector("#thumbs img");
-  await page.selectOption("#platform", "amazon");
+  await setPlatforms(page, ["amazon"]);
   await page.fill("#targetPx", "2000");
   await page.check("#whiteBg");
 
@@ -285,14 +341,24 @@ try {
   assert("tiktok square 1200", tiktokDim.w === 1200 && tiktokDim.h === 1200, JSON.stringify(tiktokDim));
   assert("filename tiktok-shop-*.jpg", /^tiktok-shop-.+\.jpg$/i.test(tiktokDim.name));
 
-  const { unzipSync } = await import("fflate");
   const zipped = unzipSync(fs.readFileSync(zipPath));
   const names = Object.keys(zipped);
   assert("zip contains 2 files", names.length === 2, names.join(", "));
   assert(
-    "zip entries are jpg",
-    names.every((n) => n.toLowerCase().endsWith(".jpg")),
+    "single ZIP is flat jpgs (no folder)",
+    names.every((n) => n.toLowerCase().endsWith(".jpg") && !n.includes("/")),
     names.join(", "),
+  );
+
+  // Deep link multi
+  await page.goto(`${base}/tools/marketplace-image-prep?platform=amazon,etsy`, {
+    waitUntil: "networkidle",
+  });
+  assert(
+    "deep link selects amazon+etsy",
+    (await page.locator('#platformList input[value="amazon"]').isChecked()) &&
+      (await page.locator('#platformList input[value="etsy"]').isChecked()) &&
+      !(await page.locator('#platformList input[value="tiktok-shop"]').isChecked()),
   );
 
   await browser.close();
