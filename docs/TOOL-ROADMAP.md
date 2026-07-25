@@ -1,52 +1,45 @@
 # Tool Roadmap
 
-## Model (US-popular for micro tools)
+Process: [TOOL-DEV-WORKFLOW.md](./TOOL-DEV-WORKFLOW.md)  
+Rules: `.cursor/rules/minitool-dev-workflow.mdc`
 
-1. Free web tool, no signup
-2. Prefer **in-browser / local processing** (privacy pitch)
-3. Freemium unlock or Gumroad for batch / templates / no-ads
-4. SEO pages per tool
+## Model
 
-## Layer 1 — Traffic magnets (build first)
+1. Free web tool, no signup  
+2. In-browser / local processing  
+3. **$4.99/mo** Pro = site-wide batch / advanced  
+4. SEO page per tool  
+5. Ship one → add continuously  
 
-| # | Tool | Why | Differentiator |
-|---|------|-----|----------------|
-| 1 | Image compressor (batch) | Huge search demand | Unlimited + private (no upload) |
-| 2 | HEIC → JPG | iPhone users constantly need this | Private, free, no watermark |
-| 3 | Word counter / QR generator | Easy to ship, fills directory | Clean UI, no ad wall |
+## Build queue
 
-## Layer 2 — Higher intent / monetize
+| # | Tool | Spec | Status |
+|---|------|------|--------|
+| 1 | Amazon Image Prep | [specs/01-amazon-image-prep.md](./specs/01-amazon-image-prep.md) | **shipped (v1)** |
+| 2 | Image compressor (batch) | — | queued |
+| 3 | HEIC → JPG | — | queued |
+| 4 | Strip EXIF (standalone) | — | queued |
+| 5 | Etsy / Shopify image presets | — | queued |
+| 6 | UTM / campaign link builder | — | queued |
+| 7 | Word counter / QR (directory fillers) | — | later |
+| 8 | Listing title checker | — | later |
 
-| # | Tool | Audience | Monetize |
-|---|------|----------|----------|
-| 4 | UTM / campaign link builder (bulk + naming rules) | Ecommerce / ads | $9 unlock history/export |
-| 5 | YouTube / social thumbnail safe-zone checker | Creators | Free + pack templates |
-| 6 | Listing title checker (Amazon/Etsy/Shopify rules) | Sellers | $9 or bundle |
-| 7 | Bulk file renamer (local) | Designers / sellers | $9 |
-| 8 | Freelance brief generator | People hiring on Fiverr etc. | Free + affiliate optional |
-
-## Suggested first ship pair
-
-1. **Private image compressor**
-2. **UTM builder**
-
-Narrative:
+## Narrative
 
 > Private browser tools for creators & sellers.
 
-## Platforms besides the independent site
+## Platforms (later)
 
 | Platform | When |
 |----------|------|
-| Gumroad / Lemon Squeezy | Now — sell Pro unlocks |
+| Gumroad / Lemon Squeezy | After first tool usable — Pro unlock |
+| Cloudflare Pages | First deploy |
 | Chrome Web Store | After 1–2 tools proven |
-| Shopify App Store | Only if ecommerce tool sticks |
-| Creative Market | Design packs only |
-| Product Hunt | Launch day exposure |
+| Submit-a-tool directory | After traffic exists |
 
 ## Do not build yet
 
-- Heavy AI wrappers
-- Full PDF suite competing with iLovePDF
-- Generic todo / notes apps
-- PWA install prompts (later)
+- Heavy AI wrappers  
+- Full PDF suite vs iLovePDF  
+- PWA install prompts  
+- Third-party tool marketplace hosting  

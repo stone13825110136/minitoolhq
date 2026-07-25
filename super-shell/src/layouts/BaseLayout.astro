@@ -1,0 +1,44 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "Private browser tools for creators & sellers. Files stay on your device.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">MiniTool <span>HQ</span></a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/tools/amazon-image-prep">Amazon Prep</a>
+        <a href="/#tools">Tools</a>
+      </nav>
+    </header>
+    <main class="site-main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>
+        MiniTool HQ — private browser tools. Processing stays on your device.
+        Pro unlocks site-wide batch limits for $4.99/mo (checkout coming soon).
+      </p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+---
+description: MiniTool HQ — fixed workflow for every micro-tool (research → reuse → build → test)
+alwaysApply: true
+---
+
+# MiniTool HQ — Tool Development Rules
+
+Do **not** code a new tool until the build spec exists under `docs/specs/`.  
+Do **not** mark a tool shipped until **feature testing** (step 9) passes.
+
+## Fixed workflow (every tool)
+
+1. **Keyword** — primary SEO keyword + 2–3 related terms
+2. **Competitors** — open top 3–5 results; fill feature parity table (must / should / won't)
+3. **Reuse** — search GitHub/npm for MIT/Apache libs. Prefer wrapping existing code
+4. **Agent assist** — use competitor-research / web fetch; never skip step 2–3
+5. **Spec** — write `docs/specs/NN-tool-slug.md`
+6. **Build** — client-side only when possible; no upload servers for file tools
+7. **Monetize** — free core + Pro **$4.99/mo** site-wide (not per-tool)
+8. **Ship UI** — SEO/FAQ + tool UI + homepage link
+9. **Feature test (mandatory)** — exercise every **must** feature from the spec + acceptance criteria; fix bugs before calling it done. `npm run build` alone is **not** enough. Record results in `docs/specs/NN-*.md` under **Test log**
+10. **Next tool** — only after step 9 passes
+
+## Hard rules
+
+- Self-operated tools first; marketplace later
+- No heavy AI wrappers, no PWA-first, no PDF suite on day one
+- Match competitor **must-have** features
+- After implementation: run the tool in a real browser (or automated E2E), with real sample files when the tool processes files
+
+## First tool
+
+See `docs/specs/01-amazon-image-prep.md`.

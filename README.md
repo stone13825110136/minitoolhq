@@ -7,22 +7,31 @@
 
 ## Status
 
-- Domain registered on Aliyun (万网), status normal
-- Site not built yet — planning docs in `/docs`
-- Old related project: `hotpicklab` (keep separate for now)
+- Domain: **minitoolhq.com** (Aliyun DNS) — separate from hotpicklab
+- Scaffold: Astro in `super-shell/`
+- Process frozen: research → reuse OSS → spec → build → $4.99 Pro
+- First tool shipped: `/tools/amazon-image-prep` (Amazon Image Prep)
 
-## Quick start (later)
-
-Project scaffolding will be added here (likely Astro or plain static + JS tools).
+## Quick start
 
 ```bash
-# after scaffolding exists
+cd super-shell
 npm install
 npm run dev
 ```
 
 ## Docs
 
-- [Session handoff / 聊天交接](./docs/SESSION-HANDOFF.md)
+- [Tool development workflow (frozen)](./docs/TOOL-DEV-WORKFLOW.md)
+- [Session handoff](./docs/SESSION-HANDOFF.md)
 - [Tool roadmap](./docs/TOOL-ROADMAP.md)
-- [Competitor research checklist](./docs/COMPETITOR-CHECKLIST.md)
+- [Competitor checklist](./docs/COMPETITOR-CHECKLIST.md)
+- [Spec 01 — Amazon Image Prep](./docs/specs/01-amazon-image-prep.md)
+
+## Agent rules
+
+- `.cursor/rules/minitool-dev-workflow.mdc` — always apply; no coding without a spec
+
+## Deploy
+
+Domain on **Aliyun DNS**; site on Cloudflare Pages. See [docs/DEPLOY.md](./docs/DEPLOY.md).

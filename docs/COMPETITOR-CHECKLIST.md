@@ -1,16 +1,21 @@
 # Competitor checklist (30–60 min per tool)
 
-Do this before coding each tool. Goal: find one clear wedge, not a 20-page report.
+**Required before coding.** Full process: [TOOL-DEV-WORKFLOW.md](./TOOL-DEV-WORKFLOW.md).  
+Cursor rule: `.cursor/rules/minitool-dev-workflow.mdc`.
 
 ## Steps
 
-1. Google the main keyword (e.g. `free image compressor`)
+1. Google the main keyword (e.g. `amazon product image resize`)
 2. Open top 3–5 results
-3. Fill the table below
-4. Write a one-line difference
-5. If no difference → change angle or pick another tool
+3. Fill **quick scan** table + **feature parity** table
+4. Search GitHub/npm for reusable libs (MIT/Apache preferred)
+5. Write one-line wedge + free vs Pro boundary
+6. Create `docs/specs/NN-tool-slug.md` — then code
 
-## Table template
+Optional: competitor-research agent/skill  
+https://github.com/750928465/competitor-research-skill-kit
+
+## Quick scan
 
 | Competitor | Upload to server? | Signup? | Limits | Ads / UX pain | Missing feature |
 |------------|-------------------|---------|--------|---------------|-----------------|
@@ -18,27 +23,37 @@ Do this before coding each tool. Goal: find one clear wedge, not a 20-page repor
 | | | | | | |
 | | | | | | |
 
+## Feature parity
+
+| Feature | Comp A | Comp B | Comp C | Us v1 (must/should/won't) |
+|---------|--------|--------|--------|---------------------------|
+| | | | | |
+| | | | | |
+
+## Open-source reuse
+
+| Need | Candidate lib | License | Use in v1? |
+|------|---------------|---------|------------|
+| | | | |
+
 ## Our wedge (fill before build)
 
 - One-line difference:
-- Free vs paid boundary:
+- Free vs Pro ($4.99/mo) boundary:
 - Primary SEO title:
 - Primary keyword:
 
-## Market pain signals (from 2026 research)
+## Market pain signals
 
-Recurring user complaints across tool sites / Reddit:
-
-1. Hate uploading sensitive files to random servers
-2. Free tier limits (e.g. 20 images / month)
-3. Signup walls and heavy ad pages
-4. Subscription fatigue — prefer small buy-once unlocks
-5. AI wrappers without a specific job are ignored
-6. Vertical workflow tools convert better than generic productivity
+1. Hate uploading sensitive files to random servers  
+2. Free tier limits and signup walls  
+3. Subscription fatigue — prefer cheap unlocks ($4.99-style)  
+4. Vertical workflow tools convert better than generic suites  
+5. AI wrappers without a specific job are ignored  
 
 ## Volume vs money
 
 | Type | Examples | Note |
 |------|----------|------|
-| High volume, crowded | PDF/image convert, word count, QR | Need privacy/UX wedge |
-| Lower volume, better pay | UTM, listing checkers, creator size tools | Better for early revenue |
+| High volume | Compress, HEIC, Amazon prep | Privacy + batch wedge; Pro for unlimited |
+| Higher intent | UTM, listing checkers | Add after image line has traffic |

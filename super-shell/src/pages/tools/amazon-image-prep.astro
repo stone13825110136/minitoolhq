@@ -1,0 +1,212 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { FREE_BATCH_LIMIT } from "../../lib/amazon-prep/types";
+---
+
+<BaseLayout
+  title="Amazon Product Image Prep — Resize, Strip EXIF & ZIP (No Upload)"
+  description="Batch-resize product photos to Amazon’s ~2000px spec, strip GPS/EXIF, optional white background. Runs in your browser — nothing uploaded."
+>
+  <section data-amazon-prep>
+    <p class="badge">No upload · Local processing · Free batch up to {FREE_BATCH_LIMIT}</p>
+    <h1>Amazon Product Photo Prep</h1>
+    <p class="lede">
+      Drop phone or studio photos, get Amazon-ready JPEGs in a ZIP — resize to the ~2000px zoom
+      spec, optional pure white background, size cap, and EXIF/GPS stripped. Files never leave
+      your device.
+    </p>
+
+    <div class="panel">
+      <div class="grid-2">
+        <label class="field">
+          Resize mode
+          <select id="resizeMode">
+            <option value="square" selected>Square 2000×2000 (main image pad)</option>
+            <option value="longest">Longest side only</option>
+          </select>
+        </label>
+        <label class="field">
+          Target size (px)
+          <input id="targetPx" type="number" min="1000" max="10000" step="100" value="2000" />
+        </label>
+        <label class="field">
+          Max file size (MB)
+          <input id="maxMb" type="number" min="0.5" max="10" step="0.5" value="5" />
+        </label>
+        <div class="checks" style="align-content: end;">
+          <label>
+            <input id="whiteBg" type="checkbox" checked />
+            Pure white background (RGB 255)
+          </label>
+          <label>
+            <input id="upscale" type="checkbox" checked />
+            Upscale if below 1600px zoom threshold
+          </label>
+          <label>
+            <input type="checkbox" checked disabled />
+            Strip EXIF / GPS (always on)
+          </label>
+        </div>
+      </div>
+
+      <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="Add product photos">
+        <strong>Drop product photos here</strong>
+        <p>JPEG · PNG · WebP · HEIC — up to {FREE_BATCH_LIMIT} free per run — nothing is uploaded</p>
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif"
+          multiple
+          hidden
+        />
+      </div>
+
+      <p class="status" id="status"></p>
+      <div class="pro-banner" id="proBanner" hidden></div>
+
+      <div class="thumbs" id="thumbs"></div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="processBtn" type="button" disabled>
+          Process &amp; Download ZIP
+        </button>
+        <button class="btn btn-ghost" id="clearBtn" type="button" disabled>Clear all</button>
+        <span class="status"><span id="queueCount">0</span> images queued</span>
+      </div>
+    </div>
+
+    <section class="section">
+      <h2>Metadata removal report</h2>
+      <p class="lede">
+        Canvas redraw strips hidden fields. This table shows what was present before cleaning.
+      </p>
+      <div class="table-wrap panel">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Camera</th>
+              <th>GPS</th>
+              <th>Date taken</th>
+              <th>Other fields</th>
+              <th>Size</th>
+            </tr>
+          </thead>
+          <tbody id="reportBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Amazon image requirements (2026)</h2>
+      <div class="table-wrap panel">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Requirement</th>
+              <th>Spec</th>
+              <th>This tool</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Minimum size (longest side)</td>
+              <td>1,000 px</td>
+              <td>Targets zoom-ready output</td>
+            </tr>
+            <tr>
+              <td>Zoom activation</td>
+              <td>1,600 px longest side</td>
+              <td>Default target 2,000 px; optional upscale</td>
+            </tr>
+            <tr>
+              <td>Recommended size</td>
+              <td>2,000 px+</td>
+              <td>Default 2,000 px / 2000×2000 square</td>
+            </tr>
+            <tr>
+              <td>Main image background</td>
+              <td>Pure white RGB(255,255,255)</td>
+              <td>Optional white pad + near-white flatten</td>
+            </tr>
+            <tr>
+              <td>Accepted formats</td>
+              <td>JPEG preferred</td>
+              <td>Outputs JPEG; accepts JPEG/PNG/WebP/HEIC</td>
+            </tr>
+            <tr>
+              <td>File size</td>
+              <td>~10 MB practical max</td>
+              <td>Default cap 5 MB (binary-search quality)</td>
+            </tr>
+            <tr>
+              <td>EXIF / GPS</td>
+              <td>Not required; safer stripped</td>
+              <td>Always stripped; report shown</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lede" style="margin-top: 1rem;">
+        White background works best for studio or solid backdrops. Complex scenes should be
+        background-removed elsewhere first, then run through this kit.
+      </p>
+    </section>
+
+    <section class="section faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>What size do Amazon product photos need?</summary>
+        <p>
+          Amazon requires at least 1,000 px on the longest side. Zoom activates around 1,600 px.
+          This tool defaults to 2,000 px (or a 2000×2000 square main-image pad).
+        </p>
+      </details>
+      <details>
+        <summary>Does Amazon require a white background?</summary>
+        <p>
+          Yes for the main image slot shown in search — pure white RGB(255,255,255). Secondary
+          images can use lifestyle backgrounds. Toggle white background on for main images.
+        </p>
+      </details>
+      <details>
+        <summary>Will this strip GPS from my phone photos?</summary>
+        <p>
+          Yes. Drawing through a canvas produces a clean JPEG with no EXIF/GPS. The report table
+          shows what was embedded before stripping.
+        </p>
+      </details>
+      <details>
+        <summary>What is the maximum file size?</summary>
+        <p>
+          Amazon does not publish a hard cap; under ~10 MB uploads reliably. The default cap here
+          is 5 MB via quality binary search.
+        </p>
+      </details>
+      <details>
+        <summary>Can I use PNG, WebP, or HEIC?</summary>
+        <p>
+          Yes as inputs. All outputs are JPEG, which Amazon prefers for product photos.
+        </p>
+      </details>
+      <details>
+        <summary>Are my photos uploaded to a server?</summary>
+        <p>
+          No. Processing runs entirely in your browser. Open DevTools → Network while processing
+          to verify — you should not see image uploads.
+        </p>
+      </details>
+      <details>
+        <summary>What is the free vs Pro limit?</summary>
+        <p>
+          Free: up to {FREE_BATCH_LIMIT} images per run with the full pipeline. Pro ($4.99/mo,
+          checkout coming soon) unlocks unlimited batch across MiniTool HQ tools.
+        </p>
+      </details>
+    </section>
+  </section>
+</BaseLayout>
+
+<script>
+  import "../../scripts/amazon-image-prep";
+</script>
