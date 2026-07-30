@@ -123,6 +123,17 @@ try {
   await page.click("#checkBtn");
   await page.waitForSelector(".result-card.pass");
   assert("default sample Pass", (await page.locator(".result-card.pass").count()) === 1);
+  const dimText = (await page.locator(".dim-ref").first().textContent()) || "";
+  assert("DIM reference shown", /DIM reference|Dimensional weight/i.test(dimText));
+  assert("DIM divisor 139", /÷\s*139|\/\s*139|÷ 139/.test(dimText) || dimText.includes("139"));
+  assert("DIM not a fee quote", /not a fee quote/i.test(dimText));
+  // 20×16×12 = 3840 / 139 ≈ 27.63; actual 28 → billable ≈ 28
+  assert(
+    "DIM math for sample",
+    /27\.6|27\.63|27\.62/.test(dimText) && /28/.test(dimText),
+    dimText.slice(0, 200),
+  );
+  assert("export enabled after check", !(await page.locator("#exportCsvBtn").isDisabled()));
 
   await page.fill(".len", "40");
   await page.fill(".wid", "20");
@@ -146,8 +157,47 @@ try {
   await page.click("#checkBtn");
   await page.waitForSelector(".result-card.fail");
   assert("AWD fails 30in length", (await page.locator(".result-card.fail").count()) === 1);
+  assert("AWD unit panel visible", await page.locator("#awdUnitPanel").isVisible());
+  assert(
+    "FAQ covers Jul 2026 AWD",
+    (await page.locator("[data-fba-box] .faq details").filter({ hasText: /July 31, 2026/i }).count()) >= 1,
+  );
+  assert(
+    "privacy callout present",
+    /Private by design|never uploaded/i.test((await page.locator(".privacy-callout").textContent()) || ""),
+  );
+
+  // Carton within AWD outer limits + unit over Jul 2026 threshold → unit Fail
+  await page.fill(".len", "20");
+  await page.fill(".wid", "16");
+  await page.fill(".hei", "12");
+  await page.fill(".wgt", "28");
+  await page.fill("#unitLen", "18");
+  await page.fill("#unitWid", "10");
+  await page.fill("#unitHei", "6");
+  await page.fill("#unitWgt", "8");
+  await page.click("#checkBtn");
+  await page.waitForSelector(".result-card");
+  const awdCards = page.locator(".result-card");
+  assert("AWD carton+unit yields 2 cards", (await awdCards.count()) === 2);
+  assert(
+    "AWD unit fails at 18in exclusive",
+    (await page.locator(".result-card.fail").filter({ hasText: /AWD unit/i }).count()) >= 1,
+  );
+
+  await page.fill("#unitLen", "12");
+  await page.fill("#unitWid", "10");
+  await page.fill("#unitHei", "6");
+  await page.fill("#unitWgt", "8");
+  await page.click("#checkBtn");
+  await page.waitForFunction(() => {
+    const cards = [...document.querySelectorAll(".result-card")];
+    return cards.length === 2 && cards.every((c) => c.classList.contains("pass"));
+  });
+  assert("AWD carton+unit both Pass", (await page.locator(".result-card.pass").count()) === 2);
 
   await page.check('input[name="program"][value="fba"]');
+  assert("AWD unit panel hidden on FBA", !(await page.locator("#awdUnitPanel").isVisible()));
   await page.check('input[name="units"][value="metric"]');
   await page.fill(".len", "50");
   await page.fill(".wid", "40");
@@ -176,6 +226,44 @@ try {
   assert(
     "status has no Pro upsell",
     !/Upgrade to Pro/i.test((await page.locator("#status").textContent()) || ""),
+  );
+
+  // Local CSV import (FileReader only — no upload)
+  const csv = "length,width,height,weight\n18,14,10,15\n22,16,12,30\n40,20,20,25\n";
+  await page.setInputFiles("#csvFileInput", {
+    name: "cartons.csv",
+    mimeType: "text/csv",
+    buffer: Buffer.from(csv, "utf8"),
+  });
+  await page.waitForFunction(() => document.querySelectorAll(".carton-row").length === 3);
+  assert("CSV import loads 3 rows", (await page.locator(".carton-row").count()) === 3);
+  assert(
+    "CSV status mentions local/import",
+    /Imported 3|Nothing uploaded|not uploaded|from CSV/i.test(
+      (await page.locator("#status").textContent()) || "",
+    ),
+  );
+  await page.click("#checkBtn");
+  await page.waitForFunction(() => document.querySelectorAll(".result-card").length >= 3);
+  assert("CSV check yields 3+ result cards", (await page.locator(".result-card").count()) >= 3);
+  assert(
+    "CSV oversize carton fails",
+    (await page.locator(".result-card.fail").count()) >= 1,
+  );
+  assert(
+    "each carton card has DIM ref",
+    (await page.locator(".result-card .dim-ref").count()) >= 3,
+  );
+
+  // FAQ coverage for new features
+  assert(
+    "FAQ covers CSV import",
+    (await page.locator("[data-fba-box] .faq details").filter({ hasText: /CSV/i }).count()) >= 1,
+  );
+  assert(
+    "FAQ covers dimensional weight",
+    (await page.locator("[data-fba-box] .faq details").filter({ hasText: /dimensional weight/i }).count()) >=
+      1,
   );
 
   assert("no measurement body uploads", posts.length === 0, JSON.stringify(posts));

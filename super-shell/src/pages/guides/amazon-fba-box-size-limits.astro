@@ -1,0 +1,163 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "Amazon FBA Box Size Limits — Carton Dimensions Explained";
+const pageDescription =
+  "Amazon FBA box size limits for inbound cartons: 36×25×25 inches and 50 lb (US FBA), vs AWD carton 25×25×25 and Jul 2026 AWD unit rules. Check Pass/Fail free.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "What is the Amazon FBA box size limit?",
+    a: "For US FBA small-parcel inbound cartons, common limits are 36 inches on the longest side, 25 inches on the other sides, and 50 pounds (length updated Jun 20, 2025). Source: Amazon Seller Central US packaging notices — confirm for your shipment.",
+  },
+  {
+    q: "What are standard FBA box dimensions?",
+    a: "Think of FBA box dimensions as up to 36 × 25 × 25 inches after sorting sides so the longest edge is length. Undersized cartons can also cause receiving issues.",
+  },
+  {
+    q: "Is AWD the same as FBA box size?",
+    a: "No. AWD inbound cartons are often capped at 25 × 25 × 25 inches and 50 lb while FBA allows longer length. Separately, from Jul 31, 2026, new US AWD inbounds generally need sortable product units smaller than 18×14×8 in and under 20 lb.",
+  },
+  {
+    q: "What are the new AWD box limits starting July 31, 2026?",
+    a: "Amazon’s US AWD program restricts new inbound eligibility for oversized/large-bulky units from July 31, 2026. Individual units generally must be smaller than 18×14×8 inches and under 20 lb. That is a unit/SKU rule — carton outer limits remain a separate check. Confirm Seller Central AWD product requirements.",
+  },
+  {
+    q: "What is the minimum FBA carton size?",
+    a: "Guides often cite about 6 × 4 × 1 inches and roughly 1 lb as a practical minimum (industry / receiving guidance). Below that, Amazon may delay or reject receiving.",
+  },
+  {
+    q: "How do I check FBA carton size before shipping?",
+    a: "Enter L×W×H and weight in the free FBA Box Size Checker for instant Pass/Fail — nothing is uploaded. For AWD, you can also check unit (SKU) eligibility after Jul 31, 2026.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "Amazon FBA box size limits", path: "/guides/amazon-fba-box-size-limits" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/amazon-fba-box-size-limits"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · FBA inbound · Reviewed 2026</p>
+    <h1>Amazon FBA box size limits</h1>
+    <p class="lede">
+      US <strong>Amazon FBA box size</strong> and carton limits sellers check before sealing inbound
+      shipments — plus AWD carton vs unit rules for 2026, and a free Pass/Fail tool.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Check cartons (and optional AWD units) against current limits in your browser.</p>
+      <a class="btn btn-primary" href="/tools/fba-box-size-checker">Open FBA Box Size Checker</a>
+    </div>
+
+    <h2>Common US FBA inbound carton limits</h2>
+    <ul>
+      <li>
+        <strong>Max length:</strong> 36 in (longest side)
+        <em> — Official / platform guidance (FBA US length change Jun 20, 2025; SC notices)</em>
+      </li>
+      <li>
+        <strong>Max width / height:</strong> 25 × 25 in
+        <em> — Official / platform guidance (SC packaging)</em>
+      </li>
+      <li>
+        <strong>Max weight (standard path):</strong> 50 lb
+        <em> — Official / platform guidance</em>
+      </li>
+      <li>
+        <strong>Guide minimum:</strong> about 6 × 4 × 1 in (~1 lb)
+        <em> — Industry / receiving guidance (warn, not always a hard published cube)</em>
+      </li>
+    </ul>
+
+    <h2>AWD carton vs AWD unit (Jul 31, 2026)</h2>
+    <p>
+      Do not confuse <strong>carton outer size</strong> with <strong>unit/SKU eligibility</strong>.
+    </p>
+    <ul>
+      <li>
+        <strong>AWD carton (outer):</strong> commonly still cited as ≤ 25 × 25 × 25 in and 50 lb
+        <em> — Platform / dual-program packaging guidance (confirm SC)</em>
+      </li>
+      <li>
+        <strong>AWD unit (from Jul 31, 2026):</strong> new US AWD inbounds generally require sortable
+        units smaller than 18 × 14 × 8 in and under 20 lb
+        <em> — Official / platform product-requirements notices (2026)</em>
+      </li>
+    </ul>
+    <p>
+      Passing a carton check does not prove the SKU is still AWD-eligible after the 2026 change.
+      Use the optional unit fields in the
+      <a href="/tools/fba-box-size-checker">FBA Box Size Checker</a> when you ship to AWD.
+    </p>
+
+    <h2>Weight exceptions &amp; packaging</h2>
+    <ul>
+      <li>
+        <strong>Over 50 lb:</strong> standard path fails. A single oversized/heavy unit may sometimes
+        continue with Team Lift labels; some help texts cite ~65 lb / ~30 kg as an upper band; over
+        100 lb often needs Mechanical Lift
+        <em> — Platform guidance + exception notes (confirm SC; not auto-approved by our tool)</em>
+      </li>
+      <li>
+        <strong>Carton strength:</strong> RSC, adequate flute (often B), ECT-32 / ~200 psi class when
+        the load needs it
+        <em> — Industry / packaging practice (common FBA prep guidance)</em>
+      </li>
+    </ul>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools
+      extra={[{ href: "/guides/amazon-dimensional-weight", label: "Amazon dimensional weight guide" }]}
+    />
+    <RelatedGuides
+      links={[
+        { href: "/guides/amazon-dimensional-weight", label: "Amazon dimensional weight" },
+        { href: "/guides/amazon-product-image-size", label: "Amazon product image size" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="Amazon" />
+    <ReportIssue />
+  </article>
+</BaseLayout>

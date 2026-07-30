@@ -40,9 +40,24 @@ Vanity redirects (keep old links alive):
 | Etsy | 2000×2000 | square | off | Listing zoom |
 | eBay | 1600×1600 | square | off | Common zoom target |
 | Shopify | 2048×2048 | square | off | Storefront common |
-| Walmart | 2000×2000 | square | on | Main image style |
+| Walmart | 2200×2200 | square | on | Official recommended; zoom floor 1500 |
 
 User can change size when exactly one marketplace is selected. Always confirm in each Seller Center.
+
+## Spec accuracy (bidirectional)
+
+**Reviewed:** 2026-07-26  
+
+| Platform / claim | Official source (URL + date) | Competitor check | Our v1 default | Notes |
+|------------------|------------------------------|------------------|----------------|-------|
+| Amazon main / zoom | Seller forums + SC guidance: ≥1000px longest for zoom; **~1600px+** often cited optimal; white RGB 255; JPEG preferred; often ≤10 MB (reviewed 2026-07-26) | Listing tools / blogs also use **2000×2000** as a higher master | **2000×2000** square default (user-adjustable), white on, JPEG, **≤5 MB** | Default is a **seller master above official 1600+ band**, not “Amazon requires exactly 2000”. Guides must label 1000 / 1600+ / optional 2000 separately. |
+| TikTok Shop | Seller University / regional: **1:1**, min **600×600**; JPEG/PNG; file caps often **5 MB** (PH essay also cites 10 MB — use safer 5) | myPixelVault / Picoko recommend **1200×1200**, white/plain main | **1200×1200** square, white on, ≤5 MB | Above official min; matches SERP seller prep tools |
+| Etsy listing photos | [Etsy Help](https://help.etsy.com/hc/en-us/articles/115015663347-Requirements-and-Best-Practices-for-Images-in-Your-Etsy-Shop): recommend ≥**2000** W&H; first photo ≥**635**; (2026-07-26) | Pixelense / craft blogs: 2000×2000 square | **2000×2000**, white **off**, ≤5 MB | White not an Etsy hard rule — leave off |
+| eBay | [eBay Help](https://www.ebay.co.uk/help/selling/listings/adding-pictures-listings?id=4148): min ~500; recommend ~**1600×1600**; up to **12 MB**; JPEG/PNG/… (2026-07-26) | Listing blogs standardize on 1600 | **1600×1600**, white off, ≤5 MB | 5 MB under 12 MB official max |
+| Shopify | Shopify product image guidance commonly **2048×2048** (merchant docs / theme best practice; confirm in admin) | Reseller tools use 2048 | **2048×2048**, white off, ≤5 MB | Platform is flexible; 2048 = common storefront default |
+| Walmart Marketplace | [Marketplace Learn image guidelines](https://marketplacelearn.walmart.com/guides/Item%20setup/Item%20content,%20imagery,%20and%20media/Product-detail-page:-Image-guidelines-&-requirements): **2200×2200** recommended; **1500×1500** zoom min; **1:1**; white **255/255/255**; JPEG/PNG/BMP; ~5 MB (2026-07-26) | Third-party blogs often say 2000 — **official wins** | **2200×2200**, white on, ≤5 MB, upscale floor **1500** | **Corrected 2026-07-26** from 2000 → 2200 |
+
+Acceptance: exports are JPEG squares at preset px; under maxBytes; white pad when enabled. UI already says confirm in Seller Center.
 
 ## Competitors
 
@@ -56,7 +71,7 @@ User can change size when exactly one marketplace is selected. Always confirm in
 
 ## Monetization
 
-Free batch **10** / run → Pro CTA (same as prior Amazon Prep).
+**Fully free** — no batch cap, no Pro CTA. Site revenue = display ads (when live).
 
 ## Acceptance criteria
 
@@ -76,7 +91,8 @@ Command: `cd super-shell && npm run test:marketplace-prep`
 
 | Date | Case | Result | Notes |
 |------|------|--------|-------|
-| 2026-07-25 | SEO title/meta/H1/FAQ JSON-LD | pass | |
+| 2026-07-26 | Spec accuracy bidirectional audit | pass | Walmart preset corrected 2000→2200; see SPEC-ACCURACY-AUDIT |
+
 | 2026-07-25 | one homepage card | pass | |
 | 2026-07-25 | Amazon + TikTok presets | pass | 2000 / 1200 |
 | 2026-07-25 | multi-export ZIP folders | pass | amazon/ + tiktok-shop/ |

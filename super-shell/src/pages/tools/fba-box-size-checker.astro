@@ -1,16 +1,29 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ReportIssue from "../../components/ReportIssue.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
 
 /** Primary: amazon fba box size. Secondaries woven into title/description/FAQ. */
 const pageTitle = "Amazon FBA Box Size Checker — Carton Dimensions & Limits (Free)";
 const pageDescription =
-  "Free Amazon FBA box size and carton size checker. Verify FBA box dimensions (36×25×25) vs AWD (25×25×25), weight limits, and Pass/Fail — in your browser, no signup.";
+  "Free Amazon FBA box size and carton size checker. Verify FBA box dimensions vs AWD, DIM weight reference (÷139), and local CSV multi-carton import — in your browser, no signup.";
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Tools", path: "/#tools" },
+  { name: "FBA Box Size Checker", path: "/tools/fba-box-size-checker" },
+];
+
+const relatedGuides = [
+  { href: "/guides/amazon-fba-box-size-limits", label: "Amazon FBA box size limits" },
+  { href: "/guides/amazon-dimensional-weight", label: "Amazon dimensional weight" },
+];
 
 const faqs: { q: string; a: string }[] = [
   {
     q: "What is the Amazon FBA box size limit?",
-    a: "For US FBA small-parcel inbound cartons, commonly cited Amazon FBA box size limits are 36 inches on the longest side, 25 inches on the other sides, and 50 pounds (length updated Jun 20, 2025). Confirm in Seller Central for your shipment.",
+    a: "For US FBA small-parcel inbound cartons, commonly cited Amazon FBA box size limits are 36 inches on the longest side, 25 inches on the other sides, and 50 pounds (length updated Jun 20, 2025). Source: Amazon Seller Central US packaging guidance / seller notices — confirm for your shipment.",
   },
   {
     q: "What are standard FBA box dimensions?",
@@ -18,15 +31,27 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Do FBA and AWD use the same box size?",
-    a: "No — AWD vs FBA box size differs. AWD often still uses 25×25×25 inches while FBA allows up to 36 inches in length. Pick the correct program in this tool to match the destination.",
+    a: "No — AWD vs FBA box size differs. AWD carton outer limits are commonly still 25×25×25 inches / 50 lb while FBA allows up to 36 inches in length. Separately, from Jul 31, 2026, new US AWD inbounds generally need sortable units smaller than 18×14×8 in and under 20 lb. Pick the correct program in this tool.",
+  },
+  {
+    q: "What are the new AWD box limits starting July 31, 2026?",
+    a: "From July 31, 2026, new US AWD inbound eligibility for oversized/large-bulky units is restricted: individual product units generally must be smaller than 18×14×8 inches and under 20 lb (sortable / standard-size). That is a unit/SKU rule — it does not replace the usual AWD carton outer limits (commonly 25×25×25 in / 50 lb). Confirm in Amazon Seller Central US AWD product requirements before you ship.",
   },
   {
     q: "How do I check FBA carton size before shipping?",
-    a: "Enter each carton’s length, width, height, and weight in this free FBA carton size checker, choose FBA or AWD, then Check. You get Pass/Fail plus which rule failed — nothing is uploaded.",
+    a: "Enter each carton’s length, width, height, and weight in this free FBA carton size checker, choose FBA or AWD, then Check. You get Pass/Fail plus which rule failed — nothing is uploaded. Or Import CSV to load many cartons at once.",
+  },
+  {
+    q: "Can I import multiple cartons from a CSV?",
+    a: "Yes. Use Import CSV with columns length,width,height,weight (header optional). Values use the units selected on the page (in/lb or cm/kg). The file is read only in your browser — never uploaded. After Check you can Export results CSV locally.",
+  },
+  {
+    q: "Does this tool calculate Amazon dimensional weight?",
+    a: "It shows a planning DIM reference using (L×W×H in inches) ÷ 139 and the greater of actual vs DIM weight. That does not change inbound Pass/Fail and is not an FBA fee quote — confirm Seller Central and see our Amazon dimensional weight guide.",
   },
   {
     q: "What if my carton is over 50 pounds?",
-    a: "The standard path fails over 50 lb. Heavier cartons may only be allowed for a single oversized/heavy unit with Team Lift (or Mechanical Lift over 100 lb) labeling — check Seller Central.",
+    a: "The standard path fails over 50 lb. For FBA, a single oversized/heavy unit may sometimes ship heavier with Team Lift labels on top and sides (some help texts also mention an upper band around ~65 lb / ~30 kg); over 100 lb often needs Mechanical Lift labeling. Multi-unit cartons over 50 lb are not on the standard path. Confirm Seller Central — this tool does not auto-approve exceptions.",
   },
   {
     q: "Can a box exceed 36 inches?",
@@ -34,7 +59,7 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Are my measurements uploaded?",
-    a: "No. All math runs in your browser. Open DevTools → Network while checking if you want to verify.",
+    a: "No. Carton checks, DIM math, and CSV import/export all run in your browser — dimensions and weights are never uploaded. Open DevTools → Network while checking if you want to verify.",
   },
   {
     q: "Is there a carton limit?",
@@ -60,11 +85,16 @@ const appLd = {
   operatingSystem: "Any",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   description: pageDescription,
-  url: "https://minitoolhq.com/tools/fba-box-size-checker",
+  url: "https://selltoolhq.com/tools/fba-box-size-checker",
 };
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription} path="/tools/fba-box-size-checker">
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/tools/fba-box-size-checker"
+  crumbs={crumbs}
+>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(appLd)} />
@@ -76,8 +106,15 @@ const appLd = {
     <p class="lede">
       Free <strong>Amazon FBA box size</strong> and <strong>carton size checker</strong>. Enter
       inbound <strong>FBA box dimensions</strong> and weight — instant Pass/Fail against common US
-      <strong>FBA</strong> (36×25×25, 50 lb) and <strong>AWD</strong> (25×25×25, 50 lb) limits.
-      Sides are sorted so the longest edge is treated as length.
+      <strong>FBA</strong> (36×25×25, 50 lb) and <strong>AWD carton</strong> (25×25×25, 50 lb)
+      limits, plus optional <strong>AWD unit</strong> eligibility after Jul 31, 2026. Each result also
+      shows a <strong>DIM weight reference</strong> (÷139) for planning — not a fee quote. Import a
+      local CSV for multi-carton checks. Read the full
+      <a href="/guides/amazon-fba-box-size-limits">Amazon FBA box size limits</a> guide for context.
+    </p>
+    <p class="lede privacy-callout">
+      <strong>Private by design:</strong> carton checks, DIM math, and CSV import/export run in your
+      browser. Measurements are never uploaded — useful when carton specs are sensitive.
     </p>
 
     <div class="panel">
@@ -96,12 +133,46 @@ const appLd = {
 
       <div id="cartonRows" class="carton-rows"></div>
 
+      <div id="awdUnitPanel" class="awd-unit-panel" hidden>
+        <h3 class="panel-subhead">AWD unit (SKU) eligibility — from Jul 31, 2026</h3>
+        <p class="muted-inline">
+          Optional. Enter the <em>product unit</em> inside the carton (not the outer box). New US AWD
+          inbounds generally need units smaller than 18×14×8 in and under 20 lb. Carton outer limits
+          stay separate (commonly 25×25×25 / 50 lb).
+        </p>
+        <div class="grid-4">
+          <label class="field"
+            >Unit length <span data-dim-unit>in</span>
+            <input id="unitLen" type="number" min="0" step="0.1" placeholder="e.g. 12" />
+          </label>
+          <label class="field"
+            >Unit width <span data-dim-unit>in</span>
+            <input id="unitWid" type="number" min="0" step="0.1" placeholder="e.g. 10" />
+          </label>
+          <label class="field"
+            >Unit height <span data-dim-unit>in</span>
+            <input id="unitHei" type="number" min="0" step="0.1" placeholder="e.g. 6" />
+          </label>
+          <label class="field"
+            >Unit weight <span data-weight-unit>lb</span>
+            <input id="unitWgt" type="number" min="0" step="0.1" placeholder="e.g. 8" />
+          </label>
+        </div>
+      </div>
+
       <p class="status" id="status"></p>
 
       <div class="actions">
         <button class="btn btn-primary" id="checkBtn" type="button">Check cartons</button>
         <button class="btn btn-ghost" id="addCartonBtn" type="button">Add carton</button>
+        <button class="btn btn-ghost" id="importCsvBtn" type="button">Import CSV</button>
+        <button class="btn btn-ghost" id="exportCsvBtn" type="button" disabled>Export results</button>
+        <input id="csvFileInput" type="file" accept=".csv,text/csv" hidden />
       </div>
+      <p class="muted-inline csv-hint">
+        CSV columns: <code>length,width,height,weight</code> (header optional). Numbers use the units
+        selected above. File stays on your device.
+      </p>
 
       <div id="results" class="results" aria-live="polite"></div>
     </div>
@@ -109,17 +180,18 @@ const appLd = {
     <section class="section">
       <h2>Amazon FBA box dimensions &amp; inbound limits (US reference)</h2>
       <p class="lede">
-        Figures below summarize widely published FBA box size and AWD carton guidance (including the
-        Jun 20, 2025 FBA length change). Always confirm the shipment destination in Seller Central
-        before you seal cartons.
+        Figures below summarize widely published FBA carton guidance (including the Jun 20, 2025 FBA
+        length change) and AWD carton vs unit rules. Source framing: Amazon Seller Central US (2025–2026)
+        packaging / AWD product-requirements notices — always confirm the shipment destination before
+        you seal cartons.
       </p>
       <div class="table-wrap panel">
         <table class="data">
           <thead>
             <tr>
               <th>Rule</th>
-              <th>FBA</th>
-              <th>AWD</th>
+              <th>FBA carton</th>
+              <th>AWD carton</th>
               <th>This tool</th>
             </tr>
           </thead>
@@ -151,7 +223,59 @@ const appLd = {
           </tbody>
         </table>
       </div>
-      <p class="lede" style="margin-top: 1rem;">
+
+      <h3 class="panel-subhead" style="margin-top: 1.5rem;">AWD unit eligibility (Jul 31, 2026+)</h3>
+      <div class="table-wrap panel">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Check</th>
+              <th>Threshold</th>
+              <th>Applies to</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Unit longest / median / shortest</td>
+              <td>Smaller than 18 × 14 × 8 in</td>
+              <td>Product SKU (not outer carton)</td>
+            </tr>
+            <tr>
+              <td>Unit weight</td>
+              <td>Under 20 lb</td>
+              <td>Product SKU</td>
+            </tr>
+            <tr>
+              <td>Carton outer (unchanged reference)</td>
+              <td>Typically ≤ 25 × 25 × 25 in / 50 lb</td>
+              <td>Inbound carton</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lede source-note">
+        Source: Amazon Seller Central US AWD product-requirements / seller notices (2026) — wording is
+        generally “smaller than” each dimension and under 20 lb for new sortable inbounds. Treat
+        exact threshold values as borderline and confirm your ASIN in Seller Central.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Weight exceptions &amp; carton packaging tips</h2>
+      <ul class="plain-list">
+        <li>
+          <strong>Over 50 lb (FBA):</strong> standard check fails. A single oversized/heavy unit may
+          sometimes continue with Team Lift labels; some guidance cites ~65 lb / ~30 kg as an upper
+          band for that exception. Over 100 lb often needs Mechanical Lift labels. Confirm Seller
+          Central — this tool never auto-approves.
+        </li>
+        <li>
+          <strong>Packaging strength (common guidance):</strong> use a proper RSC (regular slotted
+          carton), adequate flute (often B-flute), and board strength in the ECT-32 / ~200 psi burst
+          class when your load needs it. Weak boxes can fail receiving even when dimensions pass.
+        </li>
+      </ul>
+      <p class="lede">
         Not affiliated with Amazon. Passing this check does not guarantee acceptance at a
         fulfillment center.
       </p>
@@ -169,9 +293,66 @@ const appLd = {
       }
     </section>
 
+    <RelatedTools
+      hide={["fba"]}
+      extra={[
+        { href: "/guides/amazon-dimensional-weight", label: "Amazon dimensional weight guide" },
+      ]}
+    />
+    <RelatedGuides links={relatedGuides} />
+
     <ReportIssue />
   </section>
 </BaseLayout>
+
+<style>
+  .privacy-callout {
+    border-left: 3px solid var(--accent, #3d8bfd);
+    padding-left: 0.9rem;
+    margin-top: 0.75rem;
+  }
+  .awd-unit-panel {
+    margin-top: 1.25rem;
+    padding: 1rem 1.05rem 1.15rem;
+    border: 1px dashed var(--line);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .panel-subhead {
+    margin: 0 0 0.45rem;
+    font-size: 1.05rem;
+  }
+  .muted-inline {
+    margin: 0 0 0.85rem;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+  .source-note {
+    margin-top: 0.85rem;
+    font-size: 0.92rem;
+  }
+  .plain-list {
+    margin: 0.5rem 0 0;
+    padding-left: 1.2rem;
+    color: var(--muted);
+    display: grid;
+    gap: 0.65rem;
+  }
+  .csv-hint {
+    margin-top: 0.75rem;
+  }
+  .csv-hint code {
+    font-size: 0.88em;
+  }
+  :global(.dim-ref) {
+    margin-top: 0.65rem;
+  }
+  :global(.dim-ref a) {
+    color: inherit;
+    text-decoration: underline;
+  }
+</style>
 
 <script>
   import "../../scripts/fba-box-size-checker";

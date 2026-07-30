@@ -26,3 +26,5 @@ pnpm-debug.log*
 # local test artifacts
 test-fixtures/
 test-output/
+deploy-out.txt
+test-*-out.txt

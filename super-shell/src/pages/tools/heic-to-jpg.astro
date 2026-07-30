@@ -1,0 +1,150 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+
+const pageTitle = "HEIC to JPG Converter — Free Batch Convert (No Upload)";
+const pageDescription =
+  "Free HEIC to JPG converter in your browser. Batch convert HEIC to JPEG, download a ZIP — no upload, no signup. Works for iPhone photos.";
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Tools", path: "/#tools" },
+  { name: "HEIC to JPG Converter", path: "/tools/heic-to-jpg" },
+];
+
+const relatedGuides = [
+  { href: "/guides/heic-to-jpg-for-amazon", label: "HEIC to JPG for Amazon listings" },
+  { href: "/guides/heic-to-jpg-for-etsy", label: "HEIC to JPG for Etsy listings" },
+  { href: "/guides/heic-to-jpg-for-tiktok-shop", label: "HEIC to JPG for TikTok Shop" },
+  { href: "/guides/amazon-product-image-size", label: "Amazon product image size" },
+  { href: "/guides/etsy-listing-photo-size", label: "Etsy listing photo size" },
+];
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "How do I convert HEIC to JPG?",
+    a: "Add your .heic or .heif files below, set JPG quality, then Convert. This HEIC to JPG converter runs in your browser and lets you download a ZIP of JPEG files.",
+  },
+  {
+    q: "Can I batch convert HEIC to JPG?",
+    a: "Yes. Select multiple iPhone HEIC photos at once for batch HEIC to JPG conversion. There is no account and no artificial batch cap on this free tool.",
+  },
+  {
+    q: "Is HEIC the same as HEIF?",
+    a: "HEIC is Apple’s common container for HEIF images. This tool accepts both HEIC and HEIF and converts them to JPG/JPEG.",
+  },
+  {
+    q: "Why won’t Amazon or email accept my iPhone photo?",
+    a: "Many sites expect JPG, not HEIC. Convert HEIC to JPEG here first, then upload. Sellers can next use the Marketplace Image Resizer for platform sizes.",
+  },
+  {
+    q: "Are my photos uploaded to a server?",
+    a: "No. Conversion stays on your device. Open DevTools → Network while converting if you want to verify that image bytes are not posted to our servers.",
+  },
+  {
+    q: "Will I lose image quality?",
+    a: "JPG is lossy. Use the quality slider (higher = larger files, sharper detail). For listing uploads, 90–95% is usually enough.",
+  },
+  {
+    q: "Does this work on Windows and Android?",
+    a: "Yes, in a modern browser. You do not need iPhone Photos or a desktop install — only the HEIC files themselves.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const appLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "HEIC to JPG Converter",
+  applicationCategory: "MultimediaApplication",
+  operatingSystem: "Any",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  description: pageDescription,
+  url: "https://selltoolhq.com/tools/heic-to-jpg",
+};
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} path="/tools/heic-to-jpg" crumbs={crumbs}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(appLd)} />
+  </Fragment>
+
+  <section data-heic-jpg>
+    <p class="badge">No upload · In-browser · Free · Batch ZIP</p>
+    <h1>HEIC to JPG Converter</h1>
+    <p class="lede">
+      Free <strong>HEIC to JPG</strong> converter for iPhone photos. <strong>Batch convert HEIC to
+      JPEG</strong> in your browser, then download a ZIP — no upload, no signup. Use it when
+      Amazon, Etsy, email, or Windows apps reject <strong>HEIC</strong> files.
+    </p>
+
+    <div class="panel">
+      <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="Add HEIC files">
+        <p><strong>Drop HEIC / HEIF files</strong> or click to choose</p>
+        <input id="heicFiles" type="file" accept=".heic,.heif,image/heic,image/heif" multiple />
+      </div>
+
+      <div class="grid-2" style="margin-top: 1rem;">
+        <label class="field">
+          <span>JPG quality <span id="qualityLabel">92%</span></span>
+          <input id="quality" type="range" min="70" max="98" value="92" />
+        </label>
+        <label class="check field">
+          <input id="stripExif" type="checkbox" checked />
+          <span>Output clean JPG (no HEIC camera metadata)</span>
+        </label>
+      </div>
+
+      <ul id="fileList" class="file-list" hidden></ul>
+      <p class="status" id="status"></p>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="convertBtn" type="button">Convert to JPG</button>
+        <button class="btn btn-ghost" id="clearBtn" type="button">Clear</button>
+      </div>
+
+      <div id="results" class="results" aria-live="polite"></div>
+    </div>
+
+    <section class="section">
+      <h2>When you need HEIC to JPEG</h2>
+      <p class="lede">
+        iPhones often save <strong>HEIC</strong>. Seller portals and many PCs expect
+        <strong>JPG</strong>. Convert here first, then size images for each marketplace if needed.
+      </p>
+    </section>
+
+    <section class="section faq">
+      <h2>FAQ — HEIC to JPG converter</h2>
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools hide={["heic"]} />
+    <RelatedGuides links={relatedGuides} />
+
+    <ReportIssue />
+  </section>
+</BaseLayout>
+
+<script>
+  import "../../scripts/heic-to-jpg";
+</script>

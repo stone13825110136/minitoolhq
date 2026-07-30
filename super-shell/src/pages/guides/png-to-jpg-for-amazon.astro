@@ -1,0 +1,177 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "PNG to JPG for Amazon Listings - Convert WebP Too";
+const pageDescription =
+  "Convert PNG to JPG for Amazon Seller Central listings. Also convert WebP to JPG when uploads fail - batch in your browser, no upload.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "Should I convert PNG to JPG for Amazon listings?",
+    a: "Amazon accepts JPEG (preferred), PNG, TIFF, and non-animated GIF for product images. JPEG is usually the better default for main and gallery photos because files stay smaller. Convert PNG to JPG when you want lighter uploads or a marketplace-ready JPEG master.",
+  },
+  {
+    q: "Does Amazon accept WebP product images?",
+    a: "Seller Central image guidance lists JPEG, PNG, TIFF, and GIF - not WebP. If a CDN or phone export gives you WebP, convert WebP to JPG (or PNG) before uploading listing photos, then confirm in Seller Central.",
+  },
+  {
+    q: "How do I convert PNG to JPG without uploading?",
+    a: "Use the free PNG to JPG converter on SellTool HQ: drop PNG (or WebP/JPG) files, pick JPG output, set quality and background fill for transparency, then download a ZIP. Conversion runs in your browser.",
+  },
+  {
+    q: "What happens to transparent PNG on Amazon?",
+    a: "JPEG has no alpha channel. When you convert a transparent PNG to JPG, transparent pixels need a solid fill (default white), which matches common Amazon main-image practice (RGB 255, 255, 255).",
+  },
+  {
+    q: "PNG vs JPG for Amazon - which should sellers use?",
+    a: "Use JPG for most listing photos. Keep PNG when you truly need transparency later (for example some secondary graphics). Amazon prefers JPEG for typical product photography.",
+  },
+  {
+    q: "What size after converting PNG to JPG for Amazon?",
+    a: "Aim for at least 1000px on the longest side for zoom, about 1600px+ for stronger zoom quality, and many sellers use 2000x2000 as a practical square master. After format convert, use the Marketplace Image Resizer Amazon preset.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "PNG to JPG for Amazon", path: "/guides/png-to-jpg-for-amazon" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/png-to-jpg-for-amazon"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · Amazon sellers · Updated 2026</p>
+    <h1>PNG to JPG for Amazon listings</h1>
+    <p class="lede">
+      Supplier packs and design exports often arrive as <strong>PNG</strong> or
+      <strong>WebP</strong>. Seller Central prefers <strong>JPEG</strong> for most product images and
+      does not list WebP as a standard listing format. Convert <strong>PNG to JPG</strong> (and
+      <strong>WebP to JPG</strong>) in your browser first, then size for zoom.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Batch convert PNG / WebP to JPG without uploading product photos.</p>
+      <a class="btn btn-primary" href="/tools/png-to-jpg">Open PNG to JPG Converter</a>
+    </div>
+
+    <h2>What Amazon accepts (formats)</h2>
+    <p>
+      For Seller Central listing / catalog product images, accepted formats are typically
+      <strong>JPEG (preferred), PNG, TIFF, and non-animated GIF</strong>.
+      <em
+        >Source: Amazon Seller Central product image requirements / Ask Amazon image Q&amp;A
+        summaries (reviewed 2026).</em
+      >
+    </p>
+    <p>
+      <strong>WebP is not listed</strong> in that set. If Seller Central rejects a file from a CDN,
+      screenshot tool, or modern phone export, check whether it is still WebP - then convert WebP to
+      JPG before retrying.
+    </p>
+
+    <h2>When sellers should convert PNG to JPG</h2>
+    <ul>
+      <li>Main and gallery photos where smaller JPEGs upload more reliably</li>
+      <li>PNG exports from Canva / Photoshop that do not need transparency on Amazon</li>
+      <li>WebP downloads that fail Seller Central validation</li>
+      <li>Building a single JPEG master before you resize for zoom</li>
+    </ul>
+
+    <h2>Seller workflow</h2>
+    <ol>
+      <li>Gather PNG, WebP, or mixed JPG product files.</li>
+      <li>
+        <a href="/tools/png-to-jpg">Convert to JPG</a> in batch in your browser - pick a white fill
+        if the PNG has transparency.
+      </li>
+      <li>
+        Size for Amazon with the
+        <a href="/tools/marketplace-image-prep?platform=amazon">Marketplace Image Resizer (Amazon)</a>
+        .
+      </li>
+      <li>Upload JPG files in Seller Central.</li>
+    </ol>
+
+    <h2>Transparency and white background</h2>
+    <p>
+      JPEG cannot keep transparent pixels. Converting PNG to JPG fills empty areas with the color you
+      choose (default <strong>#FFFFFF</strong>). That lines up with Amazon main-image expectations for
+      a pure white background.
+      <em>Source: Amazon Seller Central main image requirements (reviewed 2026).</em>
+    </p>
+
+    <h2>Size after conversion</h2>
+    <ul>
+      <li>
+        <strong>Zoom floor:</strong> longest side at least <strong>1000px</strong>.
+      </li>
+      <li>
+        <strong>Widely cited optimal:</strong> about <strong>1600px+</strong> on the longest side.
+      </li>
+      <li>
+        <strong>Optional higher master:</strong> many sellers use <strong>2000x2000</strong> as a
+        practical square master (seller practice - confirm Seller Central).
+      </li>
+    </ul>
+    <p>
+      Full size walkthrough:
+      <a href="/guides/amazon-product-image-size">Amazon product image size requirements</a>.
+    </p>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools
+      extra={[
+        { href: "/tools/marketplace-image-prep?platform=amazon", label: "Amazon preset (resizer)" },
+      ]}
+    />
+    <RelatedGuides
+      links={[
+        { href: "/guides/amazon-product-image-size", label: "Amazon image size guide" },
+        { href: "/guides/heic-to-jpg-for-amazon", label: "HEIC to JPG for Amazon" },
+        { href: "/guides/heic-to-jpg-for-tiktok-shop", label: "HEIC to JPG for TikTok Shop" },
+        { href: "/guides/amazon-fba-box-size-limits", label: "FBA box size limits" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="Amazon" />
+    <ReportIssue />
+  </article>
+</BaseLayout>

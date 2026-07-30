@@ -10,15 +10,15 @@ Do **not** mark a tool shipped until **feature testing** and **SEO gate** both p
 
 ## Fixed workflow (every tool)
 
-1. **Keyword** — primary SEO keyword + **≥3** secondary long-tails (see `minitool-seo-keywords.mdc`)
-2. **Competitors** — open top 3–5 results; fill feature parity table (must / should / won't)
+1. **Keyword** — primary SEO keyword + **≥3** secondary long-tails; **Read** `.cursor/skills/minitool-seo-expert/SKILL.md` first (see `minitool-seo-expert.mdc` + `minitool-seo-keywords.mdc`)
+2. **Competitors + spec accuracy** — top 3–5 results; feature parity; for **format / size / limits** tools also complete the **bidirectional official + competitor check** (see `minitool-spec-accuracy.mdc`) before locking defaults
 3. **Reuse** — search GitHub/npm for MIT/Apache libs. Prefer wrapping existing code
 4. **Agent assist** — use competitor-research / web fetch; never skip step 2–3
-5. **Spec** — write `docs/specs/NN-tool-slug.md` including full **SEO** block
+5. **Spec** — write `docs/specs/NN-tool-slug.md` including full **SEO** block **and** Spec accuracy table when applicable
 6. **Build** — client-side only when possible; no upload servers for file tools
-7. **Monetize** — free core + Pro **$4.99/mo** site-wide when it makes sense; traffic tools may be fully free
-8. **Ship UI + SEO together** — tool UI, FAQ, JSON-LD, title/description, homepage link — **same PR / same ship**. No “SEO later”
-9. **Feature + SEO test (mandatory)** — every **must** feature + SEO E2E assertions; `npm run build` alone is **not** enough. Record results in the spec **Test log**
+7. **Monetize** — **ads only**; **every tool is fully free** (no Pro, no $4.99, no batch paywall)
+8. **Ship UI + SEO together** — follow SEO expert skill; tool UI, FAQ, JSON-LD, title/description, homepage link — **same PR / same ship**. No “SEO later”
+9. **Feature + SEO test (mandatory)** — every **must** feature + SEO E2E assertions; for size/format tools assert outputs match locked defaults; `npm run build` alone is **not** enough. Record results in the spec **Test log**
 10. **Next tool** — only after step 9 passes
 
 ## Hard rules
@@ -26,10 +26,11 @@ Do **not** mark a tool shipped until **feature testing** and **SEO gate** both p
 - Self-operated tools first; marketplace later
 - No heavy AI wrappers, no PWA-first, no PDF suite on day one
 - Match competitor **must-have** features
+- **Format / size / limits accuracy** — official docs + core competitors, bidirectional check before ship (`minitool-spec-accuracy.mdc`)
 - **Same customer job = one tool** (e.g. one Marketplace Image Prep, not Amazon+TikTok+Etsy clones)
 - After implementation: run the tool in a real browser (or automated E2E), with real sample files when the tool processes files
 - **Customer copy only** on the live site — see `minitool-customer-copy.mdc`
-- **Search discoverability is mandatory** — see `minitool-seo-keywords.mdc`. Cover vertical keywords on the one job page via FAQ/presets
+- **Search discoverability is mandatory** — see `minitool-seo-keywords.mdc` + **must use** SEO expert skill (`.cursor/skills/minitool-seo-expert/SKILL.md`, rule `minitool-seo-expert.mdc`). Cover vertical keywords on the one job page via FAQ/presets
 
 ## Testing tooling
 

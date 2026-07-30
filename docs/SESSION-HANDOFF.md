@@ -10,7 +10,8 @@ Updated 2026-07-25 from product discussion + first-tool spec.
 | Product form | Web tools only first (not PWA, not native) |
 | Market | English / US |
 | Strategy | Self-operated multi-tool site; **ship one → keep adding**; marketplace later |
-| Monetization | Free core + **$4.99/mo** Pro (site-wide, not per-tool) |
+| Monetization | **Ads only** — all tools free; **$4.99 Pro cancelled** |
+| vs HotPickLab | Utilities only here; naming + tarot Lab = hotpicklab.com — [BRAND-BOUNDARY.md](./BRAND-BOUNDARY.md) |
 | Tech | Prefer in-browser / local processing; reuse open-source libs |
 | Process | Frozen in [TOOL-DEV-WORKFLOW.md](./TOOL-DEV-WORKFLOW.md) + `.cursor/rules/minitool-dev-workflow.mdc` + **SEO gate** `.cursor/rules/minitool-seo-keywords.mdc` |
 | First tool | **Amazon Image Prep** — [specs/01-amazon-image-prep.md](./specs/01-amazon-image-prep.md) |
@@ -32,8 +33,8 @@ Updated 2026-07-25 from product discussion + first-tool spec.
 1. ~~Implement + feature-test `01-amazon-image-prep`~~ — E2E 21/21 pass (`npm run test:amazon-prep`)  
 2. ~~Deploy Cloudflare Pages + DNS~~ — live at https://minitoolhq.com (fix www 522 if still broken)  
 3. **Traffic:** verify sitemap + submit https://minitoolhq.com in Google Search Console  
-4. Wire Pro checkout later (Gumroad / Lemon Squeezy) — CTA stubbed  
-5. Next SEO tools: TikTok Shop image preset (seller line)
+4. AdSense / display ads after traffic — **no Pro checkout**  
+5. Next SEO tools per [TOOL-ROADMAP.md](./TOOL-ROADMAP.md) / [TRAFFIC-PRIORITY.md](./TRAFFIC-PRIORITY.md)
 
 ## Related repos
 

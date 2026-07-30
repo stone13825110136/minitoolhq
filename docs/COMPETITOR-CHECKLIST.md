@@ -9,12 +9,19 @@ Cursor rule: `.cursor/rules/minitool-dev-workflow.mdc`.
 2. Open top 3–5 results
 3. Fill **quick scan** table + **feature parity** table
 4. Search GitHub/npm for reusable libs (MIT/Apache preferred)
-5. Write one-line wedge + monetization (fully free vs free+Pro)
+5. Write one-line wedge + monetization (**fully free + ads**)
 6. Lock **primary + ≥3 secondary keywords**, Title, H1, description, ≥5 FAQ questions (see `.cursor/rules/minitool-seo-keywords.mdc`)
-7. Create `docs/specs/NN-tool-slug.md` — then code feature **and** SEO together
+7. **Spec accuracy (format / size / limits tools)** — fill bidirectional table: official Seller Central/Help + core competitors; lock defaults only after reconcile (rule: `.cursor/rules/minitool-spec-accuracy.mdc`)
+8. Create `docs/specs/NN-tool-slug.md` — then code feature **and** SEO together
 
 Optional: competitor-research agent/skill  
 https://github.com/750928465/competitor-research-skill-kit
+
+## Spec accuracy (when tool claims format, px, MB, L×W×H, weight)
+
+| Platform / claim | Official source (URL + date) | Competitor check (top tools/guides) | Our v1 default | Notes |
+|------------------|------------------------------|-------------------------------------|----------------|-------|
+| | | | | |
 
 ## Quick scan
 
@@ -40,7 +47,7 @@ https://github.com/750928465/competitor-research-skill-kit
 ## Our wedge (fill before build)
 
 - One-line difference:
-- Monetization (fully free traffic tool vs free+Pro):
+- Monetization (fully free + ads):
 - Primary keyword:
 - Secondary keywords (≥3):
 - Primary SEO title:
@@ -50,7 +57,7 @@ https://github.com/750928465/competitor-research-skill-kit
 
 1. Hate uploading sensitive files to random servers  
 2. Free tier limits and signup walls  
-3. Subscription fatigue — prefer cheap unlocks ($4.99-style)  
+3. Prefer free tools + ads over subscriptions  
 4. Vertical workflow tools convert better than generic suites  
 5. AI wrappers without a specific job are ignored  
 
@@ -58,5 +65,5 @@ https://github.com/750928465/competitor-research-skill-kit
 
 | Type | Examples | Note |
 |------|----------|------|
-| High volume | Compress, HEIC, Amazon prep | Privacy + batch wedge; Pro for unlimited |
+| High volume | Compress, HEIC, Amazon prep | Privacy + batch wedge; **ads** |
 | Higher intent | UTM, listing checkers | Add after image line has traffic |

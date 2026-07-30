@@ -63,5 +63,18 @@ export const AWD_LIMITS_IN_LB: RuleLimits = {
   minWeightGuide: 1,
 };
 
+/**
+ * AWD *unit/SKU* eligibility for new US inbounds from Jul 31, 2026 (sortable / standard-size).
+ * This is NOT the carton outer limit (still typically 25×25×25 / 50 lb).
+ * Values must be strictly smaller than each dimension and under 20 lb (confirm Seller Central).
+ */
+export const AWD_UNIT_MAX_IN_LB = {
+  maxLengthExclusive: 18,
+  maxWidthExclusive: 14,
+  maxHeightExclusive: 8,
+  maxWeightExclusive: 20,
+  effectiveDate: "2026-07-31",
+} as const;
+
 export const IN_TO_CM = 2.54;
 export const LB_TO_KG = 0.45359237;

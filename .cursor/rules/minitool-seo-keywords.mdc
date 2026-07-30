@@ -8,6 +8,11 @@ alwaysApply: true
 If customers cannot find the tool in search, the tool has no business value.  
 **Do not mark a tool shipped** until the SEO checklist below is complete on the live tool page + spec.
 
+## SEO expert skill (hard)
+
+Before any SEO work (new tool/guide SEO, audit, sitemap, GSC, on-page/meta/FAQ/JSON-LD, internal links), **Read and follow** `.cursor/skills/minitool-seo-expert/SKILL.md`.  
+Rule: `.cursor/rules/minitool-seo-expert.mdc`. Do not skip the skill.
+
 ## Customer-first product rule (hard)
 
 **Same customer job = one tool.** Do **not** ship separate tools that only change a marketplace preset (e.g. Amazon image prep vs TikTok image prep vs Etsy image prep).
@@ -62,5 +67,4 @@ Tool E2E **must** assert at least:
 
 ## Monetization note
 
-Traffic tools (e.g. FBA box checker) may be fully free — still require full SEO.  
-Paid batch tools still require the same keyword gate.
+**All MiniTool HQ tools are fully free.** Revenue is display ads. Do not ship Pro paywalls or $4.99 membership CTAs.

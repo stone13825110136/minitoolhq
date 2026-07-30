@@ -1,9 +1,6 @@
 import { processImageFile } from "../lib/amazon-prep/process";
 import {
   DEFAULT_OPTIONS,
-  FREE_BATCH_LIMIT,
-  PRO_CHECKOUT_URL,
-  PRO_PRICE_LABEL,
   type ProcessOptions,
   type ProcessResultRow,
   type QueueItem,
@@ -72,7 +69,6 @@ function init(): void {
   const fileInput = root.querySelector<HTMLInputElement>("#fileInput")!;
   const thumbs = root.querySelector<HTMLElement>("#thumbs")!;
   const statusEl = root.querySelector<HTMLElement>("#status")!;
-  const proBanner = root.querySelector<HTMLElement>("#proBanner")!;
   const processBtn = root.querySelector<HTMLButtonElement>("#processBtn")!;
   const clearBtn = root.querySelector<HTMLButtonElement>("#clearBtn")!;
   const reportBody = root.querySelector<HTMLElement>("#reportBody")!;
@@ -103,48 +99,6 @@ function init(): void {
     }
     processBtn.disabled = queue.length === 0 || busy;
     clearBtn.disabled = queue.length === 0 || busy;
-
-    updateProBanner(queue.length);
-  }
-
-  function proUpgradeHref(): string {
-    return PRO_CHECKOUT_URL.trim() || "#pro-upgrade";
-  }
-
-  function updateProBanner(count: number): void {
-    if (count < FREE_BATCH_LIMIT) {
-      proBanner.hidden = true;
-      proBanner.innerHTML = "";
-      return;
-    }
-
-    const href = proUpgradeHref();
-    const cta = `<a class="pro-cta" href="${href}">Upgrade to Pro — larger batches · ${PRO_PRICE_LABEL}</a>`;
-
-    if (count === FREE_BATCH_LIMIT) {
-      proBanner.hidden = false;
-      proBanner.innerHTML = `
-        <p class="pro-banner-title">Free batch full (${FREE_BATCH_LIMIT} images)</p>
-        <p class="pro-banner-body">
-          This run will process all ${FREE_BATCH_LIMIT}. Need a bigger batch in one go?
-          Pro unlocks higher limits on every MiniTool HQ tool.
-        </p>
-        ${cta}
-      `;
-      return;
-    }
-
-    const waiting = count - FREE_BATCH_LIMIT;
-    proBanner.hidden = false;
-    proBanner.innerHTML = `
-      <p class="pro-banner-title">Free plan: first ${FREE_BATCH_LIMIT} only</p>
-      <p class="pro-banner-body">
-        This run processes the first ${FREE_BATCH_LIMIT} images.
-        <strong>${waiting}</strong> more will wait in the queue.
-        Upgrade to Pro to process larger batches in one click.
-      </p>
-      ${cta}
-    `;
   }
 
   function addFiles(fileList: FileList | File[]): void {
@@ -195,7 +149,7 @@ function init(): void {
     clearBtn.disabled = true;
 
     const options = readOptions(root);
-    const batch = queue.slice(0, FREE_BATCH_LIMIT);
+    const batch = queue;
     const zipEntries: { name: string; data: Uint8Array }[] = [];
     const rows: ProcessResultRow[] = [];
 
@@ -214,18 +168,10 @@ function init(): void {
       const zipBlob = zipJpegFiles(zipEntries);
       downloadBlob(zipBlob, `amazon-images-${Date.now()}.zip`);
       renderReport(rows);
-      const waiting = queue.length - batch.length;
-      if (waiting > 0) {
-        setStatus(
-          `Done — ${rows.length} JPEG(s) downloaded (free limit). ${waiting} still queued — Upgrade to Pro for larger batches.`,
-          "ok",
-        );
-      } else {
-        setStatus(
-          `Done — ${rows.length} JPEG(s) zipped and downloaded. EXIF stripped via canvas redraw.`,
-          "ok",
-        );
-      }
+      setStatus(
+        `Done — ${rows.length} JPEG(s) zipped and downloaded. EXIF stripped via canvas redraw.`,
+        "ok",
+      );
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Processing failed";
       setStatus(msg, "error");

@@ -1,0 +1,43 @@
+---
+interface Link {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  links: Link[];
+  heading?: string;
+}
+
+const { links, heading = "Related guides" } = Astro.props;
+---
+
+{
+  links.length > 0 && (
+    <section class="section related-guides">
+      <h2>{heading}</h2>
+      <ul class="related-list">
+        {links.map((l) => (
+          <li>
+            <a href={l.href}>{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .related-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+  }
+  .related-list a {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+</style>

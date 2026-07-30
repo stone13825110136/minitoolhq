@@ -264,11 +264,8 @@ try {
   }
   await page.locator("#fileInput").setInputFiles(manyUnique);
   await page.waitForFunction(() => Number(document.querySelector("#queueCount")?.textContent) === 11);
-  assert("Pro banner when >10 queued", await page.locator("#proBanner").isVisible());
-  assert(
-    "Pro CTA present",
-    (await page.locator("#proBanner .pro-cta").count()) >= 1,
-  );
+  assert("no Pro banner element", (await page.locator("#proBanner").count()) === 0);
+  assert("no Pro upgrade section", (await page.locator("#pro-upgrade").count()) === 0);
 
   const [download2] = await Promise.all([
     page.waitForEvent("download", { timeout: 180000 }),
@@ -276,7 +273,7 @@ try {
   ]);
   await download2.saveAs(path.join(downloadDir, "cap-batch.zip"));
   await page.waitForSelector("#reportBody tr");
-  assert("free tier processes only 10", (await page.locator("#reportBody tr").count()) === 10);
+  assert("processes all 11 queued images", (await page.locator("#reportBody tr").count()) === 11);
 
   await dismissOverlay();
   await safeClick("#clearBtn");

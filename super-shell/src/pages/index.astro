@@ -1,18 +1,35 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ReportIssue from "../components/ReportIssue.astro";
+
+const pageTitle =
+  "SellTool HQ - Image Tools, Title Character Counter & FBA Box Checker";
+const pageDescription =
+  "Free private browser tools for sellers: marketplace image resizer, HEIC/PNG convert, image compressor, Amazon title character counter, and FBA box size checker - no upload, no signup.";
+
+const siteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "SellTool HQ",
+  url: "https://selltoolhq.com/",
+  description: pageDescription,
+};
 ---
 
-<BaseLayout
-  title="MiniTool HQ — Private Browser Tools for Creators & Sellers"
-  description="Private browser tools for creators and sellers. Files stay on your device — marketplace prep, asset cleanup, and more jobs without uploading."
->
+<BaseLayout title={pageTitle} description={pageDescription} path="/">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(siteLd)} />
+  </Fragment>
+
   <section class="hero-home">
     <p class="badge">Private · In-browser · No upload</p>
-    <p class="brand-mark">MiniTool HQ</p>
+    <p class="brand-mark">SellTool HQ</p>
     <h1>Private tools for creators &amp; sellers.</h1>
     <p class="lede">
-      Focused browser tools that keep files on your device. Pick a job below and go.
+      Resize marketplace listing photos, convert <strong>HEIC to JPG</strong> or
+      <strong>PNG to JPG</strong>, <strong>compress images</strong>, count
+      <strong>Amazon title characters</strong> (75), and check
+      <strong>Amazon FBA box size</strong> - all in your browser, files stay on your device.
     </p>
   </section>
 
@@ -26,6 +43,31 @@ import ReportIssue from "../components/ReportIssue.astro";
           background, strip EXIF, ZIP. No upload.
         </p>
       </a>
+      <a class="tool-card" href="/tools/heic-to-jpg">
+        <h2>HEIC to JPG Converter</h2>
+        <p>
+          Batch convert iPhone HEIC photos to JPG in your browser — free ZIP download, no upload.
+        </p>
+      </a>
+      <a class="tool-card" href="/tools/png-to-jpg">
+        <h2>PNG to JPG Converter</h2>
+        <p>
+          Free PNG to JPG, WebP to JPG, and JPG to PNG batch converter - ZIP download, no upload.
+        </p>
+      </a>
+      <a class="tool-card" href="/tools/image-compressor">
+        <h2>Image Compressor</h2>
+        <p>
+          Free batch image compressor - quality or target KB (e.g. 100KB), ZIP download, no upload.
+        </p>
+      </a>
+      <a class="tool-card" href="/tools/listing-character-counter">
+        <h2>Amazon Title Character Counter</h2>
+        <p>
+          Count Amazon titles (75), Item Highlights (125), bullets, backend bytes, plus Etsy 140 —
+          live in your browser.
+        </p>
+      </a>
       <a class="tool-card" href="/tools/fba-box-size-checker">
         <h2>FBA Box Size Checker</h2>
         <p>
@@ -33,11 +75,36 @@ import ReportIssue from "../components/ReportIssue.astro";
           Free, unlimited, in-browser.
         </p>
       </a>
-      <div class="tool-card" style="opacity: 0.55; cursor: default;">
-        <h2>Batch Image Compressor</h2>
-        <p>Coming next — compress photo batches in the browser without uploading.</p>
-      </div>
     </div>
+  </section>
+
+  <section id="guides" class="section">
+    <h2>Guides</h2>
+    <p class="lede">
+      <a href="/guides/amazon-product-image-size">Amazon image size</a>
+      ·
+      <a href="/guides/etsy-listing-photo-size">Etsy photo size</a>
+      ·
+      <a href="/guides/tiktok-shop-image-size">TikTok Shop size</a>
+      ·
+      <a href="/guides/amazon-fba-box-size-limits">FBA box limits</a>
+      ·
+      <a href="/guides/amazon-dimensional-weight">Dimensional weight</a>
+      ·
+      <a href="/guides/heic-to-jpg-for-amazon">HEIC for Amazon</a>
+      ·
+      <a href="/guides/heic-to-jpg-for-etsy">HEIC for Etsy</a>
+      ·
+      <a href="/guides/heic-to-jpg-for-tiktok-shop">HEIC for TikTok Shop</a>
+      ·
+      <a href="/guides/png-to-jpg-for-amazon">PNG to JPG for Amazon</a>
+      ·
+      <a href="/guides/amazon-title-character-limit">Amazon title 75 chars</a>
+      ·
+      <a href="/guides/amazon-item-highlights">Item Highlights</a>
+      ·
+      <a href="/guides/etsy-title-character-limit">Etsy title 140</a>
+    </p>
   </section>
 
   <section id="value" class="section value-block">
@@ -69,10 +136,10 @@ import ReportIssue from "../components/ReportIssue.astro";
         </p>
       </div>
       <div class="value-item">
-        <h3>Free to start</h3>
+        <h3>Free to use</h3>
         <p>
-          Core use is free with soft batch limits. Upgrade later only if you need larger runs
-          across the whole site.
+          Core tools are free with no account required. Prep listings or check cartons and
+          download results in your browser.
         </p>
       </div>
     </div>

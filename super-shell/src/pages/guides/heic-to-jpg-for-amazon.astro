@@ -1,0 +1,195 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "HEIC to JPG for Amazon Listings — Seller Central Upload Fix";
+const pageDescription =
+  "Convert HEIC to JPG for Amazon Seller Central listings. iPhone HEIC is not a supported product-image format—batch convert in your browser (no upload), then size for zoom.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "Does Amazon Seller Central accept HEIC product images?",
+    a: "For listing / catalog product images in Seller Central, Amazon’s accepted formats are JPEG (preferred), PNG, TIFF, and GIF—not HEIC. Convert HEIC to JPG before you upload listing photos. (This is about Seller Central listings, not the separate Amazon Photos consumer app.) Conversion on SellTool HQ stays in your browser so product shots are not uploaded to our servers.",
+  },
+  {
+    q: "Why did my iPhone photo fail when uploading to a listing?",
+    a: "iPhones often save HEIC. Seller Central product-image uploads expect JPG/PNG/TIFF/GIF, so HEIC files commonly fail or never appear as valid listing images. Convert HEIC to JPG locally first, then upload. Browser-side conversion keeps confidential product photos on your device.",
+  },
+  {
+    q: "What size should Amazon product images be after HEIC to JPG?",
+    a: "Per common Seller Central image guidance: longest side at least 1000px enables zoom; about 1600px+ is the widely cited optimal zoom quality. Many sellers also export 2000×2000 as a higher practical master. Always confirm the latest Image requirements in Seller Central. After convert, use our Amazon preset (adjustable) in the Marketplace Image Resizer—processing stays local.",
+  },
+  {
+    q: "Must I strip EXIF before Amazon will accept the photo?",
+    a: "No. Amazon does not require EXIF removal for listing uploads. Our tools can optionally strip camera/GPS metadata for privacy; that is a seller preference, not a platform mandate. Files never leave your browser on SellTool HQ.",
+  },
+  {
+    q: "Can I batch convert HEIC for Amazon listings without uploading?",
+    a: "Yes. Select multiple HEIC/HEIF files, convert to JPG in one run, and download a ZIP—all in your browser. No account and no server upload of image bytes, which matters when product photography is confidential.",
+  },
+  {
+    q: "Amazon Photos vs Seller Central—what’s the difference for HEIC?",
+    a: "Amazon Photos (consumer cloud album) and Seller Central (merchant listing uploads) are different products. This guide is only about Seller Central listing images, which should be prepared as JPG (or other accepted formats)—not HEIC. Convert locally on SellTool HQ, then upload in Seller Central.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "HEIC to JPG for Amazon", path: "/guides/heic-to-jpg-for-amazon" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/heic-to-jpg-for-amazon"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · Amazon sellers · Updated 2026</p>
+    <h1>HEIC to JPG for Amazon listings</h1>
+    <p class="lede">
+      You finish shooting on an iPhone, open <strong>Seller Central</strong>, and the listing upload
+      fails or never accepts the file. Often the photo is still <strong>HEIC</strong>—a format
+      Seller Central product images do not use. Convert <strong>HEIC to JPG</strong> in your
+      browser first (no upload), then match Amazon size guidance.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>
+        Convert HEIC photos in one batch without uploading confidential product shots.
+      </p>
+      <a class="btn btn-primary" href="/tools/heic-to-jpg">Open HEIC to JPG Converter</a>
+    </div>
+
+    <h2>Seller Central vs Amazon Photos</h2>
+    <p>
+      Do not mix these up. <strong>Seller Central</strong> listing / catalog images are what this
+      guide covers. Accepted product-image formats there are typically
+      <strong>JPEG (preferred), PNG, TIFF, and GIF</strong>—not HEIC.
+      <em
+        >Source: Amazon Seller Central product image requirements (seller help / SC guidance,
+        reviewed 2026).</em
+      >
+    </p>
+    <p>
+      <strong>Amazon Photos</strong> (the consumer cloud album) is a different product and may
+      handle phone formats differently. If you are preparing <strong>listing images</strong>, follow
+      Seller Central rules—not album-app behavior.
+    </p>
+
+    <h2>Why iPhone HEIC breaks listing uploads</h2>
+    <h3>iPhone defaults to HEIC</h3>
+    <p>
+      Many iPhones save to HEIC unless you switch Camera settings to Most Compatible. That is fine
+      for the Photos app—but listing tools expect JPG-family files.
+    </p>
+    <h3>What sellers usually hit</h3>
+    <p>
+      Dragging an unmodified HEIC into Seller Central often means a failed upload or a file that
+      never becomes a valid main image. You waste time re-exporting from Photos or AirDropping
+      workarounds. A batch HEIC→JPG step before resize cuts that loop.
+    </p>
+
+    <h2>Seller workflow</h2>
+    <ol>
+      <li>Shoot or gather iPhone product photos (often HEIC).</li>
+      <li>
+        <a href="/tools/heic-to-jpg">Convert HEIC to JPG</a> in batch in your browser—files stay on
+        your device.
+      </li>
+      <li>
+        Size for Amazon with the
+        <a href="/tools/marketplace-image-prep?platform=amazon">Marketplace Image Resizer (Amazon)</a>
+        —square pad and optional pure white background for main images.
+      </li>
+      <li>Upload JPG files in Seller Central.</li>
+    </ol>
+
+    <h2>Size after conversion (official vs practical)</h2>
+    <ul>
+      <li>
+        <strong>Zoom floor:</strong> longest side at least <strong>1000px</strong> so zoom can
+        enable.
+        <em>Source: Amazon Seller Central image guidance (reviewed 2026).</em>
+      </li>
+      <li>
+        <strong>Widely cited optimal:</strong> about <strong>1600px+</strong> on the longest side
+        for sharper zoom.
+        <em>Source: Amazon Seller Central / seller-forum image standards summaries (reviewed 2026).</em>
+      </li>
+      <li>
+        <strong>Optional higher master:</strong> many sellers export <strong>2000×2000</strong> as a
+        practical square master above the 1600px quality band. That is a seller practice, not a
+        separate Amazon “must be exactly 2000” rule—confirm current help text in Seller Central.
+      </li>
+      <li>
+        <strong>Main image:</strong> pure white background (RGB 255, 255, 255) and product-only
+        framing are standard main-image expectations.
+        <em>Source: Amazon Seller Central main image requirements (reviewed 2026).</em>
+      </li>
+    </ul>
+    <p>
+      Full size walkthrough:
+      <a href="/guides/amazon-product-image-size">Amazon product image size requirements</a>.
+    </p>
+
+    <h2>EXIF / GPS metadata</h2>
+    <p>
+      Amazon does <strong>not</strong> require you to strip EXIF to accept a listing image. Clearing
+      camera or GPS tags is <strong>optional</strong>—useful for privacy on public product photos.
+      Our converter can output a clean JPG; treat that as a preference, not a platform mandate.
+    </p>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools
+      extra={[
+        { href: "/tools/marketplace-image-prep?platform=amazon", label: "Amazon preset (resizer)" },
+      ]}
+    />
+    <RelatedGuides
+      links={[
+        { href: "/guides/amazon-product-image-size", label: "Amazon image size guide" },
+        { href: "/guides/heic-to-jpg-for-etsy", label: "HEIC to JPG for Etsy" },
+        { href: "/guides/heic-to-jpg-for-tiktok-shop", label: "HEIC to JPG for TikTok Shop" },
+        { href: "/guides/png-to-jpg-for-amazon", label: "PNG to JPG for Amazon" },
+        { href: "/guides/amazon-fba-box-size-limits", label: "FBA box size limits" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="Amazon" />
+    <ReportIssue />
+  </article>
+</BaseLayout>

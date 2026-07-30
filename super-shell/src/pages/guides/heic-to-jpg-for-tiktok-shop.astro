@@ -1,0 +1,168 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "HEIC to JPG for TikTok Shop - iPhone Upload Fix";
+const pageDescription =
+  "Convert HEIC to JPG for TikTok Shop listings when iPhone photos fail. Batch HEIC to JPEG in your browser, then prep TikTok Shop image size.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "Does TikTok Shop accept HEIC product images?",
+    a: "TikTok Shop listing photos work most reliably as JPG or PNG (platform guidance / common upload limits). iPhone HEIC often fails or never appears as a valid listing image - convert HEIC to JPG first.",
+  },
+  {
+    q: "How do I convert HEIC to JPG for TikTok Shop?",
+    a: "Batch convert HEIC to JPG in your browser with the free HEIC to JPG converter, download the ZIP, then use the TikTok Shop preset in the Marketplace Image Resizer for square listing photos.",
+  },
+  {
+    q: "Why do my iPhone photos fail on TikTok Shop?",
+    a: "Format (HEIC), file size (often under about 5 MB), or non-square dimensions can all block a smooth upload. Fix HEIC to JPG first, then match TikTok Shop image size guidance.",
+  },
+  {
+    q: "What size after HEIC to JPG for TikTok Shop?",
+    a: "Aim for a square image around 800x800 to 1200x1200 (or the current Seller Center recommendation). See the TikTok Shop image size guide, then confirm in TikTok Shop Seller Center.",
+  },
+  {
+    q: "Can I batch convert HEIC for TikTok without uploading?",
+    a: "Yes. Select multiple HEIC/HEIF files, convert to JPG in one run, and download a ZIP - all in your browser. No account and no server upload of image bytes.",
+  },
+  {
+    q: "Should I strip EXIF before TikTok Shop upload?",
+    a: "Optional. Platforms typically do not require EXIF removal to accept a photo. Clearing camera/GPS tags is a privacy preference for public product shots, not a platform mandate.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "HEIC to JPG for TikTok Shop", path: "/guides/heic-to-jpg-for-tiktok-shop" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/heic-to-jpg-for-tiktok-shop"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · TikTok Shop · Updated 2026</p>
+    <h1>HEIC to JPG for TikTok Shop</h1>
+    <p class="lede">
+      You shoot on an iPhone, open <strong>TikTok Shop Seller Center</strong>, and the listing photo
+      fails or never sticks. Often the file is still <strong>HEIC</strong>. Convert
+      <strong>HEIC to JPG</strong> in your browser first (no upload), then match TikTok Shop square
+      size guidance.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Batch convert iPhone HEIC for TikTok Shop without uploading product shots.</p>
+      <a class="btn btn-primary" href="/tools/heic-to-jpg">Open HEIC to JPG Converter</a>
+    </div>
+
+    <h2>Why HEIC breaks TikTok Shop uploads</h2>
+    <p>
+      TikTok Shop listing images commonly expect <strong>JPG or PNG</strong>, often under about
+      <strong>5 MB</strong> each.
+      <em>Source: TikTok Shop seller image guidance / Seller Center summaries (reviewed 2026).</em>
+    </p>
+    <p>
+      iPhones frequently save <strong>HEIC</strong> unless Camera is set to Most Compatible. Dragging
+      an unmodified HEIC into Seller Center is a common reason uploads fail or look unsupported.
+    </p>
+
+    <h2>Seller workflow</h2>
+    <ol>
+      <li>Gather iPhone product photos (often HEIC/HEIF).</li>
+      <li>
+        <a href="/tools/heic-to-jpg">Convert HEIC to JPG</a> in batch in your browser - files stay on
+        your device.
+      </li>
+      <li>
+        Size for TikTok Shop with the
+        <a href="/tools/marketplace-image-prep?platform=tiktok-shop"
+          >Marketplace Image Resizer (TikTok Shop)</a
+        >
+        - square crop for listing cards.
+      </li>
+      <li>Upload JPG files in TikTok Shop Seller Center.</li>
+    </ol>
+
+    <h2>Size after conversion</h2>
+    <ul>
+      <li>
+        Prefer a <strong>square</strong> image for primary listing photos.
+      </li>
+      <li>
+        Common practical range: about <strong>800x800 to 1200x1200</strong> (confirm current Seller
+        Center help text).
+      </li>
+      <li>Keep each file under typical upload caps (often ~5 MB).</li>
+    </ul>
+    <p>
+      Full size walkthrough:
+      <a href="/guides/tiktok-shop-image-size">TikTok Shop image size requirements</a>.
+    </p>
+
+    <h2>Amazon and Etsy sellers</h2>
+    <p>
+      Same HEIC problem shows up on other marketplaces. If you also list on Amazon or Etsy, see
+      <a href="/guides/heic-to-jpg-for-amazon">HEIC to JPG for Amazon</a>
+      and
+      <a href="/guides/heic-to-jpg-for-etsy">HEIC to JPG for Etsy</a>.
+    </p>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools
+      extra={[
+        {
+          href: "/tools/marketplace-image-prep?platform=tiktok-shop",
+          label: "TikTok Shop preset (resizer)",
+        },
+      ]}
+    />
+    <RelatedGuides
+      links={[
+        { href: "/guides/tiktok-shop-image-size", label: "TikTok Shop image size" },
+        { href: "/guides/heic-to-jpg-for-amazon", label: "HEIC to JPG for Amazon" },
+        { href: "/guides/heic-to-jpg-for-etsy", label: "HEIC to JPG for Etsy" },
+        { href: "/guides/png-to-jpg-for-amazon", label: "PNG to JPG for Amazon" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="TikTok Shop" />
+    <ReportIssue />
+  </article>
+</BaseLayout>

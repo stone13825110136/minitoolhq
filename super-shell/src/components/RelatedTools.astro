@@ -1,0 +1,73 @@
+---
+interface Link {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  /** Extra links after the core tools (guides, presets, etc.) */
+  extra?: Link[];
+  heading?: string;
+  /** Hide one of the core tools when already on that page */
+  hide?: Array<"marketplace" | "heic" | "fba" | "format" | "compress" | "listing">;
+}
+
+const {
+  extra = [],
+  heading = "Related tools",
+  hide = [],
+} = Astro.props;
+
+const core: {
+  id: "marketplace" | "heic" | "fba" | "format" | "compress" | "listing";
+  href: string;
+  label: string;
+}[] = [
+  {
+    id: "marketplace",
+    href: "/tools/marketplace-image-prep",
+    label: "Marketplace Image Resizer",
+  },
+  { id: "heic", href: "/tools/heic-to-jpg", label: "HEIC to JPG Converter" },
+  { id: "format", href: "/tools/png-to-jpg", label: "PNG to JPG Converter" },
+  { id: "compress", href: "/tools/image-compressor", label: "Image Compressor" },
+  {
+    id: "listing",
+    href: "/tools/listing-character-counter",
+    label: "Amazon Title Character Counter",
+  },
+  { id: "fba", href: "/tools/fba-box-size-checker", label: "FBA Box Size Checker" },
+];
+
+const links = [...core.filter((t) => !hide.includes(t.id)), ...extra];
+---
+
+{
+  links.length > 0 && (
+    <section class="section related-tools">
+      <h2>{heading}</h2>
+      <ul class="related-list">
+        {links.map((l) => (
+          <li>
+            <a href={l.href}>{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .related-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+  }
+  .related-list a {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+</style>

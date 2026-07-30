@@ -1,0 +1,157 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "Amazon Product Image Size Requirements (2026 Guide)";
+const pageDescription =
+  "Amazon product image size: 1000px zoom minimum, ~1600px+ optimal, optional 2000×2000 seller master, white background, JPEG. Prep listing photos free in your browser.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "What size should Amazon product images be?",
+    a: "Seller Central guidance commonly requires at least 1000 pixels on the longest side for zoom (official / platform guidance), and about 1600px+ for stronger zoom quality. Many sellers also use 2000×2000 as a practical square master (industry practice)—confirm the latest help text in Seller Central (reviewed 2026).",
+  },
+  {
+    q: "What are Amazon main image requirements?",
+    a: "Main images typically need a pure white background (RGB 255,255,255), the product filling most of the frame (often ~85%), no text or logos, and a square-friendly crop. Source: Amazon Seller Central main image requirements (reviewed 2026).",
+  },
+  {
+    q: "What is the maximum Amazon image file size?",
+    a: "Uploads are commonly capped around 10 MB (platform guidance / seller help summaries). Keep files lighter when you can so Seller Central uploads stay reliable.",
+  },
+  {
+    q: "Do Amazon image sizes affect ranking?",
+    a: "Size rules mainly affect zoom and conversion. Strong images improve clicks and sales velocity, which can help listing performance indirectly — that is seller practice, not a published “rank by pixels” rule.",
+  },
+  {
+    q: "How do I resize photos for Amazon quickly?",
+    a: "Use the free Marketplace Image Resizer: choose the Amazon preset, drop photos, and download a ZIP — processing stays in your browser.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "Amazon product image size", path: "/guides/amazon-product-image-size" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/amazon-product-image-size"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · Amazon listings · Reviewed 2026</p>
+    <h1>Amazon product image size requirements</h1>
+    <p class="lede">
+      Clear <strong>Amazon product image size</strong> targets for main and secondary photos — plus a
+      free in-browser resizer when you are ready to prep a batch.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Resize to Amazon-ready squares with white background — files stay on your device.</p>
+      <a class="btn btn-primary" href="/tools/marketplace-image-prep?platform=amazon"
+        >Open Marketplace Image Resizer</a
+      >
+    </div>
+
+    <h2>Recommended Amazon image size</h2>
+    <ul>
+      <li>
+        <strong>Minimum for zoom:</strong> 1000px on the longest side
+        <em> — Official / platform guidance (Amazon Seller Central image help, reviewed 2026)</em>
+      </li>
+      <li>
+        <strong>Widely cited optimal:</strong> about 1600px+ on the longest side
+        <em>
+          — Platform guidance / seller-forum summaries of SC image standards (reviewed 2026)</em
+        >
+      </li>
+      <li>
+        <strong>Optional seller master:</strong> 2000×2000 square — above the 1600px band
+        <em> — Industry / seller practice (not an “exactly 2000 required” rule)</em>
+      </li>
+      <li>
+        <strong>Main image:</strong> pure white background, product fills the frame
+        <em> — Official / platform guidance (SC main image requirements, reviewed 2026)</em>
+      </li>
+      <li>
+        <strong>Format:</strong> JPEG preferred; keep under common upload limits (~10 MB)
+        <em> — Platform guidance / common SC upload limits</em>
+      </li>
+    </ul>
+
+    <h2>Main vs secondary images</h2>
+    <p>
+      The main image is what shoppers see in search. Secondary slots can show lifestyle, detail, and
+      infographics — still keep resolution high so zoom works. Fill unused slots when your category
+      allows multiple images.
+    </p>
+
+    <h2>iPhone HEIC photos</h2>
+    <p>
+      If Seller Central rejects an iPhone photo, convert <a href="/tools/heic-to-jpg">HEIC to JPG</a>
+      first, then run the Amazon preset. See also
+      <a href="/guides/heic-to-jpg-for-amazon">HEIC to JPG for Amazon listings</a>.
+    </p>
+
+    <h2>EXIF / GPS metadata</h2>
+    <p>
+      Amazon does <strong>not</strong> require EXIF stripping for listing acceptance. Clearing
+      camera/GPS tags is <em>industry / seller practice</em> for privacy on public photos — optional,
+      not a platform mandate.
+    </p>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools
+      extra={[
+        { href: "/tools/marketplace-image-prep?platform=amazon", label: "Amazon preset (resizer)" },
+      ]}
+    />
+    <RelatedGuides
+      links={[
+        { href: "/guides/heic-to-jpg-for-amazon", label: "HEIC to JPG for Amazon" },
+        { href: "/guides/png-to-jpg-for-amazon", label: "PNG to JPG for Amazon" },
+        { href: "/guides/etsy-listing-photo-size", label: "Etsy listing photo size" },
+        { href: "/guides/tiktok-shop-image-size", label: "TikTok Shop image size" },
+        { href: "/guides/amazon-fba-box-size-limits", label: "FBA box size limits" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="Amazon" />
+    <ReportIssue />
+  </article>
+</BaseLayout>

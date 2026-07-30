@@ -83,17 +83,10 @@ Ship both; default to square 2000×2000 for “main image” preset.
 | HEIC (optional v1) | [heic-to](https://www.npmjs.com/package/heic-to) | MIT | Lazy-load only if enabled |
 | Do not | Custom WASM codecs from scratch | — | Defer jSquash unless quality demands |
 
-## Free vs Pro ($4.99/mo)
+## Monetization (updated 2026-07-26)
 
-| | Free | Pro |
-|--|------|-----|
-| Batch size | Up to **10** images / run | **Unlimited** (device memory only) |
-| All core pipeline | ✅ | ✅ |
-| ZIP + EXIF report | ✅ | ✅ |
-| Saved presets / multi-platform | — | Later (Etsy/Shopify tools share Pro) |
-| Watermark / ads on UI | Soft upgrade CTA only | No nag |
-
-Site-wide: Pro unlocks future tools’ batch limits too — one price.
+**Fully free** — no Pro / $4.99 / batch paywall. Process as many images as the device allows.  
+Site revenue = display ads (when live). Supersedes earlier Free-vs-Pro plan.
 
 ## Out of scope (v1)
 
@@ -114,7 +107,7 @@ Site-wide: Pro unlocks future tools’ batch limits too — one price.
 5. **Process & Download ZIP**  
 6. Metadata removal report table  
 7. Specs table + FAQ (SEO)  
-8. Soft Pro CTA when free batch cap hit  
+8. No Pro CTA (ads-only site model)  
 
 ## SEO
 

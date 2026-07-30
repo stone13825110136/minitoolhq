@@ -1,21 +1,35 @@
 ---
 import "../styles/global.css";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { breadcrumbLd, type Crumb } from "../lib/seo/breadcrumb";
 
 interface Props {
   title: string;
   description?: string;
-  /** Path only, e.g. /tools/amazon-image-prep — used for canonical + OG */
+  /** Path only, e.g. /tools/heic-to-jpg — used for canonical + OG (no trailing slash) */
   path?: string;
+  /** Optional breadcrumb trail for BreadcrumbList JSON-LD + visible nav */
+  crumbs?: Crumb[];
 }
 
 const {
   title,
   description = "Private browser tools for creators & sellers. Files stay on your device.",
-  path = Astro.url.pathname,
+  path = Astro.url.pathname.replace(/\/$/, "") || "/",
+  crumbs,
 } = Astro.props;
 
-const site = Astro.site?.href.replace(/\/$/, "") ?? "https://minitoolhq.com";
-const canonical = new URL(path.startsWith("/") ? path : `/${path}`, `${site}/`).href;
+const site = Astro.site?.href.replace(/\/$/, "") ?? "https://selltoolhq.com";
+const cleanPath = path === "/" ? "/" : path.replace(/\/$/, "");
+const canonical =
+  cleanPath === "/"
+    ? `${site}/`
+    : new URL(cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`, `${site}/`).href.replace(
+        /\/$/,
+        "",
+      );
+const ogImage = `${site}/og-default.png`;
+const crumbJson = crumbs?.length ? breadcrumbLd(crumbs, site) : null;
 ---
 
 <!doctype html>
@@ -29,40 +43,58 @@ const canonical = new URL(path.startsWith("/") ? path : `/${path}`, `${site}/`).
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="MiniTool HQ" />
+    <meta property="og:site_name" content="SellTool HQ" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="en_US" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     <title>{title}</title>
+    {
+      crumbJson && (
+        <script type="application/ld+json" set:html={JSON.stringify(crumbJson)} />
+      )
+    }
     <slot name="head" />
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="/">MiniTool <span>HQ</span></a>
+      <div class="brand-block">
+        <a class="brand" href="/">SellTool <span>HQ</span></a>
+        <p class="privacy-chip" title="Files are processed in your browser">
+          Private · in-browser · no upload
+        </p>
+      </div>
       <nav class="nav" aria-label="Primary">
         <a href="/tools/marketplace-image-prep">Marketplace Image Resizer</a>
+        <a href="/tools/heic-to-jpg">HEIC to JPG</a>
+        <a href="/tools/png-to-jpg">PNG to JPG</a>
+        <a href="/tools/image-compressor">Image Compressor</a>
+        <a href="/tools/listing-character-counter">Title Character Counter</a>
         <a href="/tools/fba-box-size-checker">FBA Box Size Checker</a>
+        <a href="/#guides">Guides</a>
         <a href="/#tools">Tools</a>
         <a href="/#report-issue">Report issue</a>
       </nav>
     </header>
     <main class="site-main">
+      {crumbs && crumbs.length > 0 && <Breadcrumbs crumbs={crumbs} />}
       <slot />
     </main>
     <footer class="site-footer">
       <p>
-        MiniTool HQ — private browser tools for creators &amp; sellers. Processing stays on your
+        SellTool HQ — private browser tools for creators &amp; sellers. Processing stays on your
         device.
       </p>
       <p class="footer-quiet">
         Found a bug?
         <a href="/#report-issue">Report it</a>
-        for free usage credit ·
-        <a href="mailto:contact@minitoolhq.com">contact@minitoolhq.com</a>
+        ·
+        <a href="mailto:contact@selltoolhq.com">contact@selltoolhq.com</a>
         <span class="footer-sep">·</span>
         <a href="/#value">About</a>
       </p>

@@ -1,0 +1,132 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "Amazon Dimensional Weight Explained — DIM Formula for Sellers";
+const pageDescription =
+  "Amazon dimensional weight (DIM) explained: (L×W×H)÷139 for many FBA fee cases. See how box size affects shipping weight — plus a free FBA carton checker.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "What is Amazon dimensional weight?",
+    a: "Dimensional weight (DIM) estimates how much space a package takes. Amazon may bill using the greater of actual weight and DIM weight for certain size tiers and programs. Confirm current Seller Central fee help (reviewed 2026).",
+  },
+  {
+    q: "How do you calculate Amazon dimensional weight?",
+    a: "A common US planning formula is length × width × height (inches) divided by 139. Treat this as platform-aligned seller math — always confirm the divisor and tier rules in current Seller Central help pages.",
+  },
+  {
+    q: "Does dimensional weight affect FBA fees?",
+    a: "Yes for many large or bulky items — fees can follow shipping weight based on DIM when it exceeds unit weight. Right-sizing cartons and product packaging reduces surprise fees.",
+  },
+  {
+    q: "Is DIM the same as FBA box size limits?",
+    a: "No. Box size limits decide whether an inbound carton is accepted. DIM affects how weight is calculated for fees. Check both before you ship.",
+  },
+  {
+    q: "How do I verify my carton will pass FBA limits?",
+    a: "Use the free FBA Box Size Checker for Pass/Fail on FBA vs AWD carton dimensions and weight. It also shows a DIM reference (÷139) that is not a fee quote.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "Amazon dimensional weight", path: "/guides/amazon-dimensional-weight" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/amazon-dimensional-weight"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · FBA fees context · Reviewed 2026</p>
+    <h1>Amazon dimensional weight (DIM)</h1>
+    <p class="lede">
+      How <strong>Amazon dimensional weight</strong> works for sellers — and how it differs from
+      inbound <strong>FBA box size</strong> limits.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>First confirm your carton passes FBA/AWD size rules, then think about DIM and fees.</p>
+      <a class="btn btn-primary" href="/tools/fba-box-size-checker">Open FBA Box Size Checker</a>
+    </div>
+
+    <h2>DIM formula (common US reference)</h2>
+    <p>
+      <strong>Dimensional weight ≈ (Length × Width × Height in inches) ÷ 139</strong>
+      <em>
+        — Widely used US Amazon planning divisor (Seller Central fee / size-tier help summaries,
+        reviewed 2026). Confirm the live divisor for your tier.</em
+      >
+    </p>
+    <p>
+      Amazon may compare DIM to actual weight and use the greater value when calculating shipping
+      weight for certain tiers. Rules vary by size tier and region — treat this as a
+      <strong>planning formula, not a fee quote</strong>
+      <em> (industry / seller practice using platform-aligned math)</em>.
+    </p>
+
+    <h2>Why carton size still matters</h2>
+    <ul>
+      <li>
+        Oversized inbound cartons can fail receiving even if fees look fine on paper
+        <em> — Official inbound packaging limits are separate from DIM</em>
+      </li>
+      <li>
+        Extra empty space inflates DIM and can raise fulfillment cost on bulky light items
+        <em> — Seller practice / fee planning</em>
+      </li>
+      <li>
+        AWD and FBA carton caps are not identical
+        <em> — Official / dual-program packaging guidance</em>
+      </li>
+    </ul>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools />
+    <RelatedGuides
+      links={[
+        { href: "/guides/amazon-fba-box-size-limits", label: "FBA box size limits" },
+        { href: "/guides/amazon-product-image-size", label: "Amazon product image size" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="Amazon" />
+    <ReportIssue />
+  </article>
+</BaseLayout>

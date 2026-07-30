@@ -10,7 +10,7 @@ Every MiniTool HQ tool follows this process. No coding before a build spec exist
 | Form | Web tools only first (not PWA) |
 | Privacy default | Process in browser; no file upload servers |
 | Ship rhythm | One tool → validate → keep adding |
-| Monetization | Free core + **$4.99/mo** Pro (site-wide unlock) |
+| Monetization | **Ads only** — all tools fully free (no Pro / $4.99) |
 | Marketplace | Help others publish tools **later**, after traffic |
 | hotpicklab | Unrelated — keep separate |
 
@@ -61,8 +61,7 @@ Coding starts only after the spec is merged/accepted.
 ### 5. Implement (feature + SEO in the same ship)
 
 - Prefer Astro (or existing `super-shell`) + client JS/TS
-- Free tier: usable but limited when willingness-to-pay exists; **traffic tools may be fully free** (no fake caps)
-- Pro $4.99: site-wide unlock for tools with real batch cost — **not** bolted onto every page
+- **All tools fully free** — no Pro subscription, no paid batch unlock
 - Ship tool page **with** full SEO in the same change: Title, H1, description, FAQ (≥5), FAQPage JSON-LD = all FAQs, WebApplication JSON-LD, homepage card, sitemap URL
 - Customer voice only — see `.cursor/rules/minitool-customer-copy.mdc` and `.cursor/rules/minitool-seo-keywords.mdc`
 - Prefer one `faqs` array in the `.astro` page that renders both HTML FAQ and JSON-LD (no drift)
@@ -76,7 +75,7 @@ Coding starts only after the spec is merged/accepted.
 3. Walk every acceptance-criterion checkbox in the spec
 4. For file tools: use real sample files (batch ≥2); confirm download / output
 5. For privacy tools: confirm no upload of file bytes (Network tab or equivalent)
-6. Hit free-tier limits and confirm Pro CTA copy **only if the tool monetizes that way**
+6. Confirm there is **no Pro / paid upsell** on the page (ads-only model)
 7. **SEO gate:** title + meta description contain primary keyword; FAQ ≥5; FAQPage JSON-LD question count ≥ on-page FAQ count; H1 present
 8. Fix failures, re-test
 9. Append a **Test log** section to the tool spec (`date`, cases, pass/fail)
@@ -123,7 +122,7 @@ One sentence.
 |------|---------|---------|
 
 ## Monetization
-- Fully free traffic tool | OR free core + Pro boundary:
+- **Fully free** + site ads (no Pro / no paid batch)
 
 ## Out of scope (v1)
 - …

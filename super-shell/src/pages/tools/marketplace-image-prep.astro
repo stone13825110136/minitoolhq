@@ -1,52 +1,74 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ReportIssue from "../../components/ReportIssue.astro";
-import { FREE_BATCH_LIMIT, PRO_PRICE_LABEL, PLATFORM_PRESETS } from "../../lib/marketplace-prep/presets";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import { PLATFORM_PRESETS } from "../../lib/marketplace-prep/presets";
 
 const pageTitle = "Marketplace Image Resizer — Amazon, TikTok Shop, Etsy & More";
 const pageDescription =
-  "Free marketplace image resizer for Amazon, TikTok Shop, Etsy, eBay, Shopify, and Walmart. Multi-select platforms → one ZIP with folders. Square sizes, white background, strip EXIF — no upload.";
+  "Free marketplace image resizer for Amazon, TikTok Shop, Etsy, eBay, Shopify, and Walmart. Square sizes, optional white background — all processing in your browser, files never upload.";
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Tools", path: "/#tools" },
+  { name: "Marketplace Image Resizer", path: "/tools/marketplace-image-prep" },
+];
+
+const relatedGuides = [
+  { href: "/guides/heic-to-jpg-for-amazon", label: "HEIC to JPG for Amazon" },
+  { href: "/guides/amazon-product-image-size", label: "Amazon product image size" },
+  { href: "/guides/etsy-listing-photo-size", label: "Etsy listing photo size" },
+  { href: "/guides/tiktok-shop-image-size", label: "TikTok Shop image size" },
+  { href: "/guides/heic-to-jpg-for-etsy", label: "HEIC to JPG for Etsy" },
+  { href: "/guides/heic-to-jpg-for-tiktok-shop", label: "HEIC to JPG for TikTok Shop" },
+  { href: "/guides/png-to-jpg-for-amazon", label: "PNG to JPG for Amazon" },
+];
 
 const faqs: { q: string; a: string }[] = [
   {
     q: "Can I resize photos for Amazon and TikTok Shop in one tool?",
-    a: "Yes. This marketplace image resizer covers Amazon, TikTok Shop, Etsy, eBay, Shopify, and Walmart on one page. Check one or more marketplaces, then Process — no separate tool per channel.",
+    a: "Yes. This marketplace image resizer covers Amazon, TikTok Shop, Etsy, eBay, Shopify, and Walmart on one page. Check one or more marketplaces, then Process — no separate tool per channel. All processing runs locally in your browser.",
   },
   {
     q: "Can I export Amazon and TikTok Shop sizes in one ZIP?",
-    a: "Yes. Check multiple marketplaces (for example Amazon + TikTok Shop), drop your photos once, and Process. You get one ZIP with a folder per marketplace — each folder uses that platform’s recommended square size.",
+    a: "Yes. Check multiple marketplaces (for example Amazon + TikTok Shop), drop your photos once, and Process. You get one ZIP with a folder per marketplace. Original files never upload to our servers.",
   },
   {
     q: "What size do Amazon product photos need?",
-    a: "Amazon product image resize commonly targets ~2000px (or 2000×2000 square main images) for zoom. Use the Amazon preset here: square pad, white background on, JPEG under 5 MB, EXIF stripped.",
+    a: "Per Amazon Seller Central image guidance (reviewed 2026): longest side ≥1000px enables zoom; about 1600px+ is widely cited as optimal. Our Amazon preset defaults to 2000×2000 as a custom seller master above that band (not an Amazon “must be exactly 2000” rule)—use the 1600px quick button for the official-optimal band. Confirm latest help text in Seller Central.",
+  },
+  {
+    q: "Does Amazon require stripping EXIF?",
+    a: "No. Amazon listing rules do not require EXIF removal. Resizing through canvas re-encodes JPEG and typically drops EXIF/GPS as a side effect of white-pad/resize—not because Amazon mandates it. Keep your original files if you need metadata for your own records.",
   },
   {
     q: "What is the TikTok Shop product image size?",
-    a: "TikTok Shop images should be square. Official minimum is often 600×600; many sellers use 1000×1000 or 1200×1200. The TikTok Shop preset defaults to 1200×1200 with optional white background for the main image.",
+    a: "TikTok Shop images should be square. Official minimum is often 600×600; many sellers use 1200×1200. The TikTok Shop preset defaults to 1200×1200 with optional white background for the main image.",
   },
   {
     q: "What size should Etsy listing photos be?",
-    a: "Etsy listing photo size is commonly prepared at 2000×2000 square for sharp zoom. Check only Etsy to tweak the pixel field, or include Etsy with other marketplaces for a multi-folder ZIP.",
+    a: "Etsy Help recommends listing photos around 2000px on each side for quality (platform recommendation, reviewed 2026)—that is not the same as the first-photo floor of about 635×635. Our Etsy preset defaults to 2000×2000 as a practical master. Confirm current Help text in your Etsy seller account.",
   },
   {
     q: "Does this work for eBay and Shopify too?",
-    a: "Yes. eBay product image size defaults to 1600×1600; Shopify product image size defaults to 2048×2048. Walmart uses a 2000×2000 white-background style preset.",
+    a: "Yes. eBay defaults to 1600×1600 (eBay’s recommended zoom band); Shopify defaults to 2048×2048; Walmart Marketplace defaults to 2200×2200 with white background (Marketplace Learn recommended size).",
   },
   {
     q: "Are my photos uploaded to a server?",
-    a: "No. All resizing runs in your browser. Open DevTools → Network while processing to verify — you should not see image uploads.",
+    a: "No. All image processing runs locally in your browser. Original product photos never upload to our server—you can verify in DevTools → Network.",
   },
   {
-    q: "Will this strip EXIF and GPS?",
-    a: "Yes. Every run redraws through canvas so EXIF/GPS are removed. The report table shows what was present before stripping.",
+    q: "My photos are iPhone HEIC—what first?",
+    a: "You can drop HEIC/HEIF straight into this resizer—conversion runs in your browser before sizing. For large HEIC-only batches, you can also use the HEIC to JPG converter first, then come back here. See the HEIC for Amazon guide for Seller Central format notes.",
+  },
+  {
+    q: "Can I control JPEG file size or quality?",
+    a: "Use Max file size (MB) on this page—the tool automatically lowers JPEG quality so each export stays under that cap (default 5 MB). There is no separate quality slider here. For a precise target like 100 KB, run the Image Compressor after you resize.",
   },
   {
     q: "Is there a batch limit?",
-    a: `Free use processes up to ${FREE_BATCH_LIMIT} images per run (each selected marketplace uses that same batch). Hit the ceiling and you will see an Upgrade to Pro prompt (${PRO_PRICE_LABEL}) for larger batches across MiniTool HQ.`,
-  },
-  {
-    q: "Can I get free usage credit?",
-    a: "Yes. Confirmed useful bug reports earn a free usage credit. Use Report a tool issue or email contact@minitoolhq.com.",
+    a: "No. Process as many images as your device can handle in one run. There is no account or signup wall.",
   },
 ];
 
@@ -68,7 +90,7 @@ const appLd = {
   operatingSystem: "Any",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   description: pageDescription,
-  url: "https://minitoolhq.com/tools/marketplace-image-prep",
+  url: "https://selltoolhq.com/tools/marketplace-image-prep",
 };
 ---
 
@@ -76,6 +98,7 @@ const appLd = {
   title={pageTitle}
   description={pageDescription}
   path="/tools/marketplace-image-prep"
+  crumbs={crumbs}
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
@@ -83,13 +106,26 @@ const appLd = {
   </Fragment>
 
   <section data-marketplace-prep>
-    <p class="badge">No upload · Local processing · Free batch up to {FREE_BATCH_LIMIT}</p>
+    <p class="badge">No upload · Local browser processing · Fully free</p>
     <h1>Marketplace Image Resizer</h1>
     <p class="lede">
       One tool for listing photos across <strong>Amazon</strong>, <strong>TikTok Shop</strong>,
       <strong>Etsy</strong>, <strong>eBay</strong>, <strong>Shopify</strong>, and
-      <strong>Walmart</strong>. Check the marketplace(s) you need, resize and strip EXIF/GPS, then
-      download one ZIP. Files never leave your device.
+      <strong>Walmart</strong>. Resize, optional white pad, then download one ZIP.
+    </p>
+    <p class="lede privacy-callout">
+      <strong
+        >All image processing runs locally in your browser. Original product photos never upload to
+        our server.</strong
+      >
+      That matters when listing shots are confidential.
+    </p>
+    <p class="lede" style="font-size: 0.95rem;">
+      iPhone HEIC? Drop it here—this tool converts HEIC in your browser, then resizes. Prefer a
+      convert-only step first?
+      <a href="/tools/heic-to-jpg">HEIC to JPG converter</a>
+      (also local).
+      <a href="/guides/heic-to-jpg-for-amazon">HEIC for Amazon listings guide</a>.
     </p>
 
     <div class="panel">
@@ -119,6 +155,23 @@ const appLd = {
           Max file size (MB)
           <input id="maxMb" type="number" min="0.5" max="20" step="0.5" value="5" />
         </label>
+        <p class="muted" style="grid-column: 1 / -1; font-size: 0.85rem; margin: 0;">
+          Max file size auto-reduces JPEG quality to stay under the cap (no separate quality
+          slider). Need ~100 KB targets?
+          <a href="/tools/image-compressor">Image Compressor</a>.
+        </p>
+        <div id="amazonSizeShortcuts" class="checks" style="grid-column: 1 / -1;" hidden>
+          <span class="muted" style="font-size: 0.85rem;">Amazon size shortcuts:</span>
+          <button class="btn btn-ghost btn-tiny" type="button" data-size="1600">
+            1600px (SC optimal band)
+          </button>
+          <button class="btn btn-ghost btn-tiny" type="button" data-size="2000">
+            2000px (seller master default)
+          </button>
+          <button class="btn btn-ghost btn-tiny" type="button" data-size="1000">
+            1000px (zoom minimum)
+          </button>
+        </div>
         <div class="checks" style="align-content: end;">
           <label>
             <input id="whiteBg" type="checkbox" checked />
@@ -128,16 +181,23 @@ const appLd = {
             <input id="upscale" type="checkbox" checked />
             Upscale if below selected size
           </label>
-          <label>
-            <input type="checkbox" checked disabled />
-            Strip EXIF / GPS (always on)
-          </label>
         </div>
+        <p class="muted" style="grid-column: 1 / -1; font-size: 0.85rem; margin: 0;">
+          EXIF/GPS: canvas resize re-encodes JPEG, so metadata is usually dropped as a side effect.
+          <strong>Amazon does not require EXIF removal</strong> for listing approval. Keep originals
+          if you need camera metadata for your own records.
+        </p>
+      </div>
+
+      <div class="compliance-tips muted" style="margin: 0.75rem 0; font-size: 0.9rem;">
+        <strong>Main-image reminders (Amazon-style):</strong>
+        no watermarks, text, or logos on the main image; show the full product (don’t crop off the
+        item). Rules vary by category—confirm in Seller Central.
       </div>
 
       <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="Add product photos">
         <strong>Drop product photos here</strong>
-        <p>JPEG · PNG · WebP · HEIC — up to {FREE_BATCH_LIMIT} free per run — nothing is uploaded</p>
+        <p>JPEG · PNG · WebP · HEIC — nothing is uploaded to our servers</p>
         <input
           id="fileInput"
           type="file"
@@ -148,7 +208,6 @@ const appLd = {
       </div>
 
       <p class="status" id="status"></p>
-      <div class="pro-banner" id="proBanner" hidden></div>
       <div class="thumbs" id="thumbs"></div>
 
       <div class="actions">
@@ -160,30 +219,30 @@ const appLd = {
       </div>
     </div>
 
-    <section id="pro-upgrade" class="section pro-upgrade-stub">
-      <h2>MiniTool HQ Pro</h2>
-      <p class="lede">
-        One site-wide subscription ({PRO_PRICE_LABEL}) unlocks larger batches on every MiniTool HQ
-        tool. Checkout plugs in here when billing is live —
-        <a href="mailto:contact@minitoolhq.com">contact@minitoolhq.com</a>
-        if you need higher limits now.
-      </p>
-    </section>
-
     <section class="section">
       <h2>How it works</h2>
       <ol class="steps">
         <li>Check the marketplace(s) you list on.</li>
-        <li>Drop JPEG, PNG, WebP, or HEIC photos. With one marketplace checked, you can tweak size or white background.</li>
-        <li>Process once and download one ZIP. Nothing is uploaded.</li>
+        <li>
+          Drop JPEG, PNG, WebP, or HEIC (HEIC is converted here in-browser). With one marketplace
+          checked, tweak size or white background. Optional:
+          <a href="/tools/heic-to-jpg">HEIC-only converter</a>
+          for convert-first batches.
+        </li>
+        <li>Process once and download one ZIP. Processing never leaves this browser.</li>
       </ol>
     </section>
 
     <section class="section">
       <h2>Marketplace size reference</h2>
       <p class="lede">
-        Defaults below match widely published guidance. Always confirm in each platform’s Seller
-        Center — rules change.
+        Tool defaults are seller-prep targets. For Amazon specifically:
+        <strong>official zoom floor ≥1000px</strong>;
+        <strong>~1600px+ often cited as optimal</strong>;
+        <strong>2000×2000 is our custom recommended master</strong> (not an Amazon “must be 2000”
+        rule).
+        <em>Sources: Amazon Seller Central image guidance / seller help summaries, reviewed 2026.</em>
+        Always confirm in each platform’s Seller Center—rules change.
       </p>
       <div class="table-wrap panel">
         <table class="data">
@@ -210,10 +269,18 @@ const appLd = {
           </tbody>
         </table>
       </div>
+      <p class="lede" style="font-size: 0.9rem;">
+        Tip: Amazon often expects filenames like <code>ASIN.MAIN.jpg</code> after upload—rename in
+        Seller Central or your folder if needed. (Optional ASIN naming in-tool is not v1.)
+      </p>
     </section>
 
     <section class="section">
-      <h2>EXIF / GPS removal report</h2>
+      <h2>EXIF / GPS report (before re-encode)</h2>
+      <p class="lede" style="font-size: 0.95rem;">
+        The table shows metadata present in the source file. After canvas resize, exported JPEGs
+        typically no longer carry that EXIF—optional for privacy, <strong>not required by Amazon</strong>.
+      </p>
       <div class="table-wrap panel">
         <table class="data">
           <thead>
@@ -242,6 +309,15 @@ const appLd = {
         ))
       }
     </section>
+
+    <RelatedTools hide={["marketplace"]} />
+    <RelatedGuides links={relatedGuides} />
+
+    <p class="lede" style="font-size: 0.9rem;">
+      Marketplace image rules can change by region and category. Always verify the latest
+      requirements in each Seller Center / Help Center before you publish. Numbers on this page may
+      mix official help text and common seller practice — confirm before you publish.
+    </p>
 
     <ReportIssue />
   </section>

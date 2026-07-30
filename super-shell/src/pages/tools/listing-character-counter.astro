@@ -1,0 +1,260 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+
+const pageTitle = "Amazon Title Character Counter (75) + Etsy Listing Limits";
+const pageDescription =
+  "Free Amazon title character counter for the 75-character limit, plus Item Highlights (125), bullets, backend bytes, and Etsy 140. Runs in your browser — no signup.";
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Tools", path: "/#tools" },
+  { name: "Listing Character Counter", path: "/tools/listing-character-counter" },
+];
+
+const relatedGuides = [
+  { href: "/guides/amazon-title-character-limit", label: "Amazon title character limit (75)" },
+  { href: "/guides/amazon-item-highlights", label: "Amazon Item Highlights (125)" },
+  { href: "/guides/etsy-title-character-limit", label: "Etsy title character limit (140)" },
+];
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "What is the Amazon title character limit?",
+    a: "Starting July 27, 2026, Amazon product titles in all categories except media need to be 75 characters or fewer, including spaces. This Amazon title character counter uses that 75-character default. Media categories can differ — confirm in Seller Central.",
+  },
+  {
+    q: "What are Amazon Item Highlights?",
+    a: "Item Highlights is a searchable field (up to 125 characters) for materials, use cases, and extra product details that no longer fit in the shorter title. Count Item Highlights in this tool alongside your title.",
+  },
+  {
+    q: "How do I use this Amazon title character counter?",
+    a: "Choose Amazon (or Etsy / TikTok Shop), paste your title and other listing fields, and watch live counts, remaining characters, and Pass/Fail. Nothing is uploaded — counting runs in your browser.",
+  },
+  {
+    q: "What is the Etsy title character limit?",
+    a: "Etsy listing titles are limited to 140 characters, including spaces and punctuation. Switch the platform to Etsy in this listing character counter to check title and tags.",
+  },
+  {
+    q: "How do Amazon backend search terms byte limits work?",
+    a: "Backend search terms are commonly limited to about 249 bytes (not characters) in US/UK/EU. This tool counts UTF-8 bytes so multi-byte characters do not silently blow the limit. Confirm the current cap in Seller Central for your marketplace.",
+  },
+  {
+    q: "What is the Amazon bullet point character limit?",
+    a: "Many seller categories allow up to 500 characters per bullet point (five bullets). Some categories are tighter (for example around 255). This tool defaults to 500 — always confirm your category style guide in Seller Central.",
+  },
+  {
+    q: "Does this tool upload my listing copy?",
+    a: "No. Titles, bullets, and keywords stay on your device. Open DevTools → Network while typing if you want to verify that listing text is not posted to our servers.",
+  },
+  {
+    q: "What about TikTok Shop title length?",
+    a: "TikTok Shop titles commonly allow up to 255 characters, while seller guidance often prefers roughly 40–150 characters and front-loading the first ~60 for mobile cards. Use the TikTok Shop preset for a hard 255 check plus soft guidance.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const appLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Amazon Title Character Counter",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Any",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  description: pageDescription,
+  url: "https://selltoolhq.com/tools/listing-character-counter",
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/tools/listing-character-counter"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(appLd)} />
+  </Fragment>
+
+  <section data-listing-counter>
+    <p class="badge">No upload · In-browser · Free · Amazon 75 · Etsy 140</p>
+    <h1>Amazon Title Character Counter</h1>
+    <p class="lede">
+      Free <strong>Amazon title character counter</strong> for the
+      <strong>75-character title</strong> limit, plus <strong>Item Highlights (125)</strong>,
+      bullets, description, and backend <strong>byte</strong> limits. Also check
+      <strong>Etsy title character</strong> limits (140) and TikTok Shop titles — all in your
+      browser, no signup.
+    </p>
+
+    <div class="panel">
+      <label class="field">
+        <span>Marketplace</span>
+        <select id="platform">
+          <option value="amazon" selected>Amazon</option>
+          <option value="etsy">Etsy</option>
+          <option value="tiktok-shop">TikTok Shop</option>
+        </select>
+      </label>
+      <p class="lede" id="platformBlurb" style="margin-top: 0.75rem; margin-bottom: 0;"></p>
+
+      <div id="fieldsHost" class="counter-fields"></div>
+
+      <div class="actions">
+        <button class="btn btn-ghost" id="clearBtn" type="button">Clear fields</button>
+      </div>
+    </div>
+
+    <section class="section">
+      <h2>Listing character limits (defaults)</h2>
+      <p class="lede">
+        Defaults below match common US seller guidance as of 2026. Category and marketplace rules can
+        differ — confirm in Seller Central, Etsy, or TikTok Seller Center before you publish.
+      </p>
+      <div class="table-wrap panel">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>Field</th>
+              <th>Limit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Amazon</td>
+              <td>Title (non-media)</td>
+              <td>75 characters</td>
+            </tr>
+            <tr>
+              <td>Amazon</td>
+              <td>Item Highlights</td>
+              <td>125 characters</td>
+            </tr>
+            <tr>
+              <td>Amazon</td>
+              <td>Bullet points (common)</td>
+              <td>500 characters each</td>
+            </tr>
+            <tr>
+              <td>Amazon</td>
+              <td>Description (common)</td>
+              <td>2000 characters</td>
+            </tr>
+            <tr>
+              <td>Amazon</td>
+              <td>Backend search terms (US/UK/EU common)</td>
+              <td>249 bytes</td>
+            </tr>
+            <tr>
+              <td>Etsy</td>
+              <td>Listing title</td>
+              <td>140 characters</td>
+            </tr>
+            <tr>
+              <td>Etsy</td>
+              <td>Tags</td>
+              <td>20 characters × 13 tags</td>
+            </tr>
+            <tr>
+              <td>TikTok Shop</td>
+              <td>Product title</td>
+              <td>255 characters (soft ~40–150)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section faq">
+      <h2>FAQ</h2>
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedGuides links={relatedGuides} />
+    <RelatedTools hide={["listing"]} />
+    <ReportIssue />
+  </section>
+</BaseLayout>
+
+<script>
+  import "../../scripts/listing-character-counter";
+</script>
+
+<style>
+  .counter-fields {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .counter-field textarea {
+    width: 100%;
+    padding: 0.7rem 0.8rem;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--bg0);
+    color: var(--ink);
+    font: inherit;
+    line-height: 1.45;
+    resize: vertical;
+    min-height: 2.8rem;
+  }
+  .counter-meter {
+    margin-top: 0.45rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .counter-meter.ok strong {
+    color: var(--ok);
+  }
+  .counter-meter.tight strong {
+    color: var(--accent);
+  }
+  .counter-meter.over,
+  .counter-meter.over strong,
+  .counter-warn {
+    color: var(--danger);
+  }
+  .counter-soft {
+    color: var(--muted);
+  }
+  .counter-preview {
+    margin-top: 0.55rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 10px;
+    border: 1px dashed var(--line);
+    background: rgba(200, 240, 108, 0.03);
+  }
+  .counter-preview-label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+  }
+  .counter-preview-text {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--ink);
+    word-break: break-word;
+  }
+</style>

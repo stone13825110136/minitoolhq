@@ -1,11 +1,5 @@
 import type { ProcessOptions } from "../amazon-prep/types";
-import {
-  FREE_BATCH_LIMIT,
-  PRO_CHECKOUT_URL,
-  PRO_PRICE_LABEL,
-} from "../amazon-prep/types";
 
-export { FREE_BATCH_LIMIT, PRO_CHECKOUT_URL, PRO_PRICE_LABEL };
 export type { ProcessOptions, ProcessResultRow, QueueItem } from "../amazon-prep/types";
 
 export type PlatformId =
@@ -27,7 +21,7 @@ export const PLATFORM_PRESETS: PlatformPreset[] = [
   {
     id: "amazon",
     label: "Amazon",
-    blurb: "2000×2000 square main image · white BG · zoom-friendly",
+    blurb: "Default 2000×2000 seller master · white BG (official zoom ≥1000; ~1600+ optimal)",
     options: {
       resizeMode: "square",
       targetPx: 2000,
@@ -55,7 +49,7 @@ export const PLATFORM_PRESETS: PlatformPreset[] = [
   {
     id: "etsy",
     label: "Etsy",
-    blurb: "2000×2000 square listing photo",
+    blurb: "2000×2000 practical listing master (Etsy recommends ~2000px; first-photo floor ~635px)",
     options: {
       resizeMode: "square",
       targetPx: 2000,
@@ -97,14 +91,14 @@ export const PLATFORM_PRESETS: PlatformPreset[] = [
   {
     id: "walmart",
     label: "Walmart",
-    blurb: "2000×2000 square · white BG typical for main",
+    blurb: "2200×2200 square · white BG (Walmart Marketplace Learn)",
     options: {
       resizeMode: "square",
-      targetPx: 2000,
+      targetPx: 2200,
       maxBytes: 5 * 1024 * 1024,
       whiteBackground: true,
       upscaleBelowZoom: true,
-      upscaleMinPx: 2000,
+      upscaleMinPx: 1500,
       filenamePrefix: "walmart",
     },
   },

@@ -1,0 +1,188 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+
+const pageTitle = "Image Compressor - Free Batch Compress (No Upload)";
+const pageDescription =
+  "Free image compressor in your browser. Batch compress images without uploading, target size (e.g. 100KB), ZIP download - no signup.";
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Tools", path: "/#tools" },
+  { name: "Image Compressor", path: "/tools/image-compressor" },
+];
+
+const relatedGuides = [
+  { href: "/guides/amazon-product-image-size", label: "Amazon product image size" },
+  { href: "/guides/png-to-jpg-for-amazon", label: "PNG to JPG for Amazon" },
+  { href: "/guides/heic-to-jpg-for-amazon", label: "HEIC to JPG for Amazon" },
+  { href: "/guides/tiktok-shop-image-size", label: "TikTok Shop image size" },
+];
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "How do I use this image compressor?",
+    a: "Add JPG, PNG, or WebP files, choose quality mode or a target file size, then Compress. This free image compressor runs in your browser and lets you download a ZIP of the results.",
+  },
+  {
+    q: "Can I batch compress images?",
+    a: "Yes. This batch image compressor accepts multiple files at once with no account and no artificial batch cap. Download everything in one ZIP when finished.",
+  },
+  {
+    q: "Can I compress images without uploading?",
+    a: "Yes. Compress image without uploading - processing stays on your device. Open DevTools → Network while compressing if you want to verify image bytes are not posted to our servers.",
+  },
+  {
+    q: "How do I compress to 100KB?",
+    a: "Switch to Target size mode, enter 100 (or tap the 100KB preset), then Compress. The tool binary-searches JPEG/WebP quality to get close to your limit. Very detailed photos may not reach 100KB without visible loss.",
+  },
+  {
+    q: "How do I compress for Amazon listing photos?",
+    a: "Amazon typically allows up to about 10 MB per image; many sellers aim for roughly 800KB-2MB JPEGs for faster pages - that is seller practice, not a 100KB rule. Compress here, then size with the Marketplace Image Resizer and confirm Seller Central.",
+  },
+  {
+    q: "Will compression change image dimensions?",
+    a: "No. This tool shrinks file size only. Pixel width and height stay the same. For Amazon/TikTok/Etsy square sizes, use the Marketplace Image Resizer after compressing.",
+  },
+  {
+    q: "Does this work with PNG and WebP?",
+    a: "Yes. JPG, PNG, and WebP are supported. For maximum size reduction, output as JPG. PNG target-size mode has limited effect because canvas PNG has no quality slider.",
+  },
+  {
+    q: "Can I compress HEIC here?",
+    a: "No. Convert HEIC to JPG first with the HEIC to JPG converter, then compress the JPEG here if you still need a smaller file.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const appLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Image Compressor",
+  applicationCategory: "MultimediaApplication",
+  operatingSystem: "Any",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  description: pageDescription,
+  url: "https://selltoolhq.com/tools/image-compressor",
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/tools/image-compressor"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(appLd)} />
+  </Fragment>
+
+  <section data-image-compressor>
+    <p class="badge">No upload · In-browser · Free · Batch ZIP</p>
+    <h1>Image Compressor</h1>
+    <p class="lede">
+      Free <strong>image compressor</strong> for product photos. <strong>Batch compress images without
+      uploading</strong>, set quality or <strong>compress to 100KB</strong> (and other targets), then
+      download a ZIP - useful before you <strong>compress for Amazon listing</strong> uploads.
+    </p>
+
+    <div class="panel">
+      <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="Add image files">
+        <p><strong>Drop JPG / PNG / WebP</strong> or click to choose</p>
+        <input
+          id="compressFiles"
+          type="file"
+          accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+          multiple
+        />
+      </div>
+
+      <div class="grid-2" style="margin-top: 1rem;">
+        <label class="field">
+          <span>Mode</span>
+          <select id="compressMode">
+            <option value="quality" selected>Quality</option>
+            <option value="target">Target size (KB)</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Output format</span>
+          <select id="outFormat">
+            <option value="jpg" selected>JPG (best shrink)</option>
+            <option value="same">Keep original format</option>
+            <option value="png">PNG</option>
+            <option value="webp">WebP</option>
+          </select>
+        </label>
+        <label class="field" id="qualityField">
+          <span>Quality <span id="qualityLabel">85%</span></span>
+          <input id="quality" type="range" min="40" max="95" value="85" />
+        </label>
+        <label class="field" id="targetField" hidden>
+          <span>Max size (KB)</span>
+          <input id="targetKb" type="number" min="20" max="5120" value="100" />
+        </label>
+      </div>
+
+      <div class="checks" style="margin-top: 0.75rem;">
+        <button class="btn btn-ghost" type="button" data-target-preset="100">100 KB</button>
+        <button class="btn btn-ghost" type="button" data-target-preset="500">500 KB</button>
+        <button class="btn btn-ghost" type="button" data-target-preset="1024">1 MB</button>
+        <button class="btn btn-ghost" type="button" data-target-preset="2048">2 MB</button>
+      </div>
+
+      <ul id="fileList" class="file-list" hidden></ul>
+      <p class="status" id="status"></p>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="compressBtn" type="button">Compress</button>
+        <button class="btn btn-ghost" id="clearBtn" type="button">Clear</button>
+      </div>
+
+      <div id="results" class="results" aria-live="polite"></div>
+    </div>
+
+    <section class="section">
+      <h2>Compress for listings without changing size</h2>
+      <p class="lede">
+        This tool only reduces <strong>file weight</strong>. Amazon listing images are commonly capped
+        around <strong>10 MB</strong>; TikTok Shop often around <strong>5 MB</strong>. Many sellers
+        prefer roughly <strong>800KB-2MB</strong> JPEGs for snappier pages - that is seller practice,
+        not a platform “must be 100KB” rule. Confirm current limits in each seller portal.
+      </p>
+    </section>
+
+    <section class="section faq">
+      <h2>FAQ - Image compressor</h2>
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools hide={["compress"]} />
+    <RelatedGuides links={relatedGuides} />
+
+    <ReportIssue />
+  </section>
+</BaseLayout>
+
+<script>
+  import "../../scripts/image-compressor";
+</script>

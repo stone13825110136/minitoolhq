@@ -44,6 +44,8 @@ Interactive **inbound carton** Pass/Fail for **FBA vs AWD** (36×25×25 vs 25×2
 | Weight >100 → Mechanical Lift note | ✅ text | ❌ | ❌ | **should** |
 | in/lb and cm/kg units | — | ✅ | ✅ | **must** |
 | Batch multiple cartons | — | paid packing | ✅ multi pkg | **must** (unlimited free) |
+| Local CSV import / result export | — | fee tools often upload | — | **must** (browser-only FileReader) |
+| DIM planning reference (÷139) | text only | ✅ fee core | ✅ carrier | **must** (reference only, not fee quote) |
 | SEO rules table + FAQ + disclaimer | ✅ | partial | ✅ | **must** |
 | Product FBA fee size-tier estimate | — | ✅ | ❌ | **won't** (v1) |
 | 3D bin packing / placement fees | — | paid | ❌ | **won't** |
@@ -64,14 +66,35 @@ Sources reviewed: Seller Central forum (length change Jun 20, 2025), GoAura / Pa
 | Min size (guide) | **6 × 4 × 1 in** |
 | Min weight (guide) | **~1 lb** (warn only, not hard fail) |
 
-### Program: AWD
+### Program: AWD carton (outer)
 
 | Rule | Value |
 |------|-------|
 | Max each side | **25 × 25 × 25 in** |
 | Max weight | **50 lb** |
 
-### Notes (UI copy, not auto-approve)
+### Program: AWD unit / SKU (new US inbounds from Jul 31, 2026)
+
+| Rule | Value |
+|------|-------|
+| Max sides (exclusive) | Smaller than **18 × 14 × 8 in** (sorted L≥W≥H) |
+| Max weight (exclusive) | Under **20 lb** |
+| Notes | **Unit eligibility**, not carton outer size. Confirm Seller Central AWD product requirements. |
+
+## Spec accuracy (bidirectional)
+
+**Reviewed:** 2026-07-26 (updated after Doubao audit + secondary sources)  
+
+| Platform / claim | Official source (URL + date) | Competitor check | Our default | Notes |
+|------------------|------------------------------|------------------|-------------|-------|
+| FBA inbound carton max L×W×H | Seller Central forums: FBA US length **36 in** from **Jun 20, 2025**; W/H **25**; weight **50 lb** ([discussion](https://sellercentral.amazon.com/seller-forums/discussions/t/aa562d83-546a-4d7b-be72-6fa07937ba54)) | GoAura, Project FBA, ParcelPath blogs match 36×25×25 / 50 lb | **36 × 25 × 25 in**, **50 lb** | Aligns official announcement + SERP |
+| AWD carton max | SC threads / dual-program summaries: carton often **25×25×25**, **50 lb** | GoAura dual-program notes | **25×25×25**, **50 lb** | Do **not** replace with 18×14×8 — that is unit eligibility |
+| AWD unit eligibility Jul 31, 2026 | Seller notices / AWD product requirements (US): sortable units smaller than **18×14×8**, under **20 lb** for new inbounds | Inventory Hero, trade press (ebrun, xfriendship) summarize same | Optional unit check; exclusive thresholds | Carton Pass ≠ SKU AWD-eligible |
+| Min size / lift notes | Common FBA packaging guidance 6×4×1; Team/Mechanical lift >50 / >100; soft ~65 lb band in some help texts | GoAura / Project FBA | Warn under min; note lift labels; never auto-approve | RSC / ECT packaging = tip only |
+
+Acceptance: Carton Pass/Fail uses sorted L≥W≥H against program carton limits; AWD unit check is separate optional layer; page disclaimer to confirm Seller Central.
+
+## Notes (UI copy, not auto-approve)
 
 - Single oversized item may allow exceptions; tool flags “over limit — check single-oversize exception / Seller Central”.
 - >50 lb: Team Lift labeling if allowed; >100 lb: Mechanical Lift.
@@ -93,8 +116,8 @@ Sources reviewed: Seller Central forum (length change Jun 20, 2025), GoAura / Pa
 
 ## Monetization
 
-**Fully free — no batch cap, no Pro CTA on this page.**  
-Inbound carton Pass/Fail is a SEO / traffic tool; charging for “more cartons” has no real willingness-to-pay. Site-wide Pro stays on tools with real batch cost (e.g. Amazon Image Prep).
+**Fully free — no batch cap, no Pro CTA.**  
+All MiniTool HQ tools are free; site revenue = display ads.
 
 ## Out of scope (v1)
 

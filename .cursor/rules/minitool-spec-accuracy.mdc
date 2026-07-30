@@ -1,0 +1,50 @@
+---
+description: MiniTool HQ — format/size/spec tools must dual-check official rules + top competitors before ship
+alwaysApply: true
+---
+
+# MiniTool HQ — Spec accuracy gate (format / size / limits)
+
+Applies to any tool or guide that **converts formats**, **resizes images**, or **checks platform dimensions / weight / carton limits** (e.g. HEIC→JPG, Marketplace Image Prep, FBA box checker, future compress/WebP).
+
+## Hard rule
+
+**Do not ship** defaults, presets, Pass/Fail logic, or guide “requirements” tables until a **bidirectional check** is written into the tool’s `docs/specs/NN-*.md`.
+
+### Bidirectional check (both required)
+
+1. **Official source** — Seller Central / Help / Help Center / developer docs for that platform (Amazon, Etsy, TikTok Shop, etc.). Record URL + date reviewed + the numbers you will implement (px, aspect, MB, L×W×H, lb/kg, formats).
+2. **Core SERP competitors** — top 3–5 tools or ranking guides for the same job. Note their defaults and where they differ from official.
+
+Then **reconcile**:
+
+| Outcome | Action |
+|---------|--------|
+| Official clear | Tool defaults **follow official**; copy may say “confirm in Seller Central” |
+| Official vague / conflict | Prefer official range; document ambiguity in spec; UI disclaimer |
+| Competitor-only number, no official basis | **Do not** present as a hard platform rule |
+| Our output must meet claim | E2E or manual check that exported files hit stated size/format (e.g. JPEG, square px, under max MB) |
+
+## Spec block (mandatory in `docs/specs/`)
+
+```markdown
+## Spec accuracy (bidirectional)
+
+| Platform / claim | Official source (URL + date) | Competitor check | Our v1 default | Notes |
+|------------------|------------------------------|------------------|----------------|-------|
+| … | … | … | … | … |
+
+Acceptance: output format/size/limits match the “Our v1 default” column; disclaimer if rules change.
+```
+
+## Do / Don’t
+
+- Do: ship seller-safe defaults that match official guidance where known  
+- Do: re-check when editing presets or publishing a new marketplace row  
+- Don’t: invent “Amazon requires X” from a random blog alone  
+- Don’t: mark shipped if format/size claims are unverified against this gate  
+
+## Related
+
+- Competitor parity: `docs/COMPETITOR-CHECKLIST.md` + workflow step “Competitors”  
+- Customer copy: never invent compliance guarantees — see `minitool-customer-copy.mdc`

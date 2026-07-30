@@ -1,0 +1,130 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "HEIC to JPG for Etsy Listings — iPhone Photos That Upload";
+const pageDescription =
+  "Convert HEIC to JPG for Etsy listings when iPhone photos fail to upload. Batch HEIC to JPEG in your browser, then prep Etsy listing photo size.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "Can I upload HEIC photos to Etsy listings?",
+    a: "Etsy listing photos work most reliably as JPG or PNG (platform guidance / common upload behavior). If an iPhone HEIC fails or looks wrong after upload, convert HEIC to JPG first.",
+  },
+  {
+    q: "How do I convert HEIC to JPG for Etsy?",
+    a: "Batch convert HEIC to JPG in your browser, download the ZIP, then use the Etsy preset in the Marketplace Image Resizer for ~2000×2000 listing photos.",
+  },
+  {
+    q: "Why do my iPhone product photos fail on Etsy?",
+    a: "Format (HEIC), file size, or dimensions can all block a smooth listing photo upload. Fix HEIC → JPG first, then check Etsy listing photo size guidance.",
+  },
+  {
+    q: "Should Etsy sellers strip HEIC metadata?",
+    a: "Optional. Etsy does not require EXIF removal to accept a photo. Clearing camera/GPS tags is a privacy preference (seller practice), not a platform mandate. Our converter can output a clean JPG in your browser.",
+  },
+  {
+    q: "What size after HEIC to JPG for Etsy?",
+    a: "Aim for at least 2000px (often 2000×2000 square) per Etsy photo recommendations (official / platform guidance, reviewed 2026). See the Etsy listing photo size guide for the 635px first-image floor.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "HEIC to JPG for Etsy", path: "/guides/heic-to-jpg-for-etsy" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/heic-to-jpg-for-etsy"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · Etsy shops · Reviewed 2026</p>
+    <h1>HEIC to JPG for Etsy listings</h1>
+    <p class="lede">
+      iPhone product shots often save as <strong>HEIC</strong>. For reliable
+      <strong>Etsy listing</strong> uploads, convert <strong>HEIC to JPG</strong>, then size photos
+      for search thumbnails.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Batch convert HEIC → JPG — files stay on your device.</p>
+      <a class="btn btn-primary" href="/tools/heic-to-jpg">Open HEIC to JPG Converter</a>
+    </div>
+
+    <h2>Shop workflow</h2>
+    <ol>
+      <li>Collect iPhone HEIC product photos.</li>
+      <li>Convert to JPG in batch (in-browser, no upload).</li>
+      <li>
+        Prep dimensions with the
+        <a href="/tools/marketplace-image-prep?platform=etsy">Etsy marketplace preset</a>
+        — commonly 2000px+ per Etsy recommendations
+        <em> (official / platform guidance, reviewed 2026)</em>.
+      </li>
+      <li>Upload to your Etsy listing.</li>
+    </ol>
+
+    <h2>Format vs size</h2>
+    <p>
+      HEIC → JPG fixes format. Listing performance still depends on
+      <a href="/guides/etsy-listing-photo-size">Etsy listing photo size</a>
+      (commonly 2000px+). Do both steps before you publish.
+    </p>
+
+    <h2>EXIF / GPS metadata</h2>
+    <p>
+      Etsy does <strong>not</strong> require EXIF stripping. Clearing camera/GPS tags is optional
+      privacy hygiene for public shop photos — seller practice, not a mandate.
+    </p>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools
+      extra={[{ href: "/tools/marketplace-image-prep?platform=etsy", label: "Etsy preset (resizer)" }]}
+    />
+    <RelatedGuides
+      links={[
+        { href: "/guides/heic-to-jpg-for-amazon", label: "HEIC to JPG for Amazon" },
+        { href: "/guides/etsy-listing-photo-size", label: "Etsy listing photo size" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="Etsy" />
+    <ReportIssue />
+  </article>
+</BaseLayout>

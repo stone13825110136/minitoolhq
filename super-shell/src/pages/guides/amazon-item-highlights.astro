@@ -1,0 +1,129 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "Amazon Item Highlights (125 Characters) — Seller Guide";
+const pageDescription =
+  "Amazon Item Highlights allow up to 125 searchable characters for materials and use cases next to the 75-character title. Learn how to use the field and count it before you publish.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "What are Amazon Item Highlights?",
+    a: "Item Highlights is a listing field Amazon introduced with the shorter title rules. It holds up to 125 characters for materials, recommended uses, and other details that help shoppers compare options.",
+  },
+  {
+    q: "Are Amazon Item Highlights searchable?",
+    a: "Amazon’s announcement states Item Highlights content is searchable and visible with titles in search results and on product detail pages. Treat exact ranking weight as unproven and still put your strongest keywords where they belong in title and bullets.",
+  },
+  {
+    q: "What is the Amazon Item Highlights character limit?",
+    a: "Up to 125 characters, including spaces. Use the listing character counter’s Item Highlights field to stay under the limit.",
+  },
+  {
+    q: "What should I put in Item Highlights vs the title?",
+    a: "Keep the title short and clear (brand, product type, must-have attribute). Put supporting specs — materials, pack size nuance, use cases — in Item Highlights so the 75-character title stays readable on mobile.",
+  },
+  {
+    q: "How do I count Item Highlights characters?",
+    a: "Open the Amazon title character counter on SellTool HQ, keep Marketplace set to Amazon, and paste into the Item Highlights box. Counting runs locally in your browser.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "Amazon Item Highlights", path: "/guides/amazon-item-highlights" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/amazon-item-highlights"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · Amazon sellers · Updated 2026-07</p>
+    <h1>Amazon Item Highlights (125 characters)</h1>
+    <p class="lede">
+      With the <strong>75-character title</strong> rule, Amazon added
+      <strong>Item Highlights</strong> — up to <strong>125 searchable characters</strong> for details
+      that no longer fit in the title.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Count Item Highlights and title together before you publish.</p>
+      <a class="btn btn-primary" href="/tools/listing-character-counter"
+        >Open listing character counter</a
+      >
+    </div>
+
+    <h2>Why Item Highlights matter</h2>
+    <p>
+      Shorter titles display fully on mobile, but sellers still need room for materials, use cases,
+      and comparison details. Item Highlights is the dedicated field for that overflow.
+      <em
+        >Source: Amazon Seller Central announcement on product title updates beginning July 27, 2026
+        (reviewed 2026-07-29).</em
+      >
+    </p>
+
+    <h2>Practical writing tips</h2>
+    <ul>
+      <li>Lead with the fact shoppers compare (material, size system, pack contents).</li>
+      <li>Avoid stuffing the same phrase already burned in the title.</li>
+      <li>Stay at or under <strong>125 characters</strong> including spaces.</li>
+      <li>Still maintain strong bullets — Item Highlights does not replace About this item.</li>
+    </ul>
+
+    <h2>Count title + Item Highlights together</h2>
+    <p>
+      Use the free
+      <a href="/tools/listing-character-counter">Amazon title character counter</a> so both fields
+      stay within 75 and 125 before you paste into Seller Central.
+    </p>
+
+    <GuideDisclaimer />
+
+    <section class="faq">
+      <h2>FAQ</h2>
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedGuides
+      links={[
+        { href: "/guides/amazon-title-character-limit", label: "Amazon title character limit (75)" },
+        { href: "/guides/etsy-title-character-limit", label: "Etsy title character limit" },
+      ]}
+    />
+    <RelatedTools />
+    <ReportIssue />
+  </article>
+</BaseLayout>

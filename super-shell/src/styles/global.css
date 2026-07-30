@@ -65,6 +65,11 @@ img {
   padding: 1.25rem 1.25rem 0.5rem;
 }
 
+.brand-block {
+  display: grid;
+  gap: 0.2rem;
+}
+
 .brand {
   font-family: var(--display);
   font-weight: 650;
@@ -76,6 +81,47 @@ img {
 
 .brand span {
   color: var(--accent);
+}
+
+.privacy-chip {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.breadcrumbs {
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+}
+
+.breadcrumbs ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  color: var(--muted);
+}
+
+.breadcrumbs li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.5rem;
+  color: rgba(154, 173, 163, 0.55);
+}
+
+.breadcrumbs a {
+  color: var(--muted);
+}
+
+.breadcrumbs a:hover {
+  color: var(--accent);
+}
+
+.breadcrumbs [aria-current="page"] {
+  color: var(--ink);
 }
 
 .nav {
@@ -680,5 +726,98 @@ table.data th {
 
 .result-card .ok-line {
   margin: 0;
+  color: var(--muted);
+}
+
+.file-list {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.file-row {
+  padding: 0.55rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.file-row.status-working {
+  color: var(--warn);
+}
+
+.file-row.status-done {
+  color: var(--ok);
+}
+
+.file-row.status-error {
+  color: var(--danger);
+}
+
+.result-box {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: rgba(200, 240, 108, 0.05);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.guide-body {
+  max-width: 42rem;
+}
+
+.guide-body h2 {
+  font-family: var(--display);
+  font-weight: 650;
+  font-size: 1.45rem;
+  margin: 2rem 0 0.65rem;
+}
+
+.guide-body p,
+.guide-body li {
+  color: var(--muted);
+}
+
+.guide-body ul {
+  padding-left: 1.2rem;
+}
+
+.guide-cta {
+  margin: 1.5rem 0;
+  padding: 1.15rem 1.25rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(200, 240, 108, 0.28);
+  background: rgba(200, 240, 108, 0.06);
+}
+
+.guide-cta p {
+  margin: 0 0 0.85rem;
+  color: var(--ink);
+}
+
+.related-guides {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  margin-top: 0.75rem;
+}
+
+.check.field {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin-top: 0.35rem;
+}
+
+.drop input[type="file"] {
+  display: block;
+  margin: 0.85rem auto 0;
+  max-width: 100%;
   color: var(--muted);
 }

@@ -1,0 +1,137 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "Amazon Title Character Limit (75) — July 2026 Guide";
+const pageDescription =
+  "Amazon title character limit is 75 characters from July 27, 2026 (except media). What changed, how Item Highlights fit, and how to count titles before you publish.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "What is the Amazon title character limit in 2026?",
+    a: "Starting July 27, 2026, titles in all categories except media must be 75 characters or fewer, including spaces. Confirm media exceptions and any category notes in Seller Central.",
+  },
+  {
+    q: "Does the 75-character limit include spaces?",
+    a: "Yes. Spaces, punctuation, brand name, and units such as 24 lb all count toward the 75-character Amazon title limit.",
+  },
+  {
+    q: "What happens if my Amazon title is over 75 characters?",
+    a: "Amazon has said titles still over 75 characters after July 27, 2026 will gradually be updated to AI recommendations. Listings stay active, but you may lose control of keyword placement if you wait. Brand-registered sellers may get a review window for AI suggestions.",
+  },
+  {
+    q: "Where do the keywords go that no longer fit in the title?",
+    a: "Use Item Highlights (up to 125 searchable characters) for materials, use cases, and extra specs. Keep the title short and shopper-clear; move supporting detail into Item Highlights, bullets, and backend search terms.",
+  },
+  {
+    q: "How do I count Amazon title characters before publishing?",
+    a: "Paste your draft into the free Amazon title character counter on SellTool HQ. It uses the 75-character default and also counts Item Highlights, bullets, and backend bytes in your browser.",
+  },
+  {
+    q: "Do media categories still allow longer titles?",
+    a: "Amazon’s announcement excludes media from the flat 75-character rule. Treat 75 as the default for non-media listings and confirm media category guidance in Seller Central.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "Amazon title character limit", path: "/guides/amazon-title-character-limit" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/amazon-title-character-limit"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · Amazon sellers · Updated 2026-07</p>
+    <h1>Amazon title character limit (75 characters)</h1>
+    <p class="lede">
+      From <strong>July 27, 2026</strong>, Amazon product titles in non-media categories need to be
+      <strong>75 characters or fewer</strong>, including spaces. This guide explains the change and
+      how to check titles before Seller Central rewrites them for you.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Count titles against the 75-character limit in your browser — no signup.</p>
+      <a class="btn btn-primary" href="/tools/listing-character-counter">Open Amazon Title Character Counter</a>
+    </div>
+
+    <h2>What changed on July 27, 2026</h2>
+    <p>
+      Amazon announced that titles in <strong>all categories except media</strong> must be
+      <strong>75 characters or less including spaces</strong>. The stated goals are full mobile
+      display and consistency with other online stores.
+      <em
+        >Source: Amazon Seller Central seller forums — “Updates to improve your product titles begin
+        on July 27” (News_Amazon, reviewed 2026-07-29).</em
+      >
+    </p>
+    <ul>
+      <li>Title default for most listings: <strong>75 characters</strong></li>
+      <li>New field: <strong>Item Highlights</strong> up to <strong>125 characters</strong></li>
+      <li>Over-limit titles: gradually updated to Amazon AI recommendations after the date</li>
+    </ul>
+
+    <h2>How to rewrite for 75 characters</h2>
+    <ol>
+      <li>Keep brand + product type + the one attribute shoppers need first.</li>
+      <li>Move materials, pack counts, and secondary keywords into Item Highlights and bullets.</li>
+      <li>Count the full string — spaces and punctuation count.</li>
+      <li>Recheck backend search terms so you do not waste byte budget on words already in the title.</li>
+    </ol>
+
+    <h2>Count before you publish</h2>
+    <p>
+      Use the free <a href="/tools/listing-character-counter">Amazon title character counter</a> to
+      paste your title and Item Highlights together. Counting stays on your device.
+    </p>
+
+    <GuideDisclaimer />
+
+    <section class="faq">
+      <h2>FAQ</h2>
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedGuides
+      links={[
+        { href: "/guides/amazon-item-highlights", label: "Amazon Item Highlights (125)" },
+        { href: "/guides/etsy-title-character-limit", label: "Etsy title character limit" },
+        { href: "/guides/amazon-product-image-size", label: "Amazon product image size" },
+      ]}
+    />
+    <RelatedTools />
+    <ReportIssue />
+  </article>
+</BaseLayout>

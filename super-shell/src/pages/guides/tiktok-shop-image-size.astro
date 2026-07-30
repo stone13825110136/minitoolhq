@@ -1,0 +1,144 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "TikTok Shop Image Size Requirements — Square Photos Guide";
+const pageDescription =
+  "TikTok Shop image size requirements: square photos, 800×800+ recommended, under 5 MB. Prep listing images free in your browser.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "What is the TikTok Shop product image size?",
+    a: "TikTok Shop product images should be square (1:1). Seller help commonly cites at least 800×800; many sellers aim for 1000×1000 or 1200×1200 for sharper mobile display (mix of platform guidance and seller practice — confirm TikTok Shop seller center, reviewed 2026).",
+  },
+  {
+    q: "What is the minimum TikTok Shop image resolution?",
+    a: "Official guidance often cites a minimum around 600×600 or 800×800 depending on document version. Below the minimum, listings can fail review — prefer 800×800 or higher and confirm current seller-center help.",
+  },
+  {
+    q: "How many images does TikTok Shop need?",
+    a: "You can upload multiple images (often up to 9 — check current seller center). Aim for at least 5 strong photos so listing quality stays competitive (seller practice).",
+  },
+  {
+    q: "What file format does TikTok Shop accept?",
+    a: "JPG and PNG are the usual formats, typically under 5 MB each (platform guidance / common limits). Convert HEIC from iPhone first if uploads fail.",
+  },
+  {
+    q: "How do I resize for TikTok Shop and Amazon together?",
+    a: "In the Marketplace Image Resizer, check TikTok Shop and Amazon, process once, and download one ZIP with a folder per marketplace.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "TikTok Shop image size", path: "/guides/tiktok-shop-image-size" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/tiktok-shop-image-size"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · TikTok Shop · Reviewed 2026</p>
+    <h1>TikTok Shop image size</h1>
+    <p class="lede">
+      Square <strong>TikTok Shop image size</strong> targets that keep listings review-ready on
+      mobile.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Export TikTok Shop squares (and other marketplaces) in one ZIP.</p>
+      <a class="btn btn-primary" href="/tools/marketplace-image-prep?platform=tiktok-shop"
+        >Open Marketplace Image Resizer</a
+      >
+    </div>
+
+    <h2>Recommended sizes</h2>
+    <ul>
+      <li>
+        <strong>Aspect:</strong> 1:1 square
+        <em> — Official / platform guidance (TikTok Shop seller image requirements)</em>
+      </li>
+      <li>
+        <strong>Safe working target:</strong> 1200×1200 (or at least 800×800)
+        <em>
+          — 800×800 commonly cited in seller help; 1200×1200 is industry / seller practice for
+          sharper mobile (reviewed 2026)</em
+        >
+      </li>
+      <li>
+        <strong>File:</strong> JPG/PNG, typically under 5 MB
+        <em> — Common platform upload guidance</em>
+      </li>
+      <li>
+        <strong>Gallery:</strong> aim for 5+ quality images when the category allows
+        <em> — Industry / seller practice</em>
+      </li>
+    </ul>
+
+    <h2>Main image tips</h2>
+    <p>
+      Keep a clean background, avoid heavy watermarks, and fill the frame with the product. Collage
+      layouts and promo text on the main image often hurt review outcomes
+      <em> (seller practice / review patterns)</em>.
+    </p>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools
+      hide={["fba"]}
+      extra={[
+        {
+          href: "/tools/marketplace-image-prep?platform=tiktok-shop",
+          label: "TikTok Shop preset (resizer)",
+        },
+      ]}
+    />
+    <RelatedGuides
+      links={[
+        { href: "/guides/amazon-product-image-size", label: "Amazon product image size" },
+        { href: "/guides/etsy-listing-photo-size", label: "Etsy listing photo size" },
+        { href: "/guides/heic-to-jpg-for-amazon", label: "HEIC to JPG for Amazon" },
+        { href: "/guides/heic-to-jpg-for-tiktok-shop", label: "HEIC to JPG for TikTok Shop" },
+        { href: "/guides/png-to-jpg-for-amazon", label: "PNG to JPG for Amazon" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="TikTok Shop" />
+    <ReportIssue />
+  </article>
+</BaseLayout>

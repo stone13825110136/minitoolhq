@@ -1,0 +1,27 @@
+{
+  "host": "selltoolhq.com",
+  "key": "a7f3c91e4b2d4e8f9c1a6d5e8f0b2a3c11",
+  "keyLocation": "https://selltoolhq.com/a7f3c91e4b2d4e8f9c1a6d5e8f0b2a3c11.txt",
+  "endpoint": "https://api.indexnow.org/indexnow",
+  "urlList": [
+    "https://selltoolhq.com/",
+    "https://selltoolhq.com/tools/marketplace-image-prep",
+    "https://selltoolhq.com/tools/heic-to-jpg",
+    "https://selltoolhq.com/tools/png-to-jpg",
+    "https://selltoolhq.com/tools/image-compressor",
+    "https://selltoolhq.com/tools/listing-character-counter",
+    "https://selltoolhq.com/tools/fba-box-size-checker",
+    "https://selltoolhq.com/guides/amazon-product-image-size",
+    "https://selltoolhq.com/guides/etsy-listing-photo-size",
+    "https://selltoolhq.com/guides/tiktok-shop-image-size",
+    "https://selltoolhq.com/guides/amazon-fba-box-size-limits",
+    "https://selltoolhq.com/guides/amazon-dimensional-weight",
+    "https://selltoolhq.com/guides/heic-to-jpg-for-amazon",
+    "https://selltoolhq.com/guides/heic-to-jpg-for-etsy",
+    "https://selltoolhq.com/guides/heic-to-jpg-for-tiktok-shop",
+    "https://selltoolhq.com/guides/png-to-jpg-for-amazon",
+    "https://selltoolhq.com/guides/amazon-title-character-limit",
+    "https://selltoolhq.com/guides/amazon-item-highlights",
+    "https://selltoolhq.com/guides/etsy-title-character-limit"
+  ]
+}

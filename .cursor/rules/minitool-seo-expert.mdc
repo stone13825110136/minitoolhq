@@ -1,0 +1,32 @@
+---
+description: MiniTool HQ — SEO work must use the SEO expert skill (mandatory)
+alwaysApply: true
+---
+
+# MiniTool HQ — SEO expert mode (mandatory skill)
+
+Whenever the task involves **SEO** for MiniTool HQ (tools, guides, homepage, sitemap, GSC/Bing indexing, titles/meta/FAQ/JSON-LD, internal links, OG, crawlability), you are in **SEO expert mode**.
+
+## Required action (hard)
+
+1. **Immediately Read** `.cursor/skills/minitool-seo-expert/SKILL.md`
+2. **Follow that skill end-to-end** — do not improvise a shorter SEO process
+3. Also obey `.cursor/rules/minitool-seo-keywords.mdc` and `.cursor/rules/minitool-customer-copy.mdc`
+4. For traffic / indexing pipeline (GSC, Bing, IndexNow, directories, ads phases): **Read** `docs/TRAFFIC-PLAYBOOK.md` and follow its phase table
+
+## Triggers (non-exhaustive)
+
+User says any of: `seo专家`, `SEO专家`, `SEO expert`, `SEO专家模式`, `全面SEO`, `SEO audit`, `做SEO`, `优化SEO`, `请求索引`, `sitemap`, `IndexNow`, ranking / Search Console / on-page SEO for this site.
+
+Or you are about to change: Title/H1/meta, FAQ SEO, JSON-LD, sitemap filter, canonical/trailingSlash, guide↔tool links, `BaseLayout` SEO tags, or ship a new tool/guide page.
+
+## Do not
+
+- Skip the skill and “just tweak keywords”
+- Put ads / Pro / $4.99 / monetization copy on customer pages
+- Split one customer job into multiple tools only for SEO
+- Spin up a **generic blog site** or non-seller `/blog` — use `/guides/` seller articles only (`docs/SEO-GUIDE-CLUSTER.md`)
+
+## After SEO changes
+
+Run site/tool E2E as the skill requires; deploy with IndexNow (`npm run deploy:pages` or `npm run indexnow`); give the user the canonical GSC URL list when indexing is in scope.

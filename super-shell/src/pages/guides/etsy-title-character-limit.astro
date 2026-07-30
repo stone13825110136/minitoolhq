@@ -1,0 +1,123 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "Etsy Title Character Limit (140) — Counter Guide";
+const pageDescription =
+  "Etsy listing titles max out at 140 characters. Learn why the first ~60 matter on mobile and how to count titles and tags before you publish.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "What is the Etsy title character limit?",
+    a: "Etsy listing titles are limited to 140 characters, including spaces and punctuation. The listing editor stops accepting input once you hit the cap.",
+  },
+  {
+    q: "Do spaces count toward the Etsy 140-character limit?",
+    a: "Yes. Every character counts — letters, spaces, commas, pipes, and punctuation.",
+  },
+  {
+    q: "How many characters show in Etsy mobile search?",
+    a: "Mobile search cards often truncate titles around the first 50–70 characters. Front-load your strongest keyword and product type in the opening portion of the title.",
+  },
+  {
+    q: "What is the Etsy tag character limit?",
+    a: "Tags are commonly limited to 20 characters each, with up to 13 tags per listing. Confirm in your Etsy seller tools if limits differ for your shop.",
+  },
+  {
+    q: "How do I count an Etsy title without uploading?",
+    a: "Open the listing character counter, switch Marketplace to Etsy, and paste your title (and optional tags). Counting stays in your browser.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "Etsy title character limit", path: "/guides/etsy-title-character-limit" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/etsy-title-character-limit"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · Etsy sellers · Updated 2026</p>
+    <h1>Etsy title character limit (140)</h1>
+    <p class="lede">
+      Every Etsy listing title hard-stops at <strong>140 characters</strong>. This guide covers the
+      limit, mobile truncation, and how to count titles and tags before you publish.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Check Etsy titles and tags against 140 / 20-character limits locally.</p>
+      <a class="btn btn-primary" href="/tools/listing-character-counter?platform=etsy"
+        >Open Etsy title character counter</a
+      >
+    </div>
+
+    <h2>The 140-character hard limit</h2>
+    <p>
+      Etsy’s listing editor enforces a <strong>140-character</strong> title, including spaces and
+      punctuation. Drafting in a doc or copying from Amazon (now often 75 characters) or another
+      channel can still blow past 140 if you paste long keyword strings.
+    </p>
+
+    <h2>Front-load for mobile</h2>
+    <p>
+      Search cards on phones often show only roughly the <strong>first 50–70 characters</strong>. Put
+      the primary keyword and product type first; use the remaining space for secondary phrases.
+    </p>
+
+    <h2>Tags still matter</h2>
+    <p>
+      Titles are not the whole SEO surface. Common Etsy practice is up to <strong>13 tags</strong> at
+      <strong>20 characters</strong> each. Count tags one-per-line in the same tool.
+    </p>
+
+    <GuideDisclaimer />
+
+    <section class="faq">
+      <h2>FAQ</h2>
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedGuides
+      links={[
+        { href: "/guides/etsy-listing-photo-size", label: "Etsy listing photo size" },
+        { href: "/guides/amazon-title-character-limit", label: "Amazon title character limit (75)" },
+        { href: "/guides/heic-to-jpg-for-etsy", label: "HEIC to JPG for Etsy" },
+      ]}
+    />
+    <RelatedTools />
+    <ReportIssue />
+  </article>
+</BaseLayout>

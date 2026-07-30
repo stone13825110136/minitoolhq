@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://minitoolhq.com/sitemap-index.xml
+Sitemap: https://selltoolhq.com/sitemap-index.xml

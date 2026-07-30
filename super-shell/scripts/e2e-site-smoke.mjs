@@ -1,7 +1,7 @@
 /**
  * Site-wide link + content smoke test (not tool feature E2E).
  * Local: builds then previews (so sitemap exists).
- * Live: BASE_URL=https://minitoolhq.com node scripts/e2e-site-smoke.mjs
+ * Live: BASE_URL=https://selltoolhq.com node scripts/e2e-site-smoke.mjs
  */
 import { spawn } from "node:child_process";
 import path from "node:path";
@@ -111,7 +111,15 @@ try {
   const pagesToVisit = [
     { path: "/", name: "homepage" },
     { path: "/tools/marketplace-image-prep", name: "marketplace prep page" },
+    { path: "/tools/heic-to-jpg", name: "heic to jpg page" },
+    { path: "/tools/png-to-jpg", name: "png to jpg page" },
+    { path: "/tools/image-compressor", name: "image compressor page" },
+    { path: "/tools/listing-character-counter", name: "listing character counter page" },
     { path: "/tools/fba-box-size-checker", name: "fba box page" },
+    { path: "/guides/amazon-product-image-size", name: "amazon image guide" },
+    { path: "/guides/amazon-fba-box-size-limits", name: "fba box guide" },
+    { path: "/guides/amazon-title-character-limit", name: "amazon title limit guide" },
+    { path: "/guides/etsy-title-character-limit", name: "etsy title limit guide" },
   ];
 
   const staticAssets = [
@@ -121,6 +129,8 @@ try {
     "/sitemap-index.xml",
     "/sitemap-0.xml",
     "/BingSiteAuth.xml",
+    "/og-default.png",
+    "/a7f3c91e4b2d4e8f9c1a6d5e8f0b2a3c11.txt",
   ];
 
   for (const p of pagesToVisit) {
@@ -141,7 +151,40 @@ try {
   const sm0 = await (await page.request.get(`${base}/sitemap-0.xml`)).text();
   assert("sitemap lists home", /<loc>/i.test(sm0));
   assert("sitemap lists marketplace tool", /marketplace-image-prep/i.test(sm0));
+  assert("sitemap lists heic tool", /heic-to-jpg/i.test(sm0));
+  assert("sitemap lists png to jpg tool", /png-to-jpg/i.test(sm0));
+  assert("sitemap lists image compressor", /image-compressor/i.test(sm0));
+  assert("sitemap lists listing character counter", /listing-character-counter/i.test(sm0));
   assert("sitemap lists fba tool", /fba-box-size-checker/i.test(sm0));
+  assert("sitemap lists amazon image guide", /amazon-product-image-size/i.test(sm0));
+  assert("sitemap lists etsy guide", /etsy-listing-photo-size/i.test(sm0));
+  assert("sitemap lists tiktok guide", /tiktok-shop-image-size/i.test(sm0));
+  assert("sitemap lists fba box guide", /amazon-fba-box-size-limits/i.test(sm0));
+  assert("sitemap lists dim weight guide", /amazon-dimensional-weight/i.test(sm0));
+  assert("sitemap lists heic amazon guide", /heic-to-jpg-for-amazon/i.test(sm0));
+  assert("sitemap lists heic etsy guide", /heic-to-jpg-for-etsy/i.test(sm0));
+  assert("sitemap lists heic tiktok guide", /heic-to-jpg-for-tiktok-shop/i.test(sm0));
+  assert("sitemap lists png amazon guide", /png-to-jpg-for-amazon/i.test(sm0));
+  assert("sitemap lists amazon title limit guide", /amazon-title-character-limit/i.test(sm0));
+  assert("sitemap lists item highlights guide", /amazon-item-highlights/i.test(sm0));
+  assert("sitemap lists etsy title limit guide", /etsy-title-character-limit/i.test(sm0));
+  assert(
+    "sitemap excludes amazon-image-prep redirect",
+    !/\/tools\/amazon-image-prep/i.test(sm0),
+  );
+  assert(
+    "sitemap excludes tiktok-shop-image-prep redirect",
+    !/\/tools\/tiktok-shop-image-prep/i.test(sm0),
+  );
+  assert(
+    "sitemap locs have no trailing slash (except home)",
+    !/selltoolhq\.com\/[^<]+\/<\/loc>/i.test(sm0),
+  );
+
+  const ogHome = await open("/");
+  assert("home has og:image", /property=["']og:image["']/i.test(ogHome));
+  assert("home has WebSite JSON-LD", /"@type":\s*"WebSite"/i.test(ogHome));
+  assert("home has Guides section", /id=["']guides["']/i.test(ogHome));
 
   const bing = await (await page.request.get(`${base}/BingSiteAuth.xml`)).text();
   assert("BingSiteAuth is XML users", /<users>/i.test(bing) && /<user>/i.test(bing));
@@ -154,8 +197,8 @@ try {
     !/Job-first, not toolbox-first|swiss army knife/i.test(homeHtml),
   );
   assert(
-    "home brand MiniTool HQ",
-    /MiniTool HQ/i.test((await page.locator(".brand-mark").textContent()) || ""),
+    "home brand SellTool HQ",
+    /SellTool HQ/i.test((await page.locator(".brand-mark").textContent()) || ""),
   );
 
   const broken = [];
@@ -165,12 +208,12 @@ try {
     for (const href of hrefs) {
       if (!href) continue;
       if (href.startsWith("mailto:")) {
-        assert(`mailto on ${p.name}`, /contact@minitoolhq\.com/i.test(href), href.slice(0, 80));
+        assert(`mailto on ${p.name}`, /contact@selltoolhq\.com/i.test(href), href.slice(0, 80));
         continue;
       }
       // Cloudflare email obfuscation on live — not a real site page
       if (href.includes("/cdn-cgi/")) continue;
-      if (/^https?:\/\//i.test(href) && !/minitoolhq\.com|127\.0\.0\.1|localhost/i.test(href)) {
+      if (/^https?:\/\//i.test(href) && !/selltoolhq\.com|127\.0\.0\.1|localhost/i.test(href)) {
         continue;
       }
 
@@ -218,6 +261,11 @@ try {
     await page.waitForURL(/marketplace-image-prep/);
     assert("card to Marketplace Prep", /Marketplace Image Resizer/i.test(await page.title()));
 
+    await page.goto(`${base}/`, { waitUntil: "domcontentloaded" });
+    await page.click('a.tool-card[href="/tools/heic-to-jpg"]');
+    await page.waitForURL(/heic-to-jpg/);
+    assert("card to HEIC to JPG", /HEIC to JPG/i.test(await page.title()));
+
     await page.click('header a[href="/tools/fba-box-size-checker"]');
     await page.waitForURL(/fba-box-size-checker/);
     assert("nav to FBA Box", /FBA Box Size/i.test(await page.title()));
@@ -236,6 +284,7 @@ try {
     assert(
       "live nav targets ok",
       (await page.request.get(`${base}/tools/marketplace-image-prep`)).status() === 200 &&
+        (await page.request.get(`${base}/tools/heic-to-jpg`)).status() === 200 &&
         (await page.request.get(`${base}/tools/fba-box-size-checker`)).status() === 200,
     );
   }
@@ -243,17 +292,66 @@ try {
   await open("/tools/marketplace-image-prep");
   assert("marketplace has drop zone", (await page.locator("#dropZone").count()) === 1);
   assert("marketplace has process btn", (await page.locator("#processBtn").count()) === 1);
-  assert("marketplace has platform select", (await page.locator("#platform").count()) === 1);
+  assert(
+    "marketplace has platform controls",
+    (await page.locator("#platformList, input[name=\"platform\"], #platform").count()) >= 1,
+  );
   assert("marketplace has FAQ", (await page.locator(".faq details").count()) >= 5);
-  assert("marketplace has #pro-upgrade", (await page.locator("#pro-upgrade").count()) === 1);
+  assert("marketplace has no #pro-upgrade", (await page.locator("#pro-upgrade").count()) === 0);
   assert("marketplace has #report-issue", (await page.locator("#report-issue").count()) === 1);
+  assert("marketplace has related guides", (await page.locator(".related-guides a").count()) >= 2);
+  const mpHtml = await page.content();
+  assert("marketplace has BreadcrumbList LD", /"@type":\s*"BreadcrumbList"/i.test(mpHtml));
+  assert(
+    "marketplace has visible breadcrumbs",
+    (await page.locator("nav.breadcrumbs").count()) === 1,
+  );
+  assert(
+    "privacy chip in header",
+    /Private · in-browser · no upload/i.test(
+      (await page.locator(".privacy-chip").first().textContent()) || "",
+    ),
+  );
+  assert(
+    "marketplace has Related tools",
+    (await page.locator(".related-tools a[href='/tools/heic-to-jpg']").count()) >= 1,
+  );
+  assert("marketplace has og:image", /property=["']og:image["']/i.test(mpHtml));
+
+  await open("/tools/heic-to-jpg");
+  assert("heic has drop zone", (await page.locator("#dropZone").count()) === 1);
+  assert("heic has convert btn", (await page.locator("#convertBtn").count()) === 1);
+  assert("heic has FAQ", (await page.locator(".faq details").count()) >= 5);
+  assert("heic has no #pro-upgrade", (await page.locator("#pro-upgrade").count()) === 0);
 
   await open("/tools/fba-box-size-checker");
   assert("fba has check btn", (await page.locator("#checkBtn").count()) === 1);
   assert("fba has program radios", (await page.locator('input[name="program"]').count()) === 2);
+  assert("fba has Import CSV", (await page.locator("#importCsvBtn").count()) === 1);
   assert("fba has FAQ", (await page.locator(".faq details").count()) >= 5);
   assert("fba has rules table", (await page.locator("table.data").count()) >= 1);
   assert("fba has no #pro-upgrade", (await page.locator("#pro-upgrade").count()) === 0);
+  assert("fba has Related tools", (await page.locator(".related-tools").count()) >= 1);
+  assert("fba has visible breadcrumbs", (await page.locator("nav.breadcrumbs").count()) === 1);
+
+  await open("/guides/amazon-fba-box-size-limits");
+  assert("fba guide has SpecLegend", (await page.locator(".spec-legend").count()) === 1);
+  assert(
+    "fba guide has disclaimer",
+    /Disclaimer/i.test((await page.locator(".guide-disclaimer").textContent()) || ""),
+  );
+  assert(
+    "fba guide no shop CTA",
+    !/pet shop|lunepaws|buy now on our store/i.test(await page.content()),
+  );
+  assert("fba guide Related tools", (await page.locator(".related-tools").count()) >= 1);
+
+  await open("/guides/amazon-product-image-size");
+  assert("amazon image guide SpecLegend", (await page.locator(".spec-legend").count()) === 1);
+  assert(
+    "amazon image guide labels official vs practice",
+    /Official \/ platform|Industry \/ seller practice/i.test(await page.content()),
+  );
 
   await open("/");
   assert("home canonical present", (await page.locator('link[rel="canonical"]').count()) >= 1);

@@ -14,7 +14,13 @@
     "test:amazon-prep": "node scripts/e2e-amazon-prep.mjs",
     "test:marketplace-prep": "node scripts/e2e-marketplace-prep.mjs",
     "test:fba-box": "node scripts/e2e-fba-box.mjs",
-    "test:site": "node scripts/e2e-site-smoke.mjs"
+    "test:heic-to-jpg": "node scripts/e2e-heic-to-jpg.mjs",
+    "test:png-to-jpg": "node scripts/e2e-png-to-jpg.mjs",
+    "test:image-compressor": "node scripts/e2e-image-compressor.mjs",
+    "test:listing-counter": "node scripts/e2e-listing-character-counter.mjs",
+    "test:site": "node scripts/e2e-site-smoke.mjs",
+    "indexnow": "node scripts/indexnow.mjs",
+    "deploy:pages": "npm run build && npx wrangler pages deploy dist --project-name=minitoolhq --commit-dirty=true && npm run indexnow"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -24,6 +30,7 @@
     "heic-to": "^1.5.2"
   },
   "devDependencies": {
-    "playwright": "^1.62.0"
+    "playwright": "^1.62.0",
+    "wrangler": "^4.115.0"
   }
 }

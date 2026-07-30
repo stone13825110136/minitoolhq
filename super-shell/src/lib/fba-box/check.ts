@@ -1,5 +1,6 @@
 import {
   AWD_LIMITS_IN_LB,
+  AWD_UNIT_MAX_IN_LB,
   FBA_LIMITS_IN_LB,
   IN_TO_CM,
   LB_TO_KG,
@@ -91,13 +92,19 @@ export function checkCarton(
     failures.push(
       `Weight ${fmt(weightLb, "lb")} exceeds standard ${label} max ${limits.maxWeight} lb`,
     );
-    if (weightLb > 100) {
-      notes.push(
-        "Over 100 lb typically requires a Mechanical Lift label if the shipment is allowed as a single heavy/oversize unit.",
-      );
+    if (program === "fba") {
+      if (weightLb > 100) {
+        notes.push(
+          "Single oversized/heavy unit over 100 lb typically needs a Mechanical Lift label on top and sides — confirm Seller Central; this tool does not auto-approve exceptions.",
+        );
+      } else {
+        notes.push(
+          "Single oversized/heavy unit over 50 lb may be allowed with Team Lift labels on top and sides (some help texts also cite an upper band around ~65 lb / ~30 kg for that exception). Multi-unit cartons over 50 lb are not on the standard path — confirm Seller Central.",
+        );
+      }
     } else {
       notes.push(
-        "Over 50 lb typically requires a Team Lift label and is only allowed for a single oversized/heavy unit — confirm in Seller Central.",
+        "AWD cartons over 50 lb are outside the standard carton weight cap — confirm AWD inbound help in Seller Central.",
       );
     }
   } else if (weightLb > 50 - 1e-9 && weightLb <= 50 + 1e-9) {
@@ -121,7 +128,13 @@ export function checkCarton(
 
   if (program === "fba" && dims.length > 25 + 1e-9 && dims.length <= 36 + 1e-9) {
     notes.push(
-      "Length is between 25–36 in (allowed for FBA since Jun 20, 2025). AWD still caps at 25 in — confirm destination program.",
+      "Length is between 25–36 in (allowed for FBA since Jun 20, 2025). AWD carton outer limits stay at 25 in — confirm destination program.",
+    );
+  }
+
+  if (program === "awd") {
+    notes.push(
+      `AWD carton outer limits (typically 25×25×25 in / 50 lb) are separate from unit/SKU eligibility. From ${AWD_UNIT_MAX_IN_LB.effectiveDate}, new US AWD inbounds generally require sortable units smaller than ${AWD_UNIT_MAX_IN_LB.maxLengthExclusive}×${AWD_UNIT_MAX_IN_LB.maxWidthExclusive}×${AWD_UNIT_MAX_IN_LB.maxHeightExclusive} in and under ${AWD_UNIT_MAX_IN_LB.maxWeightExclusive} lb — confirm Seller Central.`,
     );
   }
 
@@ -137,6 +150,69 @@ export function checkCarton(
     failures,
     warnings,
     notes,
+  };
+}
+
+export interface UnitCheckInput {
+  length: number;
+  width: number;
+  height: number;
+  weight: number;
+}
+
+export interface UnitCheckResult {
+  pass: boolean;
+  failures: string[];
+  notes: string[];
+  sorted: SortedDims;
+  weightLb: number;
+}
+
+/** Check AWD product unit (SKU) eligibility — not carton outer size. */
+export function checkAwdUnit(
+  input: UnitCheckInput,
+  units: UnitSystem,
+): UnitCheckResult {
+  const { dims, weightLb } = toImperial(
+    input.length,
+    input.width,
+    input.height,
+    input.weight,
+    units,
+  );
+  const failures: string[] = [];
+  const lim = AWD_UNIT_MAX_IN_LB;
+
+  // Sorted L≥W≥H vs exclusive maxes: map longest→length cap 18, median→14, shortest→8
+  if (dims.length + 1e-9 >= lim.maxLengthExclusive) {
+    failures.push(
+      `Unit longest side ${fmt(dims.length, "in")} is not smaller than ${lim.maxLengthExclusive} in (AWD sortable unit rule from ${lim.effectiveDate})`,
+    );
+  }
+  if (dims.width + 1e-9 >= lim.maxWidthExclusive) {
+    failures.push(
+      `Unit median side ${fmt(dims.width, "in")} is not smaller than ${lim.maxWidthExclusive} in`,
+    );
+  }
+  if (dims.height + 1e-9 >= lim.maxHeightExclusive) {
+    failures.push(
+      `Unit shortest side ${fmt(dims.height, "in")} is not smaller than ${lim.maxHeightExclusive} in`,
+    );
+  }
+  if (weightLb + 1e-9 >= lim.maxWeightExclusive) {
+    failures.push(
+      `Unit weight ${fmt(weightLb, "lb")} is not under ${lim.maxWeightExclusive} lb`,
+    );
+  }
+
+  return {
+    pass: failures.length === 0,
+    failures,
+    notes: [
+      `AWD unit check uses exclusive thresholds (must be smaller than ${lim.maxLengthExclusive}×${lim.maxWidthExclusive}×${lim.maxHeightExclusive} in and under ${lim.maxWeightExclusive} lb) for new US inbounds from ${lim.effectiveDate}. Carton outer limits remain separate. Confirm Seller Central.`,
+    ],
+    sorted: dims,
+    weightLb,
   };
 }
 

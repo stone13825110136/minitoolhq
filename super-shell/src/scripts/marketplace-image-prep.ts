@@ -1,10 +1,7 @@
 import { processImageFile } from "../lib/amazon-prep/process";
 import { blobToUint8Array, zipJpegFiles } from "../lib/amazon-prep/zip";
 import {
-  FREE_BATCH_LIMIT,
   PLATFORM_PRESETS,
-  PRO_CHECKOUT_URL,
-  PRO_PRICE_LABEL,
   presetById,
   type PlatformId,
   type ProcessOptions,
@@ -60,7 +57,6 @@ function init(): void {
   const fileInput = root.querySelector<HTMLInputElement>("#fileInput")!;
   const thumbs = root.querySelector<HTMLElement>("#thumbs")!;
   const statusEl = root.querySelector<HTMLElement>("#status")!;
-  const proBanner = root.querySelector<HTMLElement>("#proBanner")!;
   const processBtn = root.querySelector<HTMLButtonElement>("#processBtn")!;
   const clearBtn = root.querySelector<HTMLButtonElement>("#clearBtn")!;
   const reportBody = root.querySelector<HTMLElement>("#reportBody")!;
@@ -93,6 +89,8 @@ function init(): void {
     const ids = selectedPlatformIds();
     const single = ids.length === 1;
     tweakFields.hidden = !single;
+    const amazonShortcuts = root.querySelector<HTMLElement>("#amazonSizeShortcuts");
+    if (amazonShortcuts) amazonShortcuts.hidden = !(single && ids[0] === "amazon");
     if (single) {
       const preset = presetById(ids[0]);
       targetPx.value = String(preset.options.targetPx);
@@ -151,44 +149,6 @@ function init(): void {
     }
     clearBtn.disabled = queue.length === 0 || busy;
     processBtn.disabled = queue.length === 0 || busy || selectedPlatformIds().length === 0;
-    updateProBanner(queue.length);
-  }
-
-  function proUpgradeHref(): string {
-    return PRO_CHECKOUT_URL.trim() || "#pro-upgrade";
-  }
-
-  function updateProBanner(count: number): void {
-    if (count < FREE_BATCH_LIMIT) {
-      proBanner.hidden = true;
-      proBanner.innerHTML = "";
-      return;
-    }
-    const href = proUpgradeHref();
-    const cta = `<a class="pro-cta" href="${href}">Upgrade to Pro — larger batches · ${PRO_PRICE_LABEL}</a>`;
-    if (count === FREE_BATCH_LIMIT) {
-      proBanner.hidden = false;
-      proBanner.innerHTML = `
-        <p class="pro-banner-title">Free batch full (${FREE_BATCH_LIMIT} images)</p>
-        <p class="pro-banner-body">
-          This run will process all ${FREE_BATCH_LIMIT}. Need a bigger batch in one go?
-          Pro unlocks higher limits on every MiniTool HQ tool.
-        </p>
-        ${cta}
-      `;
-      return;
-    }
-    const waiting = count - FREE_BATCH_LIMIT;
-    proBanner.hidden = false;
-    proBanner.innerHTML = `
-      <p class="pro-banner-title">Free plan: first ${FREE_BATCH_LIMIT} only</p>
-      <p class="pro-banner-body">
-        This run processes the first ${FREE_BATCH_LIMIT} images.
-        <strong>${waiting}</strong> more will wait in the queue.
-        Upgrade to Pro to process larger batches in one click.
-      </p>
-      ${cta}
-    `;
   }
 
   function addFiles(fileList: FileList | File[]): void {
@@ -245,7 +205,7 @@ function init(): void {
     processBtn.disabled = true;
     clearBtn.disabled = true;
 
-    const batch = queue.slice(0, FREE_BATCH_LIMIT);
+    const batch = queue;
     const zipEntries: { name: string; data: Uint8Array }[] = [];
     const rows: ProcessResultRow[] = [];
     const folderNames = platforms.map((id) => presetById(id).id);
@@ -283,22 +243,14 @@ function init(): void {
           : `marketplace-images-${Date.now()}.zip`;
       downloadBlob(zipBlob, zipName);
       renderReport(rows, folderNames);
-      const waiting = queue.length - batch.length;
       const platLabel =
         platforms.length === 1
           ? presetById(platforms[0]).label
           : `${platforms.length} marketplaces (folders)`;
-      if (waiting > 0) {
-        setStatus(
-          `Done — ${batch.length} image(s) × ${platLabel} (free limit). ${waiting} still queued — Upgrade to Pro for larger batches.`,
-          "ok",
-        );
-      } else {
-        setStatus(
-          `Done — ${batch.length} image(s) exported for ${platLabel}. EXIF stripped.`,
-          "ok",
-        );
-      }
+      setStatus(
+        `Done — ${batch.length} image(s) exported for ${platLabel}. EXIF stripped.`,
+        "ok",
+      );
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Processing failed";
       setStatus(msg, "error");
@@ -345,6 +297,15 @@ function init(): void {
   syncExportMode();
 
   platformList.addEventListener("change", () => syncExportMode());
+
+  root.querySelector("#amazonSizeShortcuts")?.addEventListener("click", (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("button[data-size]");
+    if (!btn) return;
+    const px = Number(btn.dataset.size);
+    if (!Number.isFinite(px)) return;
+    targetPx.value = String(px);
+    setStatus(`Amazon square size set to ${px}px.`);
+  });
 
   drop.addEventListener("click", () => fileInput.click());
   fileInput.addEventListener("change", () => {

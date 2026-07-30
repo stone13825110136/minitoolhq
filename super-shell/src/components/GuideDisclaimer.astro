@@ -1,0 +1,30 @@
+---
+interface Props {
+  platforms?: string;
+}
+
+const { platforms = "Amazon, Etsy, TikTok Shop, or other marketplaces" } = Astro.props;
+---
+
+<aside class="guide-disclaimer">
+  <p>
+    <strong>Disclaimer.</strong> SellTool HQ is not affiliated with {platforms}. Numbers on this
+    page may mix platform help text and common seller practice — always confirm the current official
+    help before you publish a listing or send inbound inventory. Passing a tool check does not
+    guarantee acceptance. File processing on this site runs in your browser; we do not upload your
+    product photos or carton measurements to our servers.
+  </p>
+</aside>
+
+<style>
+  .guide-disclaimer {
+    margin: 2rem 0 1rem;
+    padding: 0.95rem 1.05rem;
+    border-left: 3px solid var(--muted);
+    font-size: 0.9rem;
+  }
+  .guide-disclaimer p {
+    margin: 0;
+    color: var(--muted);
+  }
+</style>

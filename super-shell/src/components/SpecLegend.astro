@@ -1,0 +1,67 @@
+---
+interface Props {
+  reviewedYear?: string;
+}
+
+const { reviewedYear = "2026" } = Astro.props;
+---
+
+<aside class="spec-legend" aria-label="How numbers are labeled">
+  <p><strong>How numbers are labeled on this page</strong></p>
+  <ul>
+    <li>
+      <span class="tag tag-official">Official / platform guidance</span>
+      — thresholds from Seller Central or marketplace help. Confirm the live help text before you
+      publish or ship.
+    </li>
+    <li>
+      <span class="tag tag-practice">Industry / seller practice</span>
+      — common working targets sellers use. Not a hard platform mandate unless marked official.
+    </li>
+  </ul>
+  <p class="spec-year">Source framing reviewed {reviewedYear}. Rules change by marketplace and category.</p>
+</aside>
+
+<style>
+  .spec-legend {
+    margin: 1.25rem 0 1.5rem;
+    padding: 0.95rem 1.05rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.03);
+    font-size: 0.92rem;
+  }
+  .spec-legend p {
+    margin: 0 0 0.55rem;
+    color: var(--ink);
+  }
+  .spec-legend ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--muted);
+    display: grid;
+    gap: 0.45rem;
+  }
+  .spec-year {
+    margin: 0.65rem 0 0 !important;
+    color: var(--muted) !important;
+    font-size: 0.88rem;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    vertical-align: baseline;
+  }
+  .tag-official {
+    color: var(--accent-ink);
+    background: rgba(200, 240, 108, 0.85);
+  }
+  .tag-practice {
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.12);
+  }
+</style>

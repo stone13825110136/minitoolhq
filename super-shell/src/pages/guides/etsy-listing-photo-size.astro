@@ -1,0 +1,142 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "Etsy Listing Photo Size Guide — Recommended Dimensions";
+const pageDescription =
+  "Etsy listing photo size guide: aim for 2000px+ (often 2000×2000 square), sharp thumbnails, under upload limits. Prep photos free in your browser.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "What size should Etsy listing photos be?",
+    a: "Etsy Help commonly recommends listing photos around 2000px on each side for quality (platform recommendation, reviewed 2026)—not a hard “must be exactly 2000” rule. The clearer first-photo floor is about 635×635. Many shops prep 2000×2000 squares so thumbnails and zoom look sharp (seller practice).",
+  },
+  {
+    q: "What is the minimum Etsy photo size?",
+    a: "The first listing photo should be at least 635 pixels on each side to avoid weaker search placement (platform guidance). Larger (~2000px recommended) is safer for quality—confirm current Etsy Help.",
+  },
+  {
+    q: "What file size should Etsy images be?",
+    a: "Keep uploads reliable — many sellers stay near or under ~1–5 MB per photo even when the absolute maximum is higher (industry practice). JPEG or PNG both work.",
+  },
+  {
+    q: "Should Etsy photos be square?",
+    a: "Square sources crop cleanly for search thumbnails (seller practice). Landscape can work, but leave margin so important details are not cropped.",
+  },
+  {
+    q: "How do I resize Etsy photos without Photoshop?",
+    a: "Use the Marketplace Image Resizer with the Etsy preset — batch resize in your browser, then download a ZIP. Optional EXIF strip is for privacy, not an Etsy mandate.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "Etsy listing photo size", path: "/guides/etsy-listing-photo-size" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/etsy-listing-photo-size"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · Etsy shops · Reviewed 2026</p>
+    <h1>Etsy listing photo size</h1>
+    <p class="lede">
+      Practical <strong>Etsy listing photo size</strong> targets so your first image stays sharp in
+      search and on the listing page.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Batch-prep Etsy-ready squares — no upload.</p>
+      <a class="btn btn-primary" href="/tools/marketplace-image-prep?platform=etsy"
+        >Open Marketplace Image Resizer</a
+      >
+    </div>
+
+    <h2>Recommended dimensions</h2>
+    <ul>
+      <li>
+        <strong>Recommended quality target:</strong> about 2000×2000 (or ~2000px on each side)
+        <em>
+          — Official / platform recommendation (Etsy seller help photo guidance, reviewed 2026)—not
+          the same as the 635px first-photo floor</em
+        >
+      </li>
+      <li>
+        <strong>First photo floor:</strong> at least 635×635
+        <em> — Official / platform guidance (Etsy first-image / search quality floor)</em>
+      </li>
+      <li>
+        <strong>Formats:</strong> JPG or PNG; keep files lean for smoother uploads
+        <em> — Platform accepts both; ~1–5 MB per photo is common seller practice</em>
+      </li>
+    </ul>
+
+    <h2>Thumbnails and cropping</h2>
+    <p>
+      Etsy crops your first photo into thumbnails across search and your shop. Keep the product
+      centered with a little margin so important edges are not clipped
+      <em> (seller practice based on how Etsy crops listing photos)</em>.
+    </p>
+
+    <h2>EXIF / GPS metadata</h2>
+    <p>
+      Etsy does not require EXIF stripping to accept a listing photo. Clearing camera/GPS tags is
+      optional privacy hygiene for public shop images — not a platform mandate.
+    </p>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools
+      hide={["fba"]}
+      extra={[
+        { href: "/tools/marketplace-image-prep?platform=etsy", label: "Etsy preset (resizer)" },
+        { href: "/guides/heic-to-jpg-for-etsy", label: "HEIC to JPG for Etsy" },
+      ]}
+    />
+    <RelatedGuides
+      links={[
+        { href: "/guides/heic-to-jpg-for-etsy", label: "HEIC to JPG for Etsy" },
+        { href: "/guides/amazon-product-image-size", label: "Amazon product image size" },
+        { href: "/guides/tiktok-shop-image-size", label: "TikTok Shop image size" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="Etsy" />
+    <ReportIssue />
+  </article>
+</BaseLayout>
