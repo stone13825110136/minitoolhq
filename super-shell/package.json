@@ -16,6 +16,7 @@
     "test:fba-box": "node scripts/e2e-fba-box.mjs",
     "test:heic-to-jpg": "node scripts/e2e-heic-to-jpg.mjs",
     "test:png-to-jpg": "node scripts/e2e-png-to-jpg.mjs",
+    "test:webp-to-jpg": "node scripts/e2e-webp-to-jpg.mjs",
     "test:image-compressor": "node scripts/e2e-image-compressor.mjs",
     "test:listing-counter": "node scripts/e2e-listing-character-counter.mjs",
     "test:site": "node scripts/e2e-site-smoke.mjs",

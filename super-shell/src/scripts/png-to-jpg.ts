@@ -15,11 +15,12 @@ type Row = {
   outName?: string;
 };
 
-const root = document.querySelector("[data-png-jpg]");
+const root = document.querySelector("[data-png-jpg], [data-webp-jpg]");
 if (root) {
+  const webpLanding = root.hasAttribute("data-webp-jpg");
   const fileInput = root.querySelector<HTMLInputElement>("#formatFiles")!;
   const dropZone = root.querySelector<HTMLElement>("#dropZone")!;
-  const formatEl = root.querySelector<HTMLSelectElement>("#outFormat")!;
+  const formatEl = root.querySelector<HTMLSelectElement>("#outFormat");
   const qualityEl = root.querySelector<HTMLInputElement>("#quality")!;
   const qualityLabel = root.querySelector<HTMLElement>("#qualityLabel")!;
   const qualityField = root.querySelector<HTMLElement>("#qualityField")!;
@@ -38,6 +39,7 @@ if (root) {
   }
 
   function selectedFormat(): OutputFormat {
+    if (webpLanding || !formatEl) return "jpg";
     const v = formatEl.value;
     if (v === "png" || v === "webp") return v;
     return "jpg";
@@ -66,7 +68,7 @@ if (root) {
   }
 
   qualityEl.addEventListener("input", syncQualityLabel);
-  formatEl.addEventListener("change", syncFormatUi);
+  formatEl?.addEventListener("change", syncFormatUi);
   syncQualityLabel();
   syncFormatUi();
 
@@ -198,7 +200,9 @@ if (root) {
       const a = document.createElement("a");
       a.className = "btn btn-primary";
       a.href = zipUrl;
-      a.download = `png-to-jpg-${format}.zip`;
+      a.download = webpLanding
+        ? `webp-to-jpg.zip`
+        : `png-to-jpg-${format}.zip`;
       a.id = "zipDownload";
       a.textContent = "Download ZIP";
       box.appendChild(a);

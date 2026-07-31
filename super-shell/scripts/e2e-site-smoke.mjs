@@ -113,6 +113,7 @@ try {
     { path: "/tools/marketplace-image-prep", name: "marketplace prep page" },
     { path: "/tools/heic-to-jpg", name: "heic to jpg page" },
     { path: "/tools/png-to-jpg", name: "png to jpg page" },
+    { path: "/tools/webp-to-jpg", name: "webp to jpg page" },
     { path: "/tools/image-compressor", name: "image compressor page" },
     { path: "/tools/listing-character-counter", name: "listing character counter page" },
     { path: "/tools/fba-box-size-checker", name: "fba box page" },
@@ -157,6 +158,7 @@ try {
   assert("sitemap lists marketplace tool", /marketplace-image-prep/i.test(sm0));
   assert("sitemap lists heic tool", /heic-to-jpg/i.test(sm0));
   assert("sitemap lists png to jpg tool", /png-to-jpg/i.test(sm0));
+  assert("sitemap lists webp to jpg tool", /\/tools\/webp-to-jpg/i.test(sm0));
   assert("sitemap lists image compressor", /image-compressor/i.test(sm0));
   assert("sitemap lists listing character counter", /listing-character-counter/i.test(sm0));
   assert("sitemap lists fba tool", /fba-box-size-checker/i.test(sm0));
@@ -206,7 +208,7 @@ try {
   );
   assert(
     "home brand SellTool HQ",
-    /SellTool HQ/i.test((await page.locator(".brand-mark").textContent()) || ""),
+    /SellTool\s*HQ/i.test((await page.locator("header .brand").textContent()) || ""),
   );
 
   const broken = [];
@@ -264,23 +266,27 @@ try {
   assert("no broken internal links/anchors", broken.length === 0, broken.join(" | ") || "all ok");
   // Nav journeys (local uses real clicks; live uses request verification of destinations)
   if (!useLive) {
+    async function clickAndWait(selector, urlPred) {
+      await Promise.all([page.waitForURL(urlPred), page.locator(selector).click()]);
+    }
+
     await page.goto(`${base}/`, { waitUntil: "domcontentloaded" });
-    await page.click('a.tool-card[href="/tools/marketplace-image-prep"]');
-    await page.waitForURL(/marketplace-image-prep/);
+    await clickAndWait('a.tool-card[href="/tools/marketplace-image-prep"]', /marketplace-image-prep/);
     assert("card to Marketplace Prep", /Marketplace Image Resizer/i.test(await page.title()));
 
     await page.goto(`${base}/`, { waitUntil: "domcontentloaded" });
-    await page.click('a.tool-card[href="/tools/heic-to-jpg"]');
-    await page.waitForURL(/heic-to-jpg/);
+    await clickAndWait('a.tool-card[href="/tools/heic-to-jpg"]', /heic-to-jpg/);
     assert("card to HEIC to JPG", /HEIC to JPG/i.test(await page.title()));
 
-    await page.click('header a[href="/tools/fba-box-size-checker"]');
-    await page.waitForURL(/fba-box-size-checker/);
-    assert("nav to FBA Box", /FBA Box Size/i.test(await page.title()));
+    await page.goto(`${base}/`, { waitUntil: "domcontentloaded" });
+    await clickAndWait('a.tool-card[href="/tools/fba-box-size-checker"]', /fba-box-size-checker/);
+    assert("card to FBA Box", /FBA Box Size/i.test(await page.title()));
 
-    await page.click("header a.brand");
-    await page.waitForURL((u) => u.pathname === "/" || u.pathname === "");
-    assert("brand back home", (await page.locator(".brand-mark").count()) === 1);
+    await Promise.all([
+      page.waitForURL((u) => u.pathname === "/" || u.pathname === "", { waitUntil: "domcontentloaded" }),
+      page.locator("header a.brand").click(),
+    ]);
+    assert("brand back home", (await page.locator("header a.brand").count()) === 1);
 
     await page.click('a[href="/#tools"]');
     assert("#tools exists", (await page.locator("#tools").count()) === 1);

@@ -75,7 +75,8 @@
 **建议形态：** 一个「Image Convert Lab」入口 + 多 SEO 着陆：
 
 - `/tools/heic-to-jpg`  
-- `/tools/png-to-jpg`  
+- `/tools/png-to-jpg`
+- `/tools/webp-to-jpg`  
 - `/tools/jpg-to-png`  
 - `/tools/webp-converter`（可二期）  
 

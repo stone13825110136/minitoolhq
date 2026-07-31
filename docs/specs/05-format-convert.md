@@ -26,7 +26,7 @@
 | Meta description | Free PNG to JPG converter in your browser. Also convert WebP to JPG and JPG to PNG in batch — ZIP download, no upload. |
 | FAQ | ≥5 search-shaped (see SEO block) |
 
-**One job = one tool:** do **not** split into separate `/tools/webp-to-jpg` pages; cover long-tails via output picker + FAQ.
+**One job = one engine.** Dedicated SEO landing `/tools/webp-to-jpg` (spec 09) reuses this converter for the high-volume `webp to jpg` query (2026-07-31). Keep both pages cross-linked.
 
 ## Competitors researched
 

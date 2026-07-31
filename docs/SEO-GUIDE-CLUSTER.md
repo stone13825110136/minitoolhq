@@ -19,7 +19,7 @@
 | `/guides/etsy-title-character-limit` | etsy title character limit / 140 | Listing character counter `?platform=etsy` |
 | `/guides/compress-image-for-amazon` | compress image for amazon / amazon image file size | Image Compressor → Marketplace Prep |
 | `/guides/compress-image-to-100kb` | compress image to 100kb / reduce image to 100kb | Image Compressor (target KB) |
-| `/guides/webp-to-jpg` | webp to jpg / convert webp to jpeg | PNG to JPG tool (accepts WebP) |
+| `/guides/webp-to-jpg` | webp to jpg / convert webp to jpeg | WebP to JPG tool (`/tools/webp-to-jpg`) |
 | `/guides/jpg-to-png` | jpg to png / convert jpeg to png | PNG to JPG tool (JPG→PNG mode) |
 
 **Policy (locked):** Content = **`/guides/*` seller + converter long-tails on selltoolhq.com**.  
