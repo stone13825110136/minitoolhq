@@ -49,7 +49,8 @@ These are high-search utilities that fit sellers/creators and the existing canva
 | 5 | Batch image compressor | **shipped** — `/tools/image-compressor` |
 | 6 | Listing character counter (Amazon/Etsy title·bullet) | **shipped** — `/tools/listing-character-counter` |
 | 7 | Inch ↔ cm converter (FBA / carton mutual links) | deferred (FBA tool already has units) |
-| 8–10 | Batch watermark **or** batch rename (pick one first) | optional Phase 1 |
+| 8–10 | Batch watermark **or** other high-traffic utility (research first) | optional Phase 1 |
+| — | ~~Batch rename~~ | **cancelled** — low traffic vs HEIC/convert |
 | — | Simple QR generator | **Phase 2+** — weak seller loop |
 | — | SEO guides cluster | **shipped** `/guides/*` — keep deepening in parallel |
 
@@ -68,7 +69,8 @@ These are high-search utilities that fit sellers/creators and the existing canva
 | 7 | **Batch image compressor** | [specs/06-image-compressor.md](./specs/06-image-compressor.md) | **shipped (v1)** — `/tools/image-compressor` |
 | 8 | Listing character counter | [specs/07-listing-character-counter.md](./specs/07-listing-character-counter.md) | **shipped (v1)** — 75/125 + Etsy/TikTok |
 | 9 | Inch / cm converter | — | **deferred** (thin carton page later if needed) |
-| 10 | Batch watermark / rename | — | Phase 1 optional (one first) |
+| 10 | Batch watermark / high-traffic utility | — | research first; no low-traffic fillers |
+| — | Batch rename | — | **cancelled** (low traffic) |
 | 11 | Strip EXIF (standalone) | — | later (or keep inside prep) |
 | 12 | UTM / campaign link builder | — | later |
 | — | QR generator | — | **not Phase 1** |

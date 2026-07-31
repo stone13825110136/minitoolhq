@@ -17,8 +17,14 @@
 | `/guides/amazon-title-character-limit` | amazon title character limit / amazon 75 character title | Listing character counter |
 | `/guides/amazon-item-highlights` | amazon item highlights 125 | Listing character counter |
 | `/guides/etsy-title-character-limit` | etsy title character limit / 140 | Listing character counter `?platform=etsy` |
+| `/guides/compress-image-for-amazon` | compress image for amazon / amazon image file size | Image Compressor → Marketplace Prep |
+| `/guides/compress-image-to-100kb` | compress image to 100kb / reduce image to 100kb | Image Compressor (target KB) |
+| `/guides/webp-to-jpg` | webp to jpg / convert webp to jpeg | PNG to JPG tool (accepts WebP) |
+| `/guides/jpg-to-png` | jpg to png / convert jpeg to png | PNG to JPG tool (JPG→PNG mode) |
 
-**Policy (locked):** Content = **`/guides/*` seller long-tails on minitoolhq.com**.  
+**Policy (locked):** Content = **`/guides/*` seller + converter long-tails on selltoolhq.com**.  
 Do **not** open a separate generic blog domain or `/blog` lifestyle/iPhone tips site — that attracts low-RPM traffic and dilutes brand.
 
 Not separate tools — content only. Sitemap via Astro pages.
+
+**Cancelled filler tools:** batch rename (low traffic vs HEIC/convert) — do not revive without keyword evidence.

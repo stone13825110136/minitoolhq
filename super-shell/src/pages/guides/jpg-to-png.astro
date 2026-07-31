@@ -1,0 +1,136 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "JPG to PNG Converter Guide - Free Batch (No Upload)";
+const pageDescription =
+  "Convert JPG to PNG in your browser when you need a lossless or editable master. Free batch JPG to PNG — no upload, ZIP download.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "How do I convert JPG to PNG?",
+    a: "Drop JPEG files into a free JPG to PNG converter, choose PNG output, then download. On SellTool HQ you can batch convert in your browser and get a ZIP — no upload.",
+  },
+  {
+    q: "When should sellers use JPG to PNG?",
+    a: "Use PNG when you need a working master for design edits or graphics with flat color. For Amazon main and gallery photos, JPEG is usually preferred for upload size — convert back to JPG before listing if needed.",
+  },
+  {
+    q: "Does JPG to PNG improve quality?",
+    a: "Converting JPG to PNG does not restore detail already lost to JPEG compression. It can stop further quality loss from repeated JPEG saves and may help in some editors.",
+  },
+  {
+    q: "Can I batch convert JPG to PNG without uploading?",
+    a: "Yes. The converter on SellTool HQ supports JPG → PNG in your browser with ZIP download and no signup.",
+  },
+  {
+    q: "JPG vs PNG for Amazon listings?",
+    a: "Amazon prefers JPEG for typical product photography. PNG is accepted but often larger. See our PNG to JPG for Amazon guide if your goal is marketplace upload.",
+  },
+  {
+    q: "JPG to PNG or WebP to JPG?",
+    a: "Pick the direction that matches the destination: marketplaces/email → JPG; editing masters/transparency workflows → PNG; modern web delivery → WebP is fine, but convert when a platform rejects it.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "JPG to PNG", path: "/guides/jpg-to-png" },
+];
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} path="/guides/jpg-to-png" crumbs={crumbs}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · Format convert · Updated 2026</p>
+    <h1>JPG to PNG — when you need a PNG master</h1>
+    <p class="lede">
+      <strong>Convert JPG to PNG</strong> when a workflow or editor expects PNG, or you want to avoid
+      extra JPEG generation loss while editing. Batch the conversion in your browser, then switch
+      back to JPG for Amazon-style uploads if required.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Batch JPG → PNG (and PNG/WebP → JPG) — free, no upload.</p>
+      <a class="btn btn-primary" href="/tools/png-to-jpg">Open Format Converter</a>
+    </div>
+
+    <h2>JPG to PNG vs staying on JPG</h2>
+    <ul>
+      <li>
+        <strong>Stay on JPG</strong> for marketplace galleries and email — smaller files, widely
+        accepted.
+      </li>
+      <li>
+        <strong>Convert to PNG</strong> for design handoff, screenshots with text, or when a tool
+        only accepts PNG.
+      </li>
+      <li>
+        Remember: JPG → PNG does not “restore” blur from an already-compressed JPEG.
+      </li>
+    </ul>
+
+    <h2>Seller tip</h2>
+    <p>
+      If your end goal is Seller Central, prefer a JPEG master after edits. Use
+      <a href="/guides/png-to-jpg-for-amazon">PNG to JPG for Amazon</a> before upload, and
+      <a href="/tools/marketplace-image-prep?platform=amazon">resize for Amazon</a> for zoom.
+    </p>
+
+    <h2>Steps</h2>
+    <ol>
+      <li>Open the <a href="/tools/png-to-jpg">format converter</a>.</li>
+      <li>Drop JPG files and choose <strong>PNG</strong> output.</li>
+      <li>Download the ZIP of PNG files.</li>
+      <li>When ready for listings, convert back to JPG if the channel prefers JPEG.</li>
+    </ol>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools
+      hide={["format"]}
+      extra={[{ href: "/tools/png-to-jpg", label: "PNG / JPG converter" }]}
+    />
+    <RelatedGuides
+      links={[
+        { href: "/guides/webp-to-jpg", label: "WebP to JPG" },
+        { href: "/guides/png-to-jpg-for-amazon", label: "PNG to JPG for Amazon" },
+        { href: "/guides/compress-image-to-100kb", label: "Compress to 100KB" },
+        { href: "/guides/compress-image-for-amazon", label: "Compress for Amazon" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="Amazon, Etsy, TikTok Shop, or other apps" />
+    <ReportIssue />
+  </article>
+</BaseLayout>

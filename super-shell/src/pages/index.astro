@@ -14,6 +14,71 @@ const siteLd = {
   url: "https://selltoolhq.com/",
   description: pageDescription,
 };
+
+const tools = [
+  {
+    href: "/tools/marketplace-image-prep",
+    title: "Marketplace Image Resizer",
+    desc: "Amazon, TikTok Shop, Etsy, eBay, Shopify & Walmart — square sizes, white background, strip EXIF, ZIP.",
+    cat: "images",
+    tone: "blue",
+    badge: "Popular",
+    icon: "resize",
+  },
+  {
+    href: "/tools/heic-to-jpg",
+    title: "HEIC to JPG Converter",
+    desc: "Batch convert iPhone HEIC photos to JPG in your browser — free ZIP download, no upload.",
+    cat: "convert",
+    tone: "amber",
+    badge: "Popular",
+    icon: "heic",
+  },
+  {
+    href: "/tools/png-to-jpg",
+    title: "PNG to JPG Converter",
+    desc: "Free PNG to JPG, WebP to JPG, and JPG to PNG batch converter - ZIP download, no upload.",
+    cat: "convert",
+    tone: "amber",
+    badge: null,
+    icon: "convert",
+  },
+  {
+    href: "/tools/image-compressor",
+    title: "Image Compressor",
+    desc: "Free batch image compressor - quality or target KB (e.g. 100KB), ZIP download, no upload.",
+    cat: "optimize",
+    tone: "green",
+    badge: null,
+    icon: "compress",
+  },
+  {
+    href: "/tools/listing-character-counter",
+    title: "Amazon Title Character Counter",
+    desc: "Count Amazon titles (75), Item Highlights (125), bullets, backend bytes, plus Etsy 140.",
+    cat: "seller",
+    tone: "purple",
+    badge: null,
+    icon: "count",
+  },
+  {
+    href: "/tools/fba-box-size-checker",
+    title: "FBA Box Size Checker",
+    desc: "Check FBA box dimensions — Pass/Fail for FBA 36×25×25 vs AWD 25×25×25. Free, in-browser.",
+    cat: "seller",
+    tone: "teal",
+    badge: null,
+    icon: "box",
+  },
+] as const;
+
+const filters = [
+  { id: "all", label: "All" },
+  { id: "images", label: "Resize" },
+  { id: "convert", label: "Convert" },
+  { id: "optimize", label: "Optimize" },
+  { id: "seller", label: "Seller" },
+] as const;
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription} path="/">
@@ -23,127 +88,189 @@ const siteLd = {
 
   <section class="hero-home">
     <p class="badge">Private · In-browser · No upload</p>
-    <p class="brand-mark">SellTool HQ</p>
     <h1>Private tools for creators &amp; sellers.</h1>
     <p class="lede">
-      Resize marketplace listing photos, convert <strong>HEIC to JPG</strong> or
-      <strong>PNG to JPG</strong>, <strong>compress images</strong>, count
-      <strong>Amazon title characters</strong> (75), and check
-      <strong>Amazon FBA box size</strong> - all in your browser, files stay on your device.
+      Prep listing photos, convert <strong>HEIC</strong> or <strong>PNG</strong>, compress batches,
+      count <strong>Amazon titles</strong>, and check <strong>FBA boxes</strong> — files stay on
+      your device.
     </p>
+
+    <ul class="trust-strip" aria-label="Why use SellTool HQ">
+      <li>No upload</li>
+      <li>No signup</li>
+      <li>Batch ZIP</li>
+      <li>Free to use</li>
+    </ul>
+
+    <div class="quick-start" aria-label="Quick start">
+      <p class="quick-start-label">Start with</p>
+      <div class="quick-start-actions">
+        <a class="btn btn-primary" href="/tools/marketplace-image-prep">Resize listing photos</a>
+        <a class="btn btn-ghost" href="/tools/heic-to-jpg">Convert HEIC</a>
+        <a class="btn btn-ghost" href="/tools/image-compressor">Compress images</a>
+      </div>
+    </div>
   </section>
 
   <section id="tools" class="section tools-first">
-    <h2>Tools</h2>
-    <div class="tool-cards">
-      <a class="tool-card" href="/tools/marketplace-image-prep">
-        <h2>Marketplace Image Resizer</h2>
-        <p>
-          One tool for Amazon, TikTok Shop, Etsy, eBay, Shopify &amp; Walmart — square sizes, white
-          background, strip EXIF, ZIP. No upload.
-        </p>
-      </a>
-      <a class="tool-card" href="/tools/heic-to-jpg">
-        <h2>HEIC to JPG Converter</h2>
-        <p>
-          Batch convert iPhone HEIC photos to JPG in your browser — free ZIP download, no upload.
-        </p>
-      </a>
-      <a class="tool-card" href="/tools/png-to-jpg">
-        <h2>PNG to JPG Converter</h2>
-        <p>
-          Free PNG to JPG, WebP to JPG, and JPG to PNG batch converter - ZIP download, no upload.
-        </p>
-      </a>
-      <a class="tool-card" href="/tools/image-compressor">
-        <h2>Image Compressor</h2>
-        <p>
-          Free batch image compressor - quality or target KB (e.g. 100KB), ZIP download, no upload.
-        </p>
-      </a>
-      <a class="tool-card" href="/tools/listing-character-counter">
-        <h2>Amazon Title Character Counter</h2>
-        <p>
-          Count Amazon titles (75), Item Highlights (125), bullets, backend bytes, plus Etsy 140 —
-          live in your browser.
-        </p>
-      </a>
-      <a class="tool-card" href="/tools/fba-box-size-checker">
-        <h2>FBA Box Size Checker</h2>
-        <p>
-          Check FBA box dimensions and carton size — Pass/Fail for FBA 36×25×25 vs AWD 25×25×25.
-          Free, unlimited, in-browser.
-        </p>
-      </a>
+    <div class="section-head">
+      <h2>Tools</h2>
+      <p class="section-sub">Pick a job — processing runs in your browser.</p>
+    </div>
+
+    <div class="tool-filters" role="tablist" aria-label="Filter tools">
+      {
+        filters.map((f, i) => (
+          <button
+            type="button"
+            class:list={["tool-filter", { active: i === 0 }]}
+            role="tab"
+            aria-selected={i === 0 ? "true" : "false"}
+            data-filter={f.id}
+          >
+            {f.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="tool-cards" id="tool-cards">
+      {
+        tools.map((t) => (
+          <a class="tool-card" href={t.href} data-cat={t.cat}>
+            {t.badge && <span class="tool-card-badge">{t.badge}</span>}
+            <span class={`tool-icon tone-${t.tone}`} aria-hidden="true">
+              {t.icon === "resize" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4" stroke-linecap="round" />
+                  <rect x="8" y="8" width="8" height="8" rx="1.5" />
+                </svg>
+              )}
+              {t.icon === "heic" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="4" y="5" width="10" height="14" rx="2" />
+                  <path d="M14 9h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-4" stroke-linecap="round" />
+                  <path d="M8 12h2M9 10v4" stroke-linecap="round" />
+                </svg>
+              )}
+              {t.icon === "convert" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 7h9l-2-2M17 17H8l2 2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M7 7v4a4 4 0 0 0 4 4h2" stroke-linecap="round" />
+                  <path d="M17 17v-4a4 4 0 0 0-4-4h-2" stroke-linecap="round" />
+                </svg>
+              )}
+              {t.icon === "compress" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 4H5a1 1 0 0 0-1 1v3M16 4h3a1 1 0 0 1 1 1v3M8 20H5a1 1 0 0 1-1-1v-3M16 20h3a1 1 0 0 0 1-1v-3" stroke-linecap="round" />
+                  <path d="M9 12h6M12 9v6" stroke-linecap="round" />
+                </svg>
+              )}
+              {t.icon === "count" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 6h9M5 12h14M5 18h11" stroke-linecap="round" />
+                  <circle cx="19" cy="6" r="1.5" fill="currentColor" stroke="none" />
+                </svg>
+              )}
+              {t.icon === "box" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 8l9-4 9 4-9 4-9-4z" stroke-linejoin="round" />
+                  <path d="M3 8v8l9 4 9-4V8" stroke-linejoin="round" />
+                  <path d="M12 12v8" stroke-linecap="round" />
+                </svg>
+              )}
+            </span>
+            <h2>{t.title}</h2>
+            <p>{t.desc}</p>
+          </a>
+        ))
+      }
     </div>
   </section>
 
   <section id="guides" class="section">
-    <h2>Guides</h2>
-    <p class="lede">
-      <a href="/guides/amazon-product-image-size">Amazon image size</a>
-      ·
-      <a href="/guides/etsy-listing-photo-size">Etsy photo size</a>
-      ·
-      <a href="/guides/tiktok-shop-image-size">TikTok Shop size</a>
-      ·
-      <a href="/guides/amazon-fba-box-size-limits">FBA box limits</a>
-      ·
-      <a href="/guides/amazon-dimensional-weight">Dimensional weight</a>
-      ·
-      <a href="/guides/heic-to-jpg-for-amazon">HEIC for Amazon</a>
-      ·
-      <a href="/guides/heic-to-jpg-for-etsy">HEIC for Etsy</a>
-      ·
-      <a href="/guides/heic-to-jpg-for-tiktok-shop">HEIC for TikTok Shop</a>
-      ·
-      <a href="/guides/png-to-jpg-for-amazon">PNG to JPG for Amazon</a>
-      ·
-      <a href="/guides/amazon-title-character-limit">Amazon title 75 chars</a>
-      ·
-      <a href="/guides/amazon-item-highlights">Item Highlights</a>
-      ·
-      <a href="/guides/etsy-title-character-limit">Etsy title 140</a>
-    </p>
+    <div class="section-head">
+      <h2>Guides</h2>
+      <p class="section-sub">Seller long-tails — sizes, limits, and formats.</p>
+    </div>
+    <div class="guide-chips">
+      <a class="guide-chip" href="/guides/webp-to-jpg">WebP to JPG</a>
+      <a class="guide-chip" href="/guides/jpg-to-png">JPG to PNG</a>
+      <a class="guide-chip" href="/guides/compress-image-to-100kb">Compress to 100KB</a>
+      <a class="guide-chip" href="/guides/compress-image-for-amazon">Compress for Amazon</a>
+      <a class="guide-chip" href="/guides/amazon-product-image-size">Amazon image size</a>
+      <a class="guide-chip" href="/guides/etsy-listing-photo-size">Etsy photo size</a>
+      <a class="guide-chip" href="/guides/tiktok-shop-image-size">TikTok Shop size</a>
+      <a class="guide-chip" href="/guides/amazon-fba-box-size-limits">FBA box limits</a>
+      <a class="guide-chip" href="/guides/amazon-dimensional-weight">Dimensional weight</a>
+      <a class="guide-chip" href="/guides/heic-to-jpg-for-amazon">HEIC for Amazon</a>
+      <a class="guide-chip" href="/guides/heic-to-jpg-for-etsy">HEIC for Etsy</a>
+      <a class="guide-chip" href="/guides/heic-to-jpg-for-tiktok-shop">HEIC for TikTok Shop</a>
+      <a class="guide-chip" href="/guides/png-to-jpg-for-amazon">PNG to JPG for Amazon</a>
+      <a class="guide-chip" href="/guides/amazon-title-character-limit">Amazon title 75</a>
+      <a class="guide-chip" href="/guides/amazon-item-highlights">Item Highlights</a>
+      <a class="guide-chip" href="/guides/etsy-title-character-limit">Etsy title 140</a>
+    </div>
   </section>
 
   <section id="value" class="section value-block">
     <h2>What you get</h2>
     <p class="lede">
-      Tools built for marketplace and creator work — with defaults that match common listing and
-      inbound rules — while your files stay on your device.
+      Tools built for marketplace work — with defaults that match common listing rules — while your
+      files stay on your device.
     </p>
     <div class="value-grid">
       <div class="value-item">
         <h3>Ready for the platform</h3>
         <p>
-          Amazon listing sizes, FBA carton limits, and more presets aimed at what Seller Central
-          and shops actually expect — less guesswork before you upload or ship.
+          Amazon listing sizes, FBA carton limits, and presets aimed at what Seller Central and shops
+          expect — less guesswork before you upload or ship.
         </p>
       </div>
       <div class="value-item">
         <h3>Your files stay private</h3>
         <p>
-          Processing runs in your browser. Product photos and carton numbers are not uploaded to
-          our servers. You can verify in DevTools → Network.
+          Processing runs in your browser. Product photos and carton numbers are not uploaded to our
+          servers. You can verify in DevTools → Network.
         </p>
       </div>
       <div class="value-item">
         <h3>Batch when you need it</h3>
         <p>
-          Prep several listing images or check multiple cartons in one pass, then download or
-          review results without creating an account first.
+          Prep several listing images or check multiple cartons in one pass, then download results
+          without creating an account.
         </p>
       </div>
       <div class="value-item">
         <h3>Free to use</h3>
         <p>
-          Core tools are free with no account required. Prep listings or check cartons and
-          download results in your browser.
+          Core tools are free with no account required. Prep listings or check cartons and download
+          in your browser.
         </p>
       </div>
     </div>
   </section>
 
   <ReportIssue />
+
+  <script>
+    const filters = document.querySelectorAll<HTMLButtonElement>(".tool-filter");
+    const cards = document.querySelectorAll<HTMLAnchorElement>("#tool-cards .tool-card");
+
+    filters.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.filter ?? "all";
+        filters.forEach((b) => {
+          const on = b === btn;
+          b.classList.toggle("active", on);
+          b.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        cards.forEach((card) => {
+          const cat = card.dataset.cat ?? "";
+          const show = id === "all" || cat === id;
+          card.toggleAttribute("hidden", !show);
+        });
+      });
+    });
+  </script>
 </BaseLayout>

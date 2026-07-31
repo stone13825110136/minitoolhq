@@ -1,0 +1,138 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "WebP to JPG Converter Guide - Free Batch (No Upload)";
+const pageDescription =
+  "Convert WebP to JPG in your browser when Amazon, email, or older apps reject WebP. Free batch WebP to JPEG — no upload, ZIP download.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "How do I convert WebP to JPG?",
+    a: "Drop .webp files into a free WebP to JPG converter, choose JPG output and quality, then download. On SellTool HQ the conversion runs in your browser with a ZIP download.",
+  },
+  {
+    q: "Why convert WebP to JPG for Amazon?",
+    a: "Seller Central listing formats typically list JPEG, PNG, TIFF, and GIF — not WebP. If an export arrives as WebP, convert WebP to JPG before uploading product images.",
+  },
+  {
+    q: "Is WebP better than JPG?",
+    a: "WebP is often smaller at similar quality and is great for modern websites. JPG remains the most compatible choice for marketplaces, email, and older Windows apps.",
+  },
+  {
+    q: "Can I batch convert WebP to JPEG without uploading?",
+    a: "Yes. Use the PNG to JPG tool (it also accepts WebP): process many files locally and download a ZIP — no account and no server upload of your images.",
+  },
+  {
+    q: "Does WebP to JPG keep transparency?",
+    a: "No. JPEG has no alpha channel. Transparent areas are filled with a solid color (default white), which matches common Amazon main-image practice.",
+  },
+  {
+    q: "WebP to JPG vs PNG to JPG — which tool?",
+    a: "Use the same converter on SellTool HQ: it handles PNG, WebP, and JPG inputs. Pick JPG when you need universal marketplace compatibility.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "WebP to JPG", path: "/guides/webp-to-jpg" },
+];
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} path="/guides/webp-to-jpg" crumbs={crumbs}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · Format convert · Updated 2026</p>
+    <h1>WebP to JPG — convert when uploads fail</h1>
+    <p class="lede">
+      Browsers and CDNs love <strong>WebP</strong>, but Amazon Seller Central, many email clients,
+      and older apps still expect <strong>JPG</strong>. This guide shows when to
+      <strong>convert WebP to JPG</strong> and how to do it in batch without uploading files.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Batch convert WebP → JPG in your browser (same tool as PNG to JPG).</p>
+      <a class="btn btn-primary" href="/tools/png-to-jpg">Open WebP / PNG to JPG Converter</a>
+    </div>
+
+    <h2>When you need WebP to JPG</h2>
+    <ul>
+      <li>Seller Central rejects a modern export or CDN download</li>
+      <li>A buyer or teammate on Windows cannot open WebP attachments</li>
+      <li>You want one JPEG master before marketplace resize</li>
+      <li>Email or form uploads only accept JPG/JPEG</li>
+    </ul>
+
+    <h2>Amazon and marketplaces</h2>
+    <p>
+      Amazon listing image help typically lists <strong>JPEG (preferred), PNG, TIFF, and GIF</strong>
+      — not WebP.
+      <em>Source: Amazon Seller Central product image requirements (reviewed 2026).</em>
+      Convert WebP to JPG first, then size images with the
+      <a href="/tools/marketplace-image-prep?platform=amazon">Amazon resizer preset</a>.
+    </p>
+    <p>
+      Deeper Amazon format notes:
+      <a href="/guides/png-to-jpg-for-amazon">PNG to JPG for Amazon</a> (covers WebP rejection too).
+    </p>
+
+    <h2>Steps</h2>
+    <ol>
+      <li>Collect your .webp product or marketing files.</li>
+      <li>
+        Open the <a href="/tools/png-to-jpg">converter</a>, drop files, choose <strong>JPG</strong>,
+        set quality (about 90–95% for listings).
+      </li>
+      <li>Use a white fill if the WebP had transparency.</li>
+      <li>Download the ZIP, then resize or compress if needed.</li>
+    </ol>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools
+      hide={["format"]}
+      extra={[{ href: "/tools/png-to-jpg", label: "PNG / WebP to JPG Converter" }]}
+    />
+    <RelatedGuides
+      links={[
+        { href: "/guides/png-to-jpg-for-amazon", label: "PNG to JPG for Amazon" },
+        { href: "/guides/jpg-to-png", label: "JPG to PNG guide" },
+        { href: "/guides/compress-image-for-amazon", label: "Compress for Amazon" },
+        { href: "/guides/heic-to-jpg-for-amazon", label: "HEIC to JPG for Amazon" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="Amazon, Etsy, TikTok Shop, or other apps" />
+    <ReportIssue />
+  </article>
+</BaseLayout>

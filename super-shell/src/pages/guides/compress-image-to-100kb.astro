@@ -1,0 +1,135 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "Compress Image to 100KB - Free Target Size (No Upload)";
+const pageDescription =
+  "Compress an image to 100KB in your browser. Free batch target-size compressor — no upload, ZIP download. Tips for quality vs file size.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "How do I compress an image to 100KB?",
+    a: "Use a target-size image compressor: drop your JPG/PNG/WebP, set target to 100 KB, run compress, then download. The tool lowers JPEG quality until the file is at or under the target when possible.",
+  },
+  {
+    q: "Can I compress to 100KB without uploading?",
+    a: "Yes. SellTool HQ’s compressor runs locally in your browser. File bytes are not posted to our servers.",
+  },
+  {
+    q: "Why won’t my photo go under 100KB?",
+    a: "Very large pixel dimensions or complex detail may hit a quality floor before 100KB. Resize the image smaller first, then compress again — or raise the target (e.g. 200–500KB).",
+  },
+  {
+    q: "Is 100KB good for Amazon product images?",
+    a: "Amazon does not require 100KB. Listing images need enough pixels for zoom; over-compressing can hurt quality. Use 100KB for email/web when needed; for Amazon, prioritize size in pixels then moderate compression.",
+  },
+  {
+    q: "JPG or PNG for 100KB targets?",
+    a: "JPEG usually reaches 100KB more easily for photos. PNG is harder to shrink for complex photos; convert to JPG first if the goal is a small photo file.",
+  },
+  {
+    q: "Can I batch compress many images to 100KB?",
+    a: "Yes. Add multiple files, set the 100KB target once, and download a ZIP of results — still in your browser with no signup.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "Compress image to 100KB", path: "/guides/compress-image-to-100kb" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/compress-image-to-100kb"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · Image size · Updated 2026</p>
+    <h1>Compress image to 100KB</h1>
+    <p class="lede">
+      Need a photo under <strong>100KB</strong> for a form, email, or site upload?
+      <strong>Compress image to 100KB</strong> with a free browser tool — set a target size, batch
+      process, download a ZIP, and keep files on your device.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Open the compressor → choose Target KB → enter 100 → Compress.</p>
+      <a class="btn btn-primary" href="/tools/image-compressor">Compress to 100KB</a>
+    </div>
+
+    <h2>How target-size compression works</h2>
+    <p>
+      In <strong>target KB</strong> mode, the tool re-encodes the image (usually as JPEG) and
+      searches for a quality setting that lands at or under your limit when possible. If the image
+      is huge in pixels, you may need to resize first — a 6000px photo cannot always become a clean
+      100KB file.
+    </p>
+
+    <h2>Steps</h2>
+    <ol>
+      <li>Open the <a href="/tools/image-compressor">Image Compressor</a>.</li>
+      <li>Drop one or more JPG / PNG / WebP files.</li>
+      <li>Select <strong>Target size</strong> and enter <strong>100</strong> KB.</li>
+      <li>Download the ZIP and check the results.</li>
+    </ol>
+
+    <h2>Quality tips</h2>
+    <ul>
+      <li>Photos: prefer JPG output for 100KB goals.</li>
+      <li>If quality looks bad, try 150–300KB or reduce dimensions first.</li>
+      <li>
+        Marketplace listings: see
+        <a href="/guides/compress-image-for-amazon">compress image for Amazon</a> — do not force
+        100KB when zoom detail matters.
+      </li>
+    </ul>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools hide={["compress"]} extra={[{ href: "/tools/image-compressor", label: "Image Compressor" }]} />
+    <RelatedGuides
+      links={[
+        { href: "/guides/compress-image-for-amazon", label: "Compress for Amazon listings" },
+        { href: "/guides/png-to-jpg-for-amazon", label: "PNG to JPG for Amazon" },
+        { href: "/guides/webp-to-jpg", label: "WebP to JPG guide" },
+        { href: "/guides/amazon-product-image-size", label: "Amazon image size" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="Amazon or other marketplaces" />
+    <ReportIssue />
+  </article>
+</BaseLayout>

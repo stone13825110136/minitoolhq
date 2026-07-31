@@ -120,6 +120,10 @@ try {
     { path: "/guides/amazon-fba-box-size-limits", name: "fba box guide" },
     { path: "/guides/amazon-title-character-limit", name: "amazon title limit guide" },
     { path: "/guides/etsy-title-character-limit", name: "etsy title limit guide" },
+    { path: "/guides/compress-image-for-amazon", name: "compress for amazon guide" },
+    { path: "/guides/compress-image-to-100kb", name: "compress to 100kb guide" },
+    { path: "/guides/webp-to-jpg", name: "webp to jpg guide" },
+    { path: "/guides/jpg-to-png", name: "jpg to png guide" },
   ];
 
   const staticAssets = [
@@ -168,6 +172,10 @@ try {
   assert("sitemap lists amazon title limit guide", /amazon-title-character-limit/i.test(sm0));
   assert("sitemap lists item highlights guide", /amazon-item-highlights/i.test(sm0));
   assert("sitemap lists etsy title limit guide", /etsy-title-character-limit/i.test(sm0));
+  assert("sitemap lists compress for amazon guide", /compress-image-for-amazon/i.test(sm0));
+  assert("sitemap lists compress to 100kb guide", /compress-image-to-100kb/i.test(sm0));
+  assert("sitemap lists webp to jpg guide", /webp-to-jpg/i.test(sm0));
+  assert("sitemap lists jpg to png guide", /jpg-to-png/i.test(sm0));
   assert(
     "sitemap excludes amazon-image-prep redirect",
     !/\/tools\/amazon-image-prep/i.test(sm0),
