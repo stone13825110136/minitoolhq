@@ -183,7 +183,7 @@ if (root) {
           r.status = "error";
           const raw = err instanceof Error ? err.message : String(err);
           r.message = /network|fetch|failed to fetch|load/i.test(raw)
-            ? "Network error downloading AI model — check connection/VPN, then Clear and retry"
+            ? "Network error downloading AI model — Clear and retry (no VPN needed; we auto-try a mirror)"
             : raw;
         }
         renderList();

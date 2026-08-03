@@ -90,7 +90,7 @@ Fully free + site ads (no Pro / no paid HD unlock).
 - FAQ ≥5 search-shaped; FAQPage JSON-LD = all FAQs
 - WebApplication JSON-LD, price 0
 - Homepage card + RelatedTools + IndexNow + sitemap
-- Guide later: `/guides/amazon-white-background` (can ship after tool)
+- Guide: `/guides/amazon-white-background` (shipped with tool cluster)
 
 ## Spec accuracy (bidirectional)
 

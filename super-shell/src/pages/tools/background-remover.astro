@@ -15,6 +15,7 @@ const crumbs = [
 ];
 
 const relatedGuides = [
+  { href: "/guides/amazon-white-background", label: "Amazon white background guide" },
   { href: "/guides/amazon-product-image-size", label: "Amazon product image size" },
   { href: "/guides/png-to-jpg-for-amazon", label: "PNG to JPG for Amazon" },
   { href: "/guides/compress-image-for-amazon", label: "Compress image for Amazon" },
@@ -44,7 +45,7 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Why is the first run slow?",
-    a: "The first run downloads an on-device AI model (about 40–50 MB) into your browser. On a normal connection this often takes 1–3 minutes; slower networks can take longer. Later runs reuse the cache and are much faster. Your product photos are not uploaded — only the model files are fetched once.",
+    a: "The first run downloads an on-device AI model (about 40–50 MB) into your browser. On a normal connection this often takes 1–3 minutes; slower networks can take longer. If the first CDN fails, the tool automatically retries from a mirror — you do not need a VPN. Later runs reuse the cache and are much faster. Your product photos are not uploaded — only the model files are fetched once.",
   },
   {
     q: "Does this guarantee Amazon 85% product fill?",

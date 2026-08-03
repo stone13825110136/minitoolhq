@@ -85,6 +85,7 @@ https://selltoolhq.com/tools/image-compressor
 https://selltoolhq.com/tools/listing-character-counter
 https://selltoolhq.com/tools/fba-box-size-checker
 https://selltoolhq.com/guides/amazon-product-image-size
+https://selltoolhq.com/guides/amazon-white-background
 https://selltoolhq.com/guides/etsy-listing-photo-size
 https://selltoolhq.com/guides/tiktok-shop-image-size
 https://selltoolhq.com/guides/amazon-fba-box-size-limits

@@ -94,29 +94,50 @@ export function compositeWhiteJpg(
   return canvasToBlob(c, "image/jpeg", quality);
 }
 
+/** HF Hub first (best for US); China-friendly mirror if Hub fetch fails — no VPN required. */
+const MODEL_HOSTS = ["https://huggingface.co/", "https://hf-mirror.com/"] as const;
+
+async function loadPipelineFromHost(
+  remoteHost: string,
+  onProgress?: (info: ProgressInfo) => void,
+): Promise<Segmenter> {
+  const { pipeline, env } = await import("@huggingface/transformers");
+  env.allowLocalModels = false;
+  env.useBrowserCache = true;
+  env.remoteHost = remoteHost;
+  env.remotePathTemplate = "{model}/resolve/{revision}/";
+
+  // q8 ≈ 42MB vs fp32 ≈ 168MB — faster first download; still Apache-2.0 ormbg
+  const pipe = await (pipeline as Function)("background-removal", MODEL_ID, {
+    device: "wasm",
+    dtype: "q8",
+    progress_callback: (x: ProgressInfo) => onProgress?.(x),
+  });
+  return pipe as Segmenter;
+}
+
 export async function getSegmenter(
   onProgress?: (info: ProgressInfo) => void,
+  onStatus?: (msg: string) => void,
 ): Promise<Segmenter> {
   if (!segmenterPromise) {
     segmenterPromise = (async () => {
-      try {
-        const { pipeline, env } = await import("@huggingface/transformers");
-        env.allowLocalModels = false;
-        env.useBrowserCache = true;
-
-        // background-removal is supported by Transformers.js; cast keeps TS happy across versions
-        // q8 ≈ 42MB vs fp32 ≈ 168MB — faster first download; still Apache-2.0 ormbg
-        const pipe = await (pipeline as Function)("background-removal", MODEL_ID, {
-          device: "wasm",
-          dtype: "q8",
-          progress_callback: (x: ProgressInfo) => onProgress?.(x),
-        });
-        return pipe as Segmenter;
-      } catch (err) {
-        // Allow the next call to retry instead of reusing a rejected promise
-        segmenterPromise = null;
-        throw err;
+      let lastErr: unknown;
+      for (let i = 0; i < MODEL_HOSTS.length; i++) {
+        const host = MODEL_HOSTS[i];
+        try {
+          if (i > 0) {
+            onStatus?.("Retrying model download from alternate CDN…");
+          }
+          return await loadPipelineFromHost(host, onProgress);
+        } catch (err) {
+          lastErr = err;
+        }
       }
+      segmenterPromise = null;
+      throw lastErr instanceof Error
+        ? lastErr
+        : new Error("Could not download AI model — check your network and retry");
     })();
   }
   return segmenterPromise;
@@ -139,7 +160,7 @@ export async function removeBackgroundFile(
   }
 
   opts.onStatus?.("Loading model (first run downloads once)…");
-  const segmenter = await getSegmenter(opts.onProgress);
+  const segmenter = await getSegmenter(opts.onProgress, opts.onStatus);
 
   opts.onStatus?.("Preparing image…");
   const prepared = await prepareInputCanvas(file);

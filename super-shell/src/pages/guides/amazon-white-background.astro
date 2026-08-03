@@ -1,0 +1,159 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReportIssue from "../../components/ReportIssue.astro";
+import SpecLegend from "../../components/SpecLegend.astro";
+import GuideDisclaimer from "../../components/GuideDisclaimer.astro";
+import RelatedTools from "../../components/RelatedTools.astro";
+import RelatedGuides from "../../components/RelatedGuides.astro";
+
+const pageTitle = "Amazon White Background — Main Image (#FFFFFF) Guide";
+const pageDescription =
+  "Amazon white background for main images: pure white RGB 255,255,255 (#FFFFFF). Remove backgrounds free in your browser, then resize for zoom.";
+
+const faqs: { q: string; a: string }[] = [
+  {
+    q: "What is the Amazon white background requirement?",
+    a: "Amazon main product images commonly require a pure white background — RGB 255,255,255 (#FFFFFF) — with the product as the only subject. Confirm the latest text in Seller Central for your category (reviewed 2026).",
+  },
+  {
+    q: "Is off-white or light gray OK for Amazon main images?",
+    a: "Usually no for the main image. Near-white or studio gray can fail automated checks. Aim for literal #FFFFFF corners. Lifestyle or colored backgrounds belong in secondary image slots when your category allows them.",
+  },
+  {
+    q: "How do I make an Amazon white background from a phone photo?",
+    a: "Use a free remove-background tool that exports white JPG (#FFFFFF), then size the photo with a marketplace resizer (often 2000×2000 square masters). On SellTool HQ both steps run in your browser — photos are not uploaded to our servers.",
+  },
+  {
+    q: "Does Amazon require transparent PNG for the main image?",
+    a: "No. Main images are typically JPEG on a solid white background. Transparent PNG is useful for design work, but for Seller Central main images prefer white JPG (#FFFFFF).",
+  },
+  {
+    q: "What about the 85% product fill rule?",
+    a: "Seller Central main-image guidance commonly expects the product to fill most of the frame (often about 85%). Background removal does not auto-crop to 85% — resize and pad with the Marketplace Image Resizer after you have a white background.",
+  },
+  {
+    q: "Can I use HEIC photos for Amazon white background?",
+    a: "Convert HEIC to JPG first (Amazon listing uploads do not treat HEIC as a standard product-image format), then remove the background to white, then resize.",
+  },
+];
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const crumbs = [
+  { name: "Home", path: "/" },
+  { name: "Guides", path: "/#guides" },
+  { name: "Amazon white background", path: "/guides/amazon-white-background" },
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  path="/guides/amazon-white-background"
+  crumbs={crumbs}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+
+  <article class="guide-body">
+    <p class="badge">Guide · Amazon listings · Reviewed 2026</p>
+    <h1>Amazon white background for main images</h1>
+    <p class="lede">
+      How <strong>Amazon white background</strong> rules work for main images — pure white
+      <strong>#FFFFFF / RGB 255,255,255</strong> — and how to prep photos in your browser without
+      uploading files.
+    </p>
+
+    <SpecLegend />
+
+    <div class="guide-cta">
+      <p>Remove the background to pure white (#FFFFFF) — files stay on your device.</p>
+      <a class="btn btn-primary" href="/tools/background-remover">Open Remove Background</a>
+    </div>
+
+    <h2>What Amazon expects on the main image</h2>
+    <ul>
+      <li>
+        <strong>Pure white background:</strong> RGB 255,255,255 (#FFFFFF)
+        <em> — Official / platform guidance (Seller Central main image requirements, reviewed 2026)</em>
+      </li>
+      <li>
+        <strong>Product only:</strong> no props, text, watermarks, or logos on the main image
+        <em> — Official / platform guidance</em>
+      </li>
+      <li>
+        <strong>Fill the frame:</strong> product often ~85% of the image
+        <em> — Official / platform guidance (confirm in Seller Central)</em>
+      </li>
+      <li>
+        <strong>Format:</strong> JPEG preferred for most listing main images
+        <em> — Platform guidance / common SC practice</em>
+      </li>
+    </ul>
+
+    <h2>Suggested workflow (phone photo → listing-ready)</h2>
+    <ol>
+      <li>
+        If the file is HEIC, convert with
+        <a href="/tools/heic-to-jpg">HEIC to JPG</a> first.
+      </li>
+      <li>
+        Remove the background to <strong>White JPG (#FFFFFF)</strong> with
+        <a href="/tools/background-remover">Remove Background</a>.
+      </li>
+      <li>
+        Size to Amazon squares (e.g. 2000×2000 master) with the
+        <a href="/tools/marketplace-image-prep?platform=amazon">Marketplace Image Resizer</a>.
+      </li>
+      <li>Optional: compress if the file is still heavy, then upload in Seller Central.</li>
+    </ol>
+
+    <h2>Main image vs secondary images</h2>
+    <p>
+      White background rules apply hardest to the <strong>main</strong> image shoppers see in search.
+      Secondary slots can use lifestyle, detail, or infographic shots when your category allows —
+      still keep resolution high enough for zoom. See
+      <a href="/guides/amazon-product-image-size">Amazon product image size</a> for pixel targets.
+    </p>
+
+    <h2>FAQ</h2>
+    <section class="faq">
+      {
+        faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
+    <RelatedTools
+      hide={[]}
+      extra={[
+        { href: "/tools/background-remover", label: "Remove Background (white JPG)" },
+        { href: "/tools/marketplace-image-prep?platform=amazon", label: "Amazon preset (resizer)" },
+      ]}
+    />
+    <RelatedGuides
+      links={[
+        { href: "/guides/amazon-product-image-size", label: "Amazon product image size" },
+        { href: "/guides/heic-to-jpg-for-amazon", label: "HEIC to JPG for Amazon" },
+        { href: "/guides/png-to-jpg-for-amazon", label: "PNG to JPG for Amazon" },
+        { href: "/guides/compress-image-for-amazon", label: "Compress image for Amazon" },
+      ]}
+    />
+
+    <GuideDisclaimer platforms="Amazon" />
+    <ReportIssue />
+  </article>
+</BaseLayout>

@@ -6,6 +6,7 @@
 | Guide URL | Primary intent | CTA tool |
 |-----------|----------------|----------|
 | `/guides/amazon-product-image-size` | amazon product image size / requirements | Marketplace Image Prep |
+| `/guides/amazon-white-background` | amazon white background / #FFFFFF main image | Background remover → Marketplace Prep |
 | `/guides/etsy-listing-photo-size` | etsy listing photo size | Marketplace Image Prep `?platform=etsy` |
 | `/guides/tiktok-shop-image-size` | tiktok shop image size | Marketplace Image Prep `?platform=tiktok-shop` |
 | `/guides/amazon-fba-box-size-limits` | amazon fba box size limit / dimensions | FBA Box Size Checker |

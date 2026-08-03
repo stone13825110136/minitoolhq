@@ -119,6 +119,7 @@ try {
     { path: "/tools/listing-character-counter", name: "listing character counter page" },
     { path: "/tools/fba-box-size-checker", name: "fba box page" },
     { path: "/guides/amazon-product-image-size", name: "amazon image guide" },
+    { path: "/guides/amazon-white-background", name: "amazon white background guide" },
     { path: "/guides/amazon-fba-box-size-limits", name: "fba box guide" },
     { path: "/guides/amazon-title-character-limit", name: "amazon title limit guide" },
     { path: "/guides/etsy-title-character-limit", name: "etsy title limit guide" },
@@ -165,6 +166,7 @@ try {
   assert("sitemap lists listing character counter", /listing-character-counter/i.test(sm0));
   assert("sitemap lists fba tool", /fba-box-size-checker/i.test(sm0));
   assert("sitemap lists amazon image guide", /amazon-product-image-size/i.test(sm0));
+  assert("sitemap lists amazon white background guide", /amazon-white-background/i.test(sm0));
   assert("sitemap lists etsy guide", /etsy-listing-photo-size/i.test(sm0));
   assert("sitemap lists tiktok guide", /tiktok-shop-image-size/i.test(sm0));
   assert("sitemap lists fba box guide", /amazon-fba-box-size-limits/i.test(sm0));
