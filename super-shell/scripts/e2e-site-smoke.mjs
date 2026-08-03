@@ -111,6 +111,7 @@ try {
   const pagesToVisit = [
     { path: "/", name: "homepage" },
     { path: "/tools/marketplace-image-prep", name: "marketplace prep page" },
+    { path: "/tools/background-remover", name: "background remover page" },
     { path: "/tools/heic-to-jpg", name: "heic to jpg page" },
     { path: "/tools/png-to-jpg", name: "png to jpg page" },
     { path: "/tools/webp-to-jpg", name: "webp to jpg page" },
@@ -156,6 +157,7 @@ try {
   const sm0 = await (await page.request.get(`${base}/sitemap-0.xml`)).text();
   assert("sitemap lists home", /<loc>/i.test(sm0));
   assert("sitemap lists marketplace tool", /marketplace-image-prep/i.test(sm0));
+  assert("sitemap lists background remover", /\/tools\/background-remover/i.test(sm0));
   assert("sitemap lists heic tool", /heic-to-jpg/i.test(sm0));
   assert("sitemap lists png to jpg tool", /png-to-jpg/i.test(sm0));
   assert("sitemap lists webp to jpg tool", /\/tools\/webp-to-jpg/i.test(sm0));

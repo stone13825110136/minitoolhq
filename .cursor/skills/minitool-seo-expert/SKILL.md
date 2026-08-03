@@ -77,6 +77,7 @@ Ship together with the feature:
 ```
 https://selltoolhq.com/
 https://selltoolhq.com/tools/marketplace-image-prep
+https://selltoolhq.com/tools/background-remover
 https://selltoolhq.com/tools/heic-to-jpg
 https://selltoolhq.com/tools/png-to-jpg
 https://selltoolhq.com/tools/webp-to-jpg

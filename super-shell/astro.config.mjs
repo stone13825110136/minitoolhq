@@ -21,6 +21,9 @@ export default defineConfig({
   ],
   devToolbar: { enabled: false },
   vite: {
+    optimizeDeps: {
+      exclude: ["@huggingface/transformers"],
+    },
     server: {
       watch: {
         ignored: ["**/test-output/**", "**/test-fixtures/**", "**/node_modules/**"],

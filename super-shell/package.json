@@ -19,12 +19,14 @@
     "test:webp-to-jpg": "node scripts/e2e-webp-to-jpg.mjs",
     "test:image-compressor": "node scripts/e2e-image-compressor.mjs",
     "test:listing-counter": "node scripts/e2e-listing-character-counter.mjs",
+    "test:background-remover": "node scripts/e2e-background-remover.mjs",
     "test:site": "node scripts/e2e-site-smoke.mjs",
     "indexnow": "node scripts/indexnow.mjs",
     "deploy:pages": "npm run build && npx wrangler pages deploy dist --project-name=minitoolhq --commit-dirty=true && npm run indexnow"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
+    "@huggingface/transformers": "^4.2.0",
     "astro": "^7.1.3",
     "exifr": "^7.1.3",
     "fflate": "^0.8.3",

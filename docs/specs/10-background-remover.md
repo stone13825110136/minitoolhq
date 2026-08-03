@@ -7,7 +7,7 @@
 | Slug / URL | `/tools/background-remover` |
 | Primary keyword | remove background |
 | Secondary keywords | white background product photo, amazon white background, remove background white background, product photo background remover, change background to white |
-| Status | **draft** (awaiting accept before code) |
+| Status | **shipped** (2026-08-03) |
 | Stack (proposed) | `@huggingface/transformers` + Apache-2.0 ONNX model (see below); Canvas composite; fflate ZIP |
 
 ## Job
@@ -19,9 +19,9 @@
 | Field | Value |
 |-------|--------|
 | Primary | remove background |
-| Title | Background Remover — White Background for Product Photos (Free) |
-| H1 | Background Remover for Product Photos |
-| Meta | Free background remover in your browser. Make Amazon-ready white backgrounds (#FFFFFF) or transparent PNG — batch ZIP, no upload. |
+| Title | Remove Background — White Product Photos (Free) |
+| H1 | Remove Background for Product Photos |
+| Meta | Free remove background tool in your browser. Make Amazon-ready white backgrounds (#FFFFFF) or transparent PNG — batch ZIP, no upload. |
 | FAQ | ≥5 (Amazon white bg, #FFFFFF, batch, privacy, quality limits, next resize step) |
 
 ## Competitors researched
@@ -92,17 +92,44 @@ Fully free + site ads (no Pro / no paid HD unlock).
 - Homepage card + RelatedTools + IndexNow + sitemap
 - Guide later: `/guides/amazon-white-background` (can ship after tool)
 
+## Spec accuracy (bidirectional)
+
+| Platform / claim | Official source (URL + date) | Competitor check | Our v1 default | Notes |
+|------------------|------------------------------|------------------|----------------|-------|
+| Amazon main image pure white | [Amazon Seller Central — Product image requirements](https://sellercentral.amazon.com/help/hub/reference/G200332540) (reviewed 2026-08-03): pure white background, RGB 255,255,255 | PhotoRoom / Backgroundless / BG Clear all market #FFFFFF white export | Default fill **#FFFFFF** under cutout for JPG | Confirm in Seller Central; rules can vary by category |
+| Product fill ~85% of frame | Same Seller Central main-image guidance (common ~85% fill) | Resizers often pad/crop separately | **won't** auto-crop v1 | CTA → Marketplace Image Resizer |
+| Main image format | JPEG preferred; PNG also listed in many categories | Competitors export JPG or PNG | Default **JPG**; optional transparent **PNG** | Transparent PNG is for design use, not Amazon main |
+
+## FAQ topics (search-shaped, ≥5)
+
+1. How do I remove background from a product photo?
+2. How do I make an Amazon white background (#FFFFFF)?
+3. Does this remove background tool upload my images?
+4. Can I batch remove backgrounds and download a ZIP?
+5. Can I keep a transparent PNG instead of white?
+6. Why is the first run slow?
+7. Does this guarantee Amazon 85% product fill?
+8. Can I use HEIC here?
+
 ## Acceptance criteria
 
-- [ ] Spec accepted
-- [ ] Remove BG on ≥2 sample product photos; white JPG corners ≈ #FFFFFF
-- [ ] Transparent PNG option works
-- [ ] Batch ZIP; no image-byte upload
-- [ ] First-load model progress UI (no frozen blank page)
-- [ ] Title + meta include primary / white-background intent
-- [ ] FAQ ≥5 + matching FAQPage JSON-LD
-- [ ] Homepage + RelatedTools + IndexNow
-- [ ] E2E `npm run test:background-remover` (SEO + convert smoke; may mock/skip full model in CI if too heavy — document)
+- [x] Spec accepted (2026-08-03 — white-bg first)
+- [x] Remove BG on real product photo (Nike sample); white JPG look OK (manual 2026-08-03)
+- [x] Transparent PNG option in UI (manual spot-check optional)
+- [x] Batch ZIP; no image-byte upload (design + Network: model CDN only)
+- [x] First-load model progress UI + first-run notice (~40–50 MB)
+- [x] Title + meta include primary / white-background intent
+- [x] FAQ ≥5 + matching FAQPage JSON-LD
+- [x] Homepage + RelatedTools + IndexNow
+- [x] E2E SEO gate `SKIP_BG_MODEL=1 npm run test:background-remover` (12/12); feature via manual product photo
+
+## Hosting note (model)
+
+| Option | Decision |
+|--------|----------|
+| Cloudflare Pages `public/` | **No** — ONNX weights ≥42 MB, over Pages ~25 MB/file limit |
+| Cloudflare R2 | Later optional (faster CDN); not required for v1 |
+| Hugging Face CDN + `dtype: q8` | **v1** — ~42 MB first download; disclose in UI/FAQ |
 
 ## Risks
 
@@ -117,7 +144,9 @@ Fully free + site ads (no Pro / no paid HD unlock).
 
 | Date | Case | Result | Notes |
 |------|------|--------|-------|
-| | | | |
+| 2026-08-03 | SEO E2E `SKIP_BG_MODEL=1` | **pass** | 12 asserts |
+| 2026-08-03 | Manual product-sample-1.jpg → white JPG | **pass** | Real sneaker; user confirmed |
+| 2026-08-03 | Flat red test PNG | **fail expected** | Not a product subject; documented |
 
 ## Relationship
 

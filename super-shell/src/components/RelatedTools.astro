@@ -9,7 +9,9 @@ interface Props {
   extra?: Link[];
   heading?: string;
   /** Hide one of the core tools when already on that page */
-  hide?: Array<"marketplace" | "heic" | "fba" | "format" | "webp" | "compress" | "listing">;
+  hide?: Array<
+    "marketplace" | "heic" | "fba" | "format" | "webp" | "compress" | "listing" | "bg"
+  >;
 }
 
 const {
@@ -19,7 +21,7 @@ const {
 } = Astro.props;
 
 const core: {
-  id: "marketplace" | "heic" | "fba" | "format" | "webp" | "compress" | "listing";
+  id: "marketplace" | "heic" | "fba" | "format" | "webp" | "compress" | "listing" | "bg";
   href: string;
   label: string;
 }[] = [
@@ -28,6 +30,7 @@ const core: {
     href: "/tools/marketplace-image-prep",
     label: "Marketplace Image Resizer",
   },
+  { id: "bg", href: "/tools/background-remover", label: "Remove Background (White)" },
   { id: "heic", href: "/tools/heic-to-jpg", label: "HEIC to JPG Converter" },
   { id: "format", href: "/tools/png-to-jpg", label: "PNG to JPG Converter" },
   { id: "webp", href: "/tools/webp-to-jpg", label: "WebP to JPG Converter" },
