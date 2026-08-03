@@ -1,14 +1,14 @@
 ---
 name: minitool-seo-expert
 description: >-
-  MiniTool HQ SEO expert pass — full on-page, technical, and internal-link SEO for
-  minitoolhq.com. Use when the user says seo专家, SEO expert, 全面SEO, SEO audit,
-  or asks to improve search ranking / indexing for MiniTool HQ tools or guides.
+  SellTool HQ SEO expert pass — full on-page, technical, and internal-link SEO for
+  selltoolhq.com. Use when the user says seo专家, SEO expert, 全面SEO, SEO audit,
+  or asks to improve search ranking / indexing for SellTool HQ tools or guides.
 ---
 
-# MiniTool HQ — SEO Expert
+# SellTool HQ — SEO Expert
 
-Read this skill **before** changing SEO on MiniTool HQ. Repo root: `minitoolhq/` (Astro app in `super-shell/`).
+Read this skill **before** changing SEO on SellTool HQ. Repo root: `minitoolhq/` (Astro app in `super-shell/`). Live host: **https://selltoolhq.com** (legacy `minitoolhq.com` → 301 only).
 
 ## Hard constraints
 
@@ -16,7 +16,7 @@ Read this skill **before** changing SEO on MiniTool HQ. Repo root: `minitoolhq/`
 2. Follow `.cursor/rules/minitool-customer-copy.mdc` — **never** put ads, Pro, $4.99, or “how we make money” on customer pages.
 3. **One job = one tool.** Do not split marketplace image prep into separate tools for SEO.
 4. Internal strategy lives in `docs/POSITIONING.md` only — not on the site.
-5. URL shape: **no trailing slash** (`trailingSlash: 'never'`). Keep canonical, links, and sitemap aligned.
+5. URL shape: **no trailing slash** (`trailingSlash: 'never'`). Keep canonical, links, and sitemap aligned. (CF may *serve* a slash; canonical + sitemap must stay bare.)
 
 ## Workflow (run in order)
 
@@ -49,7 +49,7 @@ Ship together with the feature:
 ### 3. Technical SEO
 
 - Sitemap via `@astrojs/sitemap` — **filter out** redirect-only paths (`/tools/amazon-image-prep`, `/tools/tiktok-shop-image-prep`)
-- Redirect stubs: `noindex` if they still emit HTML; CF `_redirects` for 301
+- Redirect stubs: `noindex` if they still emit HTML; CF `_redirects` / middleware for 301
 - `robots.txt` points at `sitemap-index.xml`
 - Default `og:image` / `twitter:image` sitewide
 - BreadcrumbList JSON-LD on tools and guides
@@ -65,6 +65,7 @@ Ship together with the feature:
 
 - `cd super-shell && npm run test:site` (and tool E2E if page changed)
 - Assert sitemap has tools + all guides; **excludes** redirect stubs; **no trailing slash** on locs
+- Live: `$env:BASE_URL='https://selltoolhq.com'; npm run test:site`
 - Build + deploy Cloudflare Pages when user wants live
 
 ### 6. Post-deploy indexing checklist (give user)
@@ -74,23 +75,39 @@ Ship together with the feature:
 3. Canonical URL list (update when shipping tools/guides):
 
 ```
-https://minitoolhq.com/
-https://minitoolhq.com/tools/marketplace-image-prep
-https://minitoolhq.com/tools/heic-to-jpg
-https://minitoolhq.com/tools/fba-box-size-checker
-https://minitoolhq.com/guides/amazon-product-image-size
-https://minitoolhq.com/guides/etsy-listing-photo-size
-https://minitoolhq.com/guides/tiktok-shop-image-size
-https://minitoolhq.com/guides/amazon-fba-box-size-limits
-https://minitoolhq.com/guides/amazon-dimensional-weight
+https://selltoolhq.com/
+https://selltoolhq.com/tools/marketplace-image-prep
+https://selltoolhq.com/tools/heic-to-jpg
+https://selltoolhq.com/tools/png-to-jpg
+https://selltoolhq.com/tools/webp-to-jpg
+https://selltoolhq.com/tools/image-compressor
+https://selltoolhq.com/tools/listing-character-counter
+https://selltoolhq.com/tools/fba-box-size-checker
+https://selltoolhq.com/guides/amazon-product-image-size
+https://selltoolhq.com/guides/etsy-listing-photo-size
+https://selltoolhq.com/guides/tiktok-shop-image-size
+https://selltoolhq.com/guides/amazon-fba-box-size-limits
+https://selltoolhq.com/guides/amazon-dimensional-weight
+https://selltoolhq.com/guides/heic-to-jpg-for-amazon
+https://selltoolhq.com/guides/heic-to-jpg-for-etsy
+https://selltoolhq.com/guides/heic-to-jpg-for-tiktok-shop
+https://selltoolhq.com/guides/png-to-jpg-for-amazon
+https://selltoolhq.com/guides/amazon-title-character-limit
+https://selltoolhq.com/guides/amazon-item-highlights
+https://selltoolhq.com/guides/etsy-title-character-limit
+https://selltoolhq.com/guides/compress-image-for-amazon
+https://selltoolhq.com/guides/compress-image-to-100kb
+https://selltoolhq.com/guides/webp-to-jpg
+https://selltoolhq.com/guides/jpg-to-png
 ```
 
-Full traffic levers: `docs/TRAFFIC-PLAYBOOK.md`. Skip redirect URLs.
+Full traffic levers: `docs/TRAFFIC-PLAYBOOK.md`. Skip redirect URLs (`/tools/amazon-image-prep`, `/tools/tiktok-shop-image-prep`).
 
 ## Related docs
 
 - `docs/TRAFFIC-PLAYBOOK.md` — GSC / Bing / IndexNow / directories / ads phases
 - `docs/TRAFFIC-PRIORITY.md` — which products pull volume
+- `docs/SEO-GUIDE-CLUSTER.md` — guide → tool CTA map
 
 ## Audit output format
 
