@@ -21,12 +21,12 @@
 |-------|--------|
 | Primary | png to jpg |
 | Secondary (≥3) | webp to jpg; jpg to png; convert png to jpg; png to webp; batch image converter |
-| Title | PNG to JPG Converter — Free Batch (PNG · JPG · WebP) |
+| Title | PNG to JPG Converter - Free Batch (PNG / JPG / WebP) |
 | H1 | PNG to JPG Converter |
-| Meta description | Free PNG to JPG converter in your browser. Also convert WebP to JPG and JPG to PNG in batch — ZIP download, no upload. |
+| Meta description | Free PNG to JPG converter in your browser. Also convert WebP to JPG, WebP to PNG, and JPG to PNG in one batch tool - ZIP download, no upload. |
 | FAQ | ≥5 search-shaped (see SEO block) |
 
-**One job = one engine.** Dedicated SEO landing `/tools/webp-to-jpg` (spec 09) reuses this converter for the high-volume `webp to jpg` query (2026-07-31). Keep both pages cross-linked.
+**One job = one tool UI.** Homepage shows one “PNG / JPG / WebP Converter” card. `/tools/webp-to-jpg` is a **thin SEO landing** that CTAs into this hub with `?out=jpg` (spec 09). HEIC stays on `/tools/heic-to-jpg`.
 
 ## Competitors researched
 

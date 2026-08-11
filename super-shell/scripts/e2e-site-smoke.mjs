@@ -205,6 +205,15 @@ try {
 
   const homeHtml = await open("/");
   assert("home has Tools heading", /<h2[^>]*>\s*Tools\s*<\/h2>/i.test(homeHtml));
+  assert(
+    "home has format hub card",
+    /href="\/tools\/png-to-jpg"[^>]*>[\s\S]*?PNG\s*\/\s*JPG\s*\/\s*WebP/i.test(homeHtml) ||
+      /PNG\s*\/\s*JPG\s*\/\s*WebP Converter/i.test(homeHtml),
+  );
+  assert(
+    "home has no separate WebP tool card",
+    !/tool-card[^>]+href="\/tools\/webp-to-jpg"/i.test(homeHtml),
+  );
   assert("home has What you get", /What you get/i.test(homeHtml));
   assert(
     "home rejects internal jargon",

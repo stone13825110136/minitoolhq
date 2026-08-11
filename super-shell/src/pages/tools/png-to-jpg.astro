@@ -4,14 +4,15 @@ import ReportIssue from "../../components/ReportIssue.astro";
 import RelatedGuides from "../../components/RelatedGuides.astro";
 import RelatedTools from "../../components/RelatedTools.astro";
 
+/** Primary: png to jpg. Hub covers WebP↔JPG/PNG via output picker — one job, one tool. */
 const pageTitle = "PNG to JPG Converter - Free Batch (PNG / JPG / WebP)";
 const pageDescription =
-  "Free PNG to JPG converter in your browser. Also convert WebP to JPG and JPG to PNG in batch - ZIP download, no upload.";
+  "Free PNG to JPG converter in your browser. Also convert WebP to JPG, WebP to PNG, and JPG to PNG in one batch tool - ZIP download, no upload.";
 
 const crumbs = [
   { name: "Home", path: "/" },
   { name: "Tools", path: "/#tools" },
-  { name: "PNG to JPG Converter", path: "/tools/png-to-jpg" },
+  { name: "PNG / JPG / WebP Converter", path: "/tools/png-to-jpg" },
 ];
 
 const relatedGuides = [
@@ -29,15 +30,23 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Can I convert WebP to JPG?",
-    a: "Yes. Drop WebP images, pick JPG as the output, and convert. WebP to JPG is useful when marketplaces, email, or older tools reject WebP uploads.",
+    a: "Yes. Drop WebP images, pick JPG as the output (or use the WebP → JPG preset), and convert. WebP to JPG is useful when marketplaces, email, or older tools reject WebP uploads.",
+  },
+  {
+    q: "Can I convert WebP to PNG?",
+    a: "Yes. Drop WebP files, set Output to PNG, then Convert. WebP to PNG helps when you need a widely supported format that can keep transparency for later editing.",
   },
   {
     q: "How do I convert JPG to PNG?",
     a: "Select JPG files, set Output to PNG, then Convert. Use PNG when you need a lossless copy or a format that can keep a transparent background later.",
   },
   {
+    q: "Can I convert PNG to WebP?",
+    a: "Yes. Set Output to WebP and convert. Use WebP when you control the site or app that accepts it; for Amazon listings, JPG is usually safer.",
+  },
+  {
     q: "Can I batch convert images and download a ZIP?",
-    a: "Yes. This free batch image converter accepts multiple PNG, JPG, and WebP files at once - no account and no artificial batch cap - then builds a ZIP on your device.",
+    a: "Yes. This free PNG / JPG / WebP batch converter accepts multiple files at once - no account and no artificial batch cap - then builds a ZIP on your device.",
   },
   {
     q: "Are my images uploaded to a server?",
@@ -53,7 +62,7 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Can I convert HEIC here?",
-    a: "No. iPhone HEIC/HEIF belongs in the separate HEIC to JPG converter. This tool is for PNG, JPG, and WebP only.",
+    a: "No. iPhone HEIC/HEIF needs a different decoder. Use the separate HEIC to JPG converter. This hub is for PNG, JPG, and WebP only.",
   },
 ];
 
@@ -70,7 +79,7 @@ const faqLd = {
 const appLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  name: "PNG to JPG Converter",
+  name: "PNG to JPG Converter (PNG / JPG / WebP)",
   applicationCategory: "MultimediaApplication",
   operatingSystem: "Any",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -86,12 +95,13 @@ const appLd = {
   </Fragment>
 
   <section data-png-jpg>
-    <p class="badge">No upload · In-browser · Free · Batch ZIP</p>
+    <p class="badge">No upload · In-browser · Free · PNG · JPG · WebP hub</p>
     <h1>PNG to JPG Converter</h1>
     <p class="lede">
-      Free <strong>PNG to JPG</strong> converter for listing and product photos. Also
-      <strong>convert WebP to JPG</strong> and <strong>JPG to PNG</strong> in one
-      <strong>batch image converter</strong> - download a ZIP, no upload, no signup.
+      Free <strong>PNG to JPG</strong> converter for listing and product photos — and the same
+      <strong>batch hub</strong> for <strong>WebP to JPG</strong>, <strong>WebP to PNG</strong>,
+      <strong>JPG to PNG</strong>, and <strong>PNG to WebP</strong>. Pick the output format below,
+      convert in your browser, download a ZIP — no upload, no signup.
     </p>
 
     <div class="panel">
@@ -103,6 +113,17 @@ const appLd = {
           accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
           multiple
         />
+      </div>
+
+      <div class="format-presets" role="group" aria-label="Common conversions">
+        <span class="format-presets-label">Quick output:</span>
+        <button type="button" class="btn btn-ghost btn-tiny" data-out-preset="jpg">
+          → JPG (PNG/WebP to JPG)
+        </button>
+        <button type="button" class="btn btn-ghost btn-tiny" data-out-preset="png">
+          → PNG (JPG/WebP to PNG)
+        </button>
+        <button type="button" class="btn btn-ghost btn-tiny" data-out-preset="webp">→ WebP</button>
       </div>
 
       <div class="grid-2" style="margin-top: 1rem;">
@@ -136,42 +157,45 @@ const appLd = {
     </div>
 
     <section class="section">
-      <h2>PNG, JPG, and WebP for marketplaces</h2>
+      <h2>One hub for PNG, JPG, and WebP</h2>
       <p class="lede">
-        Amazon prefers <strong>JPEG</strong> for most listing images and does not list WebP as a
-        standard product-image format. Etsy and TikTok Shop commonly accept <strong>JPG</strong> and
-        <strong>PNG</strong>. Convert formats here first, then size photos with the Marketplace Image
-        Resizer if needed. Confirm current rules in each seller portal.
+        This is a single <strong>PNG / JPG / WebP converter</strong> — not three separate apps. Use
+        the output dropdown (or quick presets) for the format you need. Amazon prefers
+        <strong>JPEG</strong> for most listing images and does not list WebP as a standard
+        product-image format. Etsy and TikTok Shop commonly accept <strong>JPG</strong> and
+        <strong>PNG</strong>. Convert here first, then size photos with the Marketplace Image
+        Resizer. iPhone <strong>HEIC</strong> belongs in the separate
+        <a href="/tools/heic-to-jpg">HEIC to JPG</a> tool.
       </p>
       <div class="table-wrap panel">
         <table class="data">
           <thead>
             <tr>
-              <th>Use case</th>
-              <th>Suggested output</th>
+              <th>Job</th>
+              <th>Output</th>
               <th>Notes</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Amazon main / gallery</td>
+              <td>PNG to JPG / WebP to JPG</td>
               <td>JPG</td>
-              <td>JPEG preferred; PNG also accepted</td>
+              <td>Best default for Amazon main / gallery</td>
             </tr>
             <tr>
-              <td>WebP from phone / CDN</td>
-              <td>JPG or PNG</td>
-              <td>Convert WebP to JPG before upload if rejected</td>
-            </tr>
-            <tr>
-              <td>Need transparency later</td>
+              <td>WebP to PNG / JPG to PNG</td>
               <td>PNG</td>
-              <td>JPG cannot keep alpha</td>
+              <td>When you need transparency or lossless</td>
             </tr>
             <tr>
-              <td>iPhone HEIC</td>
+              <td>PNG to WebP / JPG to WebP</td>
+              <td>WebP</td>
+              <td>Only if your destination accepts WebP</td>
+            </tr>
+            <tr>
+              <td>iPhone HEIC → JPG</td>
               <td>—</td>
-              <td>Use <a href="/tools/heic-to-jpg">HEIC to JPG</a> instead</td>
+              <td>Use <a href="/tools/heic-to-jpg">HEIC to JPG</a> (not this hub)</td>
             </tr>
           </tbody>
         </table>
@@ -179,7 +203,7 @@ const appLd = {
     </section>
 
     <section class="section faq">
-      <h2>FAQ — PNG to JPG converter</h2>
+      <h2>FAQ — PNG / JPG / WebP converter</h2>
       {
         faqs.map((f) => (
           <details>
@@ -200,3 +224,18 @@ const appLd = {
 <script>
   import "../../scripts/png-to-jpg";
 </script>
+
+<style>
+  .format-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.65rem;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  .format-presets-label {
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin-right: 0.15rem;
+  }
+</style>

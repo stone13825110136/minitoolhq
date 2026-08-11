@@ -1,7 +1,6 @@
 /**
- * Feature + SEO E2E for WebP to JPG landing — must pass before "shipped".
+ * SEO E2E for WebP→JPG thin landing (points to format hub with ?out=jpg).
  */
-import fs from "node:fs";
 import path from "node:path";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -9,7 +8,6 @@ import { chromium } from "playwright";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
-const fixtures = path.join(root, "test-fixtures");
 
 const results = [];
 function log(caseName, pass, notes = "") {
@@ -59,31 +57,6 @@ function killServer(child) {
   }
 }
 
-async function canvasToFile(page, outPath, { mime, size = 180 }) {
-  const bytes = await page.evaluate(
-    async ({ mime, size }) => {
-      const c = document.createElement("canvas");
-      c.width = size;
-      c.height = size;
-      const ctx = c.getContext("2d");
-      if (!ctx) throw new Error("no ctx");
-      for (let i = 0; i < 6000; i++) {
-        ctx.fillStyle = `rgb(${i % 255},${(i * 3) % 255},${(i * 7) % 255})`;
-        ctx.fillRect(i % size, (i * 17) % size, 4, 4);
-      }
-      const blob = await new Promise((resolve, reject) => {
-        c.toBlob((b) => (b ? resolve(b) : reject(new Error("toBlob failed"))), mime, 0.92);
-      });
-      const ab = await blob.arrayBuffer();
-      return Array.from(new Uint8Array(ab));
-    },
-    { mime, size },
-  );
-  fs.mkdirSync(path.dirname(outPath), { recursive: true });
-  fs.writeFileSync(outPath, Buffer.from(bytes));
-  return outPath;
-}
-
 const port = 4333;
 const base = `http://127.0.0.1:${port}`;
 
@@ -99,13 +72,6 @@ try {
 
   const browser = await chromium.launch();
   const page = await browser.newPage();
-  const posts = [];
-  page.on("request", (req) => {
-    if (["POST", "PUT", "PATCH"].includes(req.method())) {
-      const body = req.postDataBuffer()?.length ?? 0;
-      if (body > 0) posts.push({ url: req.url(), method: req.method(), size: body });
-    }
-  });
 
   await page.goto(`${base}/tools/webp-to-jpg`, { waitUntil: "networkidle" });
 
@@ -134,39 +100,19 @@ try {
   });
   assert("FAQPage JSON-LD >= FAQ count", faqLd >= faqCount);
 
-  const webp1 = path.join(fixtures, "webp-landing-a.webp");
-  const webp2 = path.join(fixtures, "webp-landing-b.webp");
-  await canvasToFile(page, webp1, { mime: "image/webp", size: 180 });
-  await canvasToFile(page, webp2, { mime: "image/webp", size: 200 });
-
-  await page.setInputFiles("#formatFiles", [webp1, webp2]);
-  await page.click("#convertBtn");
-  await page.waitForSelector("#zipDownload", { timeout: 60000 });
   assert(
-    "WebP→JPG batch convert done",
-    /done|converted/i.test((await page.locator("#status").textContent()) || ""),
+    "CTA to hub with out=jpg",
+    (await page.locator('a[href="/tools/png-to-jpg?out=jpg"]').count()) >= 1,
   );
-  assert("ZIP download link", (await page.locator("#zipDownload").count()) >= 1);
-
-  const zipOk = await page.evaluate(async () => {
-    const href = document.querySelector("#zipDownload")?.getAttribute("href");
-    if (!href) return false;
-    const res = await fetch(href);
-    const u8 = new Uint8Array(await res.arrayBuffer());
-    return u8[0] === 0x50 && u8[1] === 0x4b;
-  });
-  assert("ZIP is real zip", zipOk);
-
+  assert(
+    "no full converter drop zone on thin landing",
+    (await page.locator("#formatFiles").count()) === 0,
+  );
   assert(
     "seller next-step marketplace",
     (await page.locator('a[href="/tools/marketplace-image-prep"]').count()) >= 1,
   );
-  assert("PNG converter link", (await page.locator('a[href="/tools/png-to-jpg"]').count()) >= 1);
-  assert(
-    "no file upload POST",
-    posts.filter((p) => p.size > 500).length === 0,
-    JSON.stringify(posts),
-  );
+  assert("hub link", (await page.locator('a[href="/tools/png-to-jpg"]').count()) >= 1);
 
   const appLd = await page.evaluate(() => {
     const blocks = [...document.querySelectorAll('script[type="application/ld+json"]')];
@@ -184,8 +130,16 @@ try {
   assert("WebApplication free offer", appLd?.offers?.price === "0");
   assert("canonical path", /webp-to-jpg/i.test(appLd?.url || ""));
 
+  await page.click('a[href="/tools/png-to-jpg?out=jpg"]');
+  await page.waitForURL(/png-to-jpg\?out=jpg/, { timeout: 15000 });
+  assert(
+    "hub opens with JPG selected",
+    (await page.locator("#outFormat").inputValue()) === "jpg",
+  );
+  assert("hub drop zone present", (await page.locator("#formatFiles").count()) === 1);
+
   await browser.close();
-  console.log("\nAll WebP→JPG E2E checks passed:", results.length);
+  console.log("\nAll WebP→JPG thin-landing E2E checks passed:", results.length);
 } catch (err) {
   console.error(err);
   console.error("\nResults so far:", results);

@@ -4,14 +4,19 @@ import ReportIssue from "../../components/ReportIssue.astro";
 import RelatedGuides from "../../components/RelatedGuides.astro";
 import RelatedTools from "../../components/RelatedTools.astro";
 
+/**
+ * Thin SEO landing for `webp to jpg`.
+ * Conversion runs on the PNG / JPG / WebP hub with ?out=jpg — one job, one tool UI.
+ */
+const hubHref = "/tools/png-to-jpg?out=jpg";
 const pageTitle = "WebP to JPG Converter - Free Batch (No Upload)";
 const pageDescription =
-  "Free WebP to JPG converter in your browser. Batch convert WebP to JPEG, ZIP download - no upload, no signup.";
+  "Free WebP to JPG converter for marketplace uploads. Opens our PNG / JPG / WebP hub with JPG selected — batch ZIP, no upload.";
 
 const crumbs = [
   { name: "Home", path: "/" },
   { name: "Tools", path: "/#tools" },
-  { name: "WebP to JPG Converter", path: "/tools/webp-to-jpg" },
+  { name: "WebP to JPG", path: "/tools/webp-to-jpg" },
 ];
 
 const relatedGuides = [
@@ -25,7 +30,7 @@ const relatedGuides = [
 const faqs: { q: string; a: string }[] = [
   {
     q: "How do I convert WebP to JPG?",
-    a: "Add your WebP files below, set JPEG quality and background fill if needed, then Convert to JPG. Conversion runs in your browser and you can download a ZIP.",
+    a: "Open the converter hub (JPG is pre-selected), drop your WebP files, then Convert. You get a ZIP download in your browser — no upload.",
   },
   {
     q: "Is this WebP to JPG converter free?",
@@ -33,27 +38,27 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Are my WebP images uploaded?",
-    a: "No. Files stay on your device. Open DevTools → Network while converting if you want to verify image bytes are not posted to our servers.",
+    a: "No. Files stay on your device in the browser converter. Open DevTools → Network while converting if you want to verify.",
   },
   {
     q: "Why convert WebP to JPEG for Amazon?",
-    a: "Amazon listing guidance prefers JPEG for product images and does not list WebP as a standard format. Convert WebP to JPG here, then confirm in Seller Central.",
+    a: "Amazon listing guidance prefers JPEG for product images and does not list WebP as a standard format. Convert WebP to JPG, then confirm in Seller Central.",
   },
   {
     q: "Can I convert multiple WebP files at once?",
-    a: "Yes. Drop a batch of WebP images, convert, and download one ZIP. PNG and JPG inputs are also accepted if you need a mixed batch.",
+    a: "Yes. The hub accepts a batch of WebP images, converts them, and builds one ZIP on your device.",
   },
   {
     q: "What if my WebP has transparency?",
-    a: "JPEG has no alpha. Transparent pixels are filled with the background color you pick (default white), which matches common Amazon main-image practice.",
+    a: "JPEG has no alpha. Transparent pixels are filled with the background color you pick in the hub (default white).",
   },
   {
     q: "Need PNG to JPG or JPG to PNG instead?",
-    a: "Use the PNG to JPG converter for full format switching (JPG, PNG, or WebP output). This page is optimized for WebP → JPG.",
+    a: "Same hub — change the output dropdown to PNG or WebP. This landing is for people searching WebP to JPG.",
   },
   {
     q: "Can I convert HEIC here?",
-    a: "No. iPhone HEIC/HEIF belongs in the HEIC to JPG converter.",
+    a: "No. iPhone HEIC/HEIF belongs in the separate HEIC to JPG converter.",
   },
 ];
 
@@ -86,45 +91,23 @@ const appLd = {
   </Fragment>
 
   <section data-webp-jpg>
-    <p class="badge">No upload · In-browser · Free · Batch ZIP</p>
+    <p class="badge">No upload · In-browser · Free · Opens format hub</p>
     <h1>WebP to JPG Converter</h1>
     <p class="lede">
-      Free <strong>WebP to JPG</strong> converter for product and listing photos.
-      <strong>Batch convert WebP to JPEG</strong> in your browser — ZIP download, no upload,
-      no signup. Built for sellers who need marketplace-friendly JPEGs.
+      Free <strong>WebP to JPG</strong> for product and listing photos. Conversion runs in our
+      <strong>PNG / JPG / WebP hub</strong> with <strong>JPG</strong> already selected — batch ZIP,
+      no upload, no signup.
     </p>
 
-    <div class="panel">
-      <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="Add WebP image files">
-        <p><strong>Drop WebP</strong> (PNG / JPG also OK) or click to choose</p>
-        <input
-          id="formatFiles"
-          type="file"
-          accept=".webp,.png,.jpg,.jpeg,image/webp,image/png,image/jpeg"
-          multiple
-        />
+    <div class="panel webp-landing-cta">
+      <p>
+        Drop WebP files in the hub, convert to JPEG, download a ZIP. Same engine as PNG ↔ JPG ↔
+        WebP — one tool, not a separate converter app.
+      </p>
+      <div class="actions" style="margin-top: 1rem;">
+        <a class="btn btn-primary" href={hubHref}>Convert WebP to JPG</a>
+        <a class="btn btn-ghost" href="/tools/png-to-jpg">All formats (PNG / JPG / WebP)</a>
       </div>
-
-      <div class="grid-2" style="margin-top: 1rem;">
-        <label class="field" id="qualityField">
-          <span>JPEG quality <span id="qualityLabel">92%</span></span>
-          <input id="quality" type="range" min="70" max="98" value="92" />
-        </label>
-        <label class="field" id="fillField">
-          <span>JPG background (for transparency)</span>
-          <input id="fillColor" type="color" value="#ffffff" />
-        </label>
-      </div>
-
-      <ul id="fileList" class="file-list" hidden></ul>
-      <p class="status" id="status"></p>
-
-      <div class="actions">
-        <button class="btn btn-primary" id="convertBtn" type="button">Convert to JPG</button>
-        <button class="btn btn-ghost" id="clearBtn" type="button">Clear</button>
-      </div>
-
-      <div id="results" class="results" aria-live="polite"></div>
     </div>
 
     <section class="section">
@@ -132,8 +115,8 @@ const appLd = {
       <p class="lede">
         Phones, CDNs, and design exports often save <strong>WebP</strong>. Amazon listing guidance
         prefers <strong>JPEG</strong> and does not list WebP as a standard product-image format.
-        Convert here first, then size photos with the Marketplace Image Resizer if needed. Confirm
-        current rules in Seller Central.
+        Convert in the hub first, then size photos with the Marketplace Image Resizer if needed.
+        Confirm current rules in Seller Central.
       </p>
       <div class="table-wrap panel">
         <table class="data">
@@ -148,7 +131,7 @@ const appLd = {
             <tr>
               <td>WebP rejected on Amazon / Etsy upload</td>
               <td>JPG</td>
-              <td>Convert here → upload</td>
+              <td><a href={hubHref}>Open hub → JPG</a></td>
             </tr>
             <tr>
               <td>Need marketplace pixel sizes</td>
@@ -160,7 +143,7 @@ const appLd = {
             <tr>
               <td>Need PNG / other formats</td>
               <td>—</td>
-              <td><a href="/tools/png-to-jpg">PNG to JPG converter</a></td>
+              <td><a href="/tools/png-to-jpg">PNG / JPG / WebP hub</a></td>
             </tr>
             <tr>
               <td>iPhone HEIC</td>
@@ -184,13 +167,9 @@ const appLd = {
       }
     </section>
 
-    <RelatedTools hide={["webp"]} />
+    <RelatedTools hide={["format"]} />
     <RelatedGuides links={relatedGuides} />
 
     <ReportIssue />
   </section>
 </BaseLayout>
-
-<script>
-  import "../../scripts/png-to-jpg";
-</script>

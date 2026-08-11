@@ -51,6 +51,10 @@ const faqs: { q: string; a: string }[] = [
     q: "Does this work on Windows and Android?",
     a: "Yes, in a modern browser. You do not need iPhone Photos or a desktop install — only the HEIC files themselves.",
   },
+  {
+    q: "Can I convert PNG or WebP here?",
+    a: "No. This tool is only for HEIC/HEIF from phones. Convert PNG, JPG, and WebP in the separate PNG / JPG / WebP converter hub.",
+  },
 ];
 
 const faqLd = {
@@ -85,9 +89,11 @@ const appLd = {
     <p class="badge">No upload · In-browser · Free · Batch ZIP</p>
     <h1>HEIC to JPG Converter</h1>
     <p class="lede">
-      Free <strong>HEIC to JPG</strong> converter for iPhone photos. <strong>Batch convert HEIC to
-      JPEG</strong> in your browser, then download a ZIP — no upload, no signup. Use it when
-      Amazon, Etsy, email, or Windows apps reject <strong>HEIC</strong> files.
+      Free <strong>HEIC to JPG</strong> converter for <strong>iPhone HEIC / HEIF</strong> photos.
+      <strong>Batch convert HEIC to JPEG</strong> in your browser, then download a ZIP — no upload,
+      no signup. Use it when Amazon, Etsy, email, or Windows apps reject HEIC. For
+      <strong>PNG / JPG / WebP</strong> (not HEIC), use the
+      <a href="/tools/png-to-jpg">PNG / JPG / WebP converter</a> instead.
     </p>
 
     <div class="panel">
@@ -119,10 +125,12 @@ const appLd = {
     </div>
 
     <section class="section">
-      <h2>When you need HEIC to JPEG</h2>
+      <h2>When you need HEIC to JPEG (not the format hub)</h2>
       <p class="lede">
         iPhones often save <strong>HEIC</strong>. Seller portals and many PCs expect
-        <strong>JPG</strong>. Convert here first, then size images for each marketplace if needed.
+        <strong>JPG</strong>. HEIC needs a special decoder, so it stays in this tool — separate from
+        the PNG / JPG / WebP hub. Convert HEIC here first, then size images for each marketplace if
+        needed.
       </p>
     </section>
 

@@ -15,12 +15,11 @@ type Row = {
   outName?: string;
 };
 
-const root = document.querySelector("[data-png-jpg], [data-webp-jpg]");
+const root = document.querySelector("[data-png-jpg]");
 if (root) {
-  const webpLanding = root.hasAttribute("data-webp-jpg");
   const fileInput = root.querySelector<HTMLInputElement>("#formatFiles")!;
   const dropZone = root.querySelector<HTMLElement>("#dropZone")!;
-  const formatEl = root.querySelector<HTMLSelectElement>("#outFormat");
+  const formatEl = root.querySelector<HTMLSelectElement>("#outFormat")!;
   const qualityEl = root.querySelector<HTMLInputElement>("#quality")!;
   const qualityLabel = root.querySelector<HTMLElement>("#qualityLabel")!;
   const qualityField = root.querySelector<HTMLElement>("#qualityField")!;
@@ -39,7 +38,6 @@ if (root) {
   }
 
   function selectedFormat(): OutputFormat {
-    if (webpLanding || !formatEl) return "jpg";
     const v = formatEl.value;
     if (v === "png" || v === "webp") return v;
     return "jpg";
@@ -67,8 +65,30 @@ if (root) {
           : "Convert to WebP";
   }
 
+  function applyOutFormat(fmt: OutputFormat) {
+    formatEl.value = fmt;
+    syncFormatUi();
+    const url = new URL(location.href);
+    url.searchParams.set("out", fmt);
+    history.replaceState(null, "", url.pathname + url.search);
+  }
+
+  function applyQueryOut() {
+    const q = new URLSearchParams(location.search).get("out");
+    if (q === "png" || q === "webp" || q === "jpg") {
+      formatEl.value = q;
+    }
+  }
+
   qualityEl.addEventListener("input", syncQualityLabel);
-  formatEl?.addEventListener("change", syncFormatUi);
+  formatEl.addEventListener("change", () => applyOutFormat(selectedFormat()));
+  root.querySelectorAll<HTMLButtonElement>("[data-out-preset]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const v = btn.dataset.outPreset;
+      if (v === "png" || v === "webp" || v === "jpg") applyOutFormat(v);
+    });
+  });
+  applyQueryOut();
   syncQualityLabel();
   syncFormatUi();
 
@@ -78,7 +98,7 @@ if (root) {
         rows.push({
           file,
           status: "error",
-          message: "HEIC/HEIF — use HEIC to JPG tool",
+          message: "HEIC/HEIF — open HEIC to JPG converter (not this hub)",
         });
         continue;
       }
@@ -200,9 +220,7 @@ if (root) {
       const a = document.createElement("a");
       a.className = "btn btn-primary";
       a.href = zipUrl;
-      a.download = webpLanding
-        ? `webp-to-jpg.zip`
-        : `png-to-jpg-${format}.zip`;
+      a.download = `format-convert-${format}.zip`;
       a.id = "zipDownload";
       a.textContent = "Download ZIP";
       box.appendChild(a);

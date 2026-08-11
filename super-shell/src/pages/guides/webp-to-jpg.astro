@@ -72,7 +72,7 @@ const crumbs = [
 
     <div class="guide-cta">
       <p>Batch convert WebP → JPG in your browser — no upload.</p>
-      <a class="btn btn-primary" href="/tools/webp-to-jpg">Open WebP to JPG Converter</a>
+      <a class="btn btn-primary" href="/tools/png-to-jpg?out=jpg">Open WebP to JPG Converter</a>
     </div>
 
     <h2>When you need WebP to JPG</h2>
@@ -100,8 +100,8 @@ const crumbs = [
     <ol>
       <li>Collect your .webp product or marketing files.</li>
       <li>
-        Open the <a href="/tools/webp-to-jpg">WebP to JPG converter</a>, drop files,
-        set quality (about 90–95% for listings).
+        Open the <a href="/tools/png-to-jpg?out=jpg">PNG / JPG / WebP hub</a> (JPG selected),
+        drop WebP files, set quality (about 90–95% for listings).
       </li>
       <li>Use a white fill if the WebP had transparency.</li>
       <li>Download the ZIP, then resize or compress if needed.</li>
@@ -119,10 +119,7 @@ const crumbs = [
       }
     </section>
 
-    <RelatedTools
-      hide={["webp"]}
-      extra={[{ href: "/tools/png-to-jpg", label: "PNG to JPG Converter" }]}
-    />
+    <RelatedTools hide={["format"]} />
     <RelatedGuides
       links={[
         { href: "/guides/png-to-jpg-for-amazon", label: "PNG to JPG for Amazon" },

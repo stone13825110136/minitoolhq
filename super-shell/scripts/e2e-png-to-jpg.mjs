@@ -118,10 +118,16 @@ try {
   assert("page title SEO", (await page.title()).toLowerCase().includes("png to jpg"));
   const desc = (await page.locator('meta[name="description"]').getAttribute("content")) || "";
   assert("meta description has primary keyword", /png to jpg/i.test(desc));
-  assert("meta has secondary", /webp to jpg|jpg to png/i.test(desc));
+  assert("meta has secondary", /webp to jpg|webp to png|jpg to png/i.test(desc));
   assert(
     "H1 present",
     (await page.locator("[data-png-jpg] h1").textContent())?.toLowerCase().includes("png to jpg"),
+  );
+  assert(
+    "hub lede mentions WebP hub",
+    /webp to jpg|png \/ jpg \/ webp/i.test(
+      (await page.locator("[data-png-jpg] .lede").first().textContent()) || "",
+    ),
   );
   const faqCount = await page.locator("[data-png-jpg] .faq details").count();
   assert("FAQ >= 5", faqCount >= 5);
@@ -222,6 +228,11 @@ try {
     return res.headers.get("content-type") || (await res.blob()).type;
   });
   assert("WebP→JPG output jpeg", /jpeg/i.test(singleType), singleType);
+
+  await page.goto(`${base}/tools/png-to-jpg?out=png`, { waitUntil: "networkidle" });
+  assert("query out=png selects PNG", (await page.locator("#outFormat").inputValue()) === "png");
+  await page.click('[data-out-preset="jpg"]');
+  assert("preset sets JPG", (await page.locator("#outFormat").inputValue()) === "jpg");
 
   assert(
     "seller next-step marketplace",
